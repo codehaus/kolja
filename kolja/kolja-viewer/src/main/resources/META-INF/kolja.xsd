@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns="http://baulsupp.com/schema/kolja" xmlns:xsd="http://www.w3.org/2001/XMLSchema" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://baulsupp.com/schema/kolja">
+    <xsd:element name="event-format" type="EventFormat"></xsd:element>
+    
+    <xsd:complexType name="EventFormat">
+        <xsd:sequence>
+        	<xsd:element name="warn" type="WarnEventFormat"
+        		maxOccurs="1" minOccurs="0">
+        	</xsd:element>
+        	<xsd:element name="pattern" type="PatternEventFormat"
+        		maxOccurs="unbounded" minOccurs="0">
+        	</xsd:element>
+        </xsd:sequence>
+        <xsd:attribute name="id" type="xsd:string"></xsd:attribute>
+    </xsd:complexType>
+
+    <xsd:complexType name="PatternEventFormat">
+    	<xsd:attribute name="pattern" type="xsd:string"></xsd:attribute>
+    	<xsd:attribute name="message" type="xsd:string"></xsd:attribute>
+    </xsd:complexType>
+
+    <xsd:complexType name="WarnEventFormat">
+    	<xsd:attribute name="message" type="xsd:string"></xsd:attribute>
+    	<xsd:attribute name="priority-field" type="xsd:string"></xsd:attribute>
+    </xsd:complexType>
+
+    <xsd:complexType name="RegexFieldCopier">
+    	<xsd:attribute name="pattern" type="xsd:string"></xsd:attribute>
+    	<xsd:attribute name="fields" type="Fields"></xsd:attribute>
+    </xsd:complexType>
+
+    <xsd:complexType name="BasicFieldCopier">
+    	<xsd:attribute name="field" type="Field"></xsd:attribute>
+    </xsd:complexType>
+
+    <xsd:element name="request-format" type="RequestFormat"></xsd:element>
+    
+    <xsd:complexType name="RequestFormat">
+        <xsd:sequence>
+        	<xsd:element name="fields" type="Fields" maxOccurs="1" minOccurs="1"></xsd:element>
+        	<xsd:element name="start-pattern" type="xsd:string" maxOccurs="1" minOccurs="0"></xsd:element>
+        	<xsd:element name="end-pattern" type="xsd:string" maxOccurs="1" minOccurs="0"></xsd:element>
+        	<xsd:element name="field-matchers" type="FieldMatchers" maxOccurs="1" minOccurs="1"></xsd:element>
+        	<xsd:element name="printf-status-formatter"
+        		type="PrintfStatusFormatter" maxOccurs="1" minOccurs="1">
+        	</xsd:element>
+        </xsd:sequence>
+        <xsd:attribute name="id" type="xsd:string"></xsd:attribute>
+    	<xsd:attribute name="offset-is-end" type="xsd:string"></xsd:attribute>
+    </xsd:complexType>
+
+    <xsd:simpleType name="Fields">
+    	<xsd:restriction base="xsd:string">
+    		<xsd:pattern value="\s*[\w_]+\s*(,\s*[\w_]+\s*)*"></xsd:pattern>
+    	</xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="Field">
+    	<xsd:restriction base="xsd:string">
+    		<xsd:pattern value="[\w_]+"></xsd:pattern>
+    	</xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:complexType name="FieldMatchers">
+        <xsd:sequence>
+        	<xsd:element name="regex" type="RegexFieldCopier"
+        		maxOccurs="unbounded" minOccurs="0">
+        	</xsd:element>
+        	<xsd:element name="basic" type="BasicFieldCopier"
+        		maxOccurs="unbounded" minOccurs="0">
+        	</xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="PrintfStatusFormatter">
+        <xsd:sequence>
+            <xsd:element name="fields" type="Fields" maxOccurs="1" minOccurs="1"></xsd:element>
+        </xsd:sequence>
+        <xsd:attribute name="pattern" type="xsd:string"></xsd:attribute>
+    </xsd:complexType>
+</xsd:schema>

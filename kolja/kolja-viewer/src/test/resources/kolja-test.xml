@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:kolja="http://baulsupp.com/schema/kolja"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://baulsupp.com/schema/kolja http://baulsupp.com/schema/kolja.xsd">
+     
+  <bean name="logFormat" class="com.baulsupp.kolja.log.viewer.importing.ConfigurableLogFormat">
+    <property name="lineFormat">
+    		<bean class="com.baulsupp.kolja.log.viewer.importing.ConfigurableLineFormat">
+    			<property name="entryPattern" value="8:^20" />
+    			<property name="fieldPattern" value="40:(.*) \[(.*)#(.*)\] \[(.*)\] \[(.*)\]: (.*?)$\n?(.*)\z" />
+    			<property name="types">
+    				<bean class="com.baulsupp.kolja.log.line.type.TypeList">
+		    			<property name="types">
+	    					<list>
+	    						<bean class="com.baulsupp.kolja.log.line.type.DateType">
+					    			<property name="dateFormat" value="yyyy-MM-dd HH:mm:ss,SSS" />
+	    						</bean>
+	    						<bean class="com.baulsupp.kolja.log.line.type.NameType">
+	    							<property name="name" value="logger_id" />
+	    						</bean>
+	    						<bean class="com.baulsupp.kolja.log.line.type.NameType">
+	    							<property name="name" value="thread" />
+	    						</bean>
+	    						<bean class="com.baulsupp.kolja.log.line.type.NameType">
+	    							<property name="name" value="request_id" />
+	    						</bean>
+	    						<bean class="com.baulsupp.kolja.log.line.type.PriorityType" />
+	    						<bean class="com.baulsupp.kolja.log.line.type.MessageType" />
+	    						<bean class="com.baulsupp.kolja.log.line.type.ExceptionType" />
+	    					</list>
+	    				</property>
+    				</bean>
+    			</property>    		
+    		</bean>
+    </property>
+    <property name="outputFormat">
+    		<bean class="com.baulsupp.kolja.log.viewer.importing.ConfigurableOutputFormat">
+    			<property name="widths" value="8,0,3,0,5,102" />
+    			<property name="additional" value="exception" />
+    			<property name="formats">
+    				<list>
+				    	<bean class="com.baulsupp.kolja.log.viewer.format.FormatFormat" factory-method="shortTimeFormat" />
+				    	<bean class="com.baulsupp.kolja.log.viewer.format.ToStringFormat" />
+				    	<bean class="com.baulsupp.kolja.log.viewer.format.ToStringFormat" />
+				    	<bean class="com.baulsupp.kolja.log.viewer.format.ToStringFormat" />
+				    	<bean class="com.baulsupp.kolja.log.viewer.format.ToStringFormat" />
+				    	<bean class="com.baulsupp.kolja.log.viewer.format.ToStringFormat" />
+    				</list>
+    			</property>
+    			<property name="highlights">
+		    		<bean class="com.baulsupp.kolja.log.viewer.highlight.HighlightList">
+		    			<property name="highlights">	
+		    				<list>
+						    	<bean class="com.baulsupp.kolja.log.viewer.highlight.PriorityHighlight" />
+						    	<bean class="com.baulsupp.kolja.log.viewer.highlight.RegexHighlight">
+					    			<property name="pattern" value="MSG SUMMARY" />
+					    			<property name="colours" value="blue:black" />
+						    	</bean>
+		    				</list>
+	    				</property>
+    				</bean>
+    			</property>
+    		</bean>
+    </property>
+    
+    <property name="requestFormat" ref="requests" /> 
+    
+    <property name="eventFormat" ref="events" />
+  </bean> 
+   
+  <kolja:request-format id="requests" offset-is-end="true">
+  	<kolja:fields>request_id,thread</kolja:fields>
+  	<kolja:start-pattern>*** GET</kolja:start-pattern>
+  	<kolja:end-pattern>*** END</kolja:end-pattern>
+  	<kolja:field-matchers>
+  		<kolja:regex pattern="x-zed-user-id: (.*)" fields="msisdn"/>
+  		<kolja:regex pattern="country:(.*)" fields="msisdn"/>
+  		<kolja:basic field="exception"/>  
+  	</kolja:field-matchers>
+  	<kolja:printf-status-formatter pattern="%s %s (%s ms)">
+	  	<kolja:fields>msisdn,country,duration</kolja:fields>
+  	</kolja:printf-status-formatter> 
+  </kolja:request-format> 
+   
+  <kolja:event-format id="events">
+  	<kolja:warn />  	
+  	<kolja:pattern pattern="country:(.*)" message="Country Line Found (%s)"/>
+  </kolja:event-format>
+</beans>
