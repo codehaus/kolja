@@ -5,17 +5,16 @@
   <artifactId>kolja</artifactId>
   <packaging>pom</packaging>
   <name>Kolja Log Tools</name>
+  <description>Terminal based tools for dealing with log files.</description>
   <version>1.0-SNAPSHOT</version>
-  <dependencies>
-    <dependency>
-      <groupId>xom</groupId>
-      <artifactId>xom</artifactId>
-      <version>1.1</version>
-    </dependency>  
-  </dependencies> 
   <developers>
   <developer>
+  	<id>yuri</id>
 	<name>Yuri Schimke</name>
+	<timezone>+1</timezone>
+	<roles>
+		<role>Lead Developer</role>
+	</roles>
   </developer>
   </developers>
   <modules>
@@ -25,8 +24,11 @@
     <module>kolja-viewer</module>
     <module>kolja-ansi</module>
     <module>kolja-util</module>
-    <module>integration-test</module>
   </modules>
+  	<scm>
+		<connection>scm:svn:http://svn.codehaus.org/kolja/trunk/kolja</connection>
+		<developerConnection>scm:svn:svn+ssh://svn.codehaus.org/kolja/trunk/kolja</developerConnection>
+	</scm>
     <build>
      <plugins>
 			<plugin>
