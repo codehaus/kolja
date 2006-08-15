@@ -1,76 +1,34 @@
 <?xml version="1.0"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>com.baulsupp</groupId>
-	<artifactId>kolja-parent</artifactId>
-	<packaging>pom</packaging>
-	<version>1.0</version>
-	<name>Kolja Parent POM</name>
-	<description>Kolja Parent POM.</description>
-	<url>http://kolja.codehaus.org/</url>
-	<developers>
-		<developer>
-			<id>yuri</id>
-			<name>Yuri Schimke</name>
-			<timezone>+1</timezone>
-			<roles>
-				<role>Lead Developer</role>
-			</roles>
-		</developer>
-	</developers>
-	<scm>
-		<connection>scm:svn:http://svn.codehaus.org/kolja/trunk</connection>
-		<developerConnection>scm:svn:svn+ssh://svn.codehaus.org/kolja/trunk</developerConnection>
-		<url>http://fisheye.codehaus.org/browse/kolja/trunk</url>
-	</scm>
-	<build>
-	    <extensions>
-	      <extension>
-			<groupId>org.apache.maven.wagon</groupId>
-			<artifactId>wagon-webdav</artifactId>
-			<version>1.0-beta-1</version>
-		  </extension>
-    	</extensions>
-    	<plugins>
-			<plugin>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<configuration>
-					<source>1.5</source>
-					<target>1.5</target>
-				</configuration>
-			</plugin>
-		</plugins>
-    </build>
-	<distributionManagement>		
-		<!--  
-			The servers here defined must also appear in ~/.m2/settings.xml
-			<settings>
-			<servers>
-			<server>
-			<id>codehaus-kolja-repository</id>
-			<username></username>
-			<password></password>
-			</server>
-			<server>
-			<id>codehaus-kolja-snapshot-repository</id>
-			<username></username>
-			<password></password>
-			</server>
-			</servers>
-			</settings>          
-		-->
-	
-		<repository>
-			<id>codehaus-kolja-repository</id>
-			<name>Codehaus Kolja Repository</name>
-			<url>dav:https://dav.codehaus.org/repository/kolja/</url>
-		</repository>
-		<snapshotRepository>
-			<id>codehaus-kolja-snapshot-repository</id>
-			<name>Codehaus Kolja Snapshot Repository</name>
-			<url>
-				dav:https://dav.codehaus.org/snapshots.repository/kolja/
-			</url>
-		</snapshotRepository>
+	<groupId>com.baulsupp.kolja</groupId>
+	<artifactId>jcurses</artifactId>
+	<name>JCurses</name>
+	<version>0.9.5.1</version>
+	<description>Internal Version of JCurses for use with Kolja. For projects please use http://sourceforge.net/projects/javacurses/</description>
+	<parent>
+		<groupId>com.baulsupp</groupId>
+		<artifactId>kolja-parent</artifactId>
+		<version>1.0</version>
+	</parent> 
+	<distributionManagement>
+		<site>
+			<id>codehaus-kolja-site</id>
+			<name>Codehaus Kolja Site</name>
+			<url>dav:https://dav.codehaus.org/kolja/jcurses/</url>
+		</site>
 	</distributionManagement>
+	<dependencies>
+		<dependency>
+			<groupId>commons-logging</groupId>
+			<artifactId>commons-logging</artifactId>
+			<version>1.0.4</version>
+		</dependency>
+	</dependencies>
+
+  <scm>
+    <connection>scm:svn:http://svn.codehaus.org/kolja/tags/jcurses-0.9.5.1</connection>
+    <developerConnection>scm:svn:svn+ssh://svn.codehaus.org/kolja/tags/jcurses-0.9.5.1</developerConnection>
+    <url>http://fisheye.codehaus.org/browse/kolja/tags/jcurses-0.9.5.1</url>
+  </scm>
 </project>
