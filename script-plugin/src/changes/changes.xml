@@ -1,0 +1,19 @@
+<document>
+  <properties>
+    <title>Script Plugin</title>
+    <author email="yuri.schimke@gmail.com">Yuri Schimke</author>
+  </properties>
+  <body>
+    <release version="1.1" date="2006-08-20" description="Changed groupId">
+      <action dev="yuri" type="update">
+ 	     Changed group to com.baulsupp.kolja
+      </action>
+    </release>
+
+    <release version="1.0" date="2006-08-01" description="First release">
+      <action dev="yuri" type="add">
+      	Initial Version
+      </action>
+    </release>
+  </body>
+</document>
