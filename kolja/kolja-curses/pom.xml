@@ -8,7 +8,6 @@
 	<parent>
 		<groupId>com.baulsupp.kolja</groupId>
 		<artifactId>kolja</artifactId>
-		<relativePath>../pom.xml</relativePath>
 		<version>1.0-SNAPSHOT</version>
 	</parent>
 	<dependencies>
@@ -42,14 +41,6 @@
 	<build>
 		<plugins>
 			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<configuration>
-					<source>1.5</source>
-					<target>1.5</target>
-				</configuration>
-			</plugin>
-			<plugin>
 				<groupId>com.baulsupp</groupId>
 				<artifactId>script-plugin</artifactId>
 				<executions>
@@ -58,33 +49,10 @@
 							<goal>generate-env</goal>
 						</goals>
 						<configuration>
-							<classpathVariable>
-								LESS_CP
-							</classpathVariable>
+							<classpathVariable>LESS_CP</classpathVariable>
 						</configuration>
 					</execution>
 				</executions>
-			</plugin>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>exec-maven-plugin</artifactId>
-				<configuration>
-					<mainClass>com.baulsupp.less.LessMain</mainClass>
-					<arguments>
-						<argument>-x</argument>
-						<argument>../kolja-viewer/src/main/resources/zeds.xml</argument>
-						<argument>-a</argument>
-						<argument>../test/deli.log</argument>
-					</arguments>
-					<systemProperties>
-						<systemProperty>
-							<key>foo</key>
-							<!-- plugin crashes when there are no
-								values here -->
-							<value>bar</value>
-						</systemProperty>
-					</systemProperties>
-				</configuration>
 			</plugin>
 		</plugins>
 	</build>

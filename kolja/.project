@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<projectDescription>
+	<name>kolja</name>
+	<comment></comment>
+	<projects>
+		<project>curses-list</project>
+		<project>gloogy</project>
+		<project>jcurses</project>
+		<project>kolja-ansi</project>
+		<project>kolja-curses</project>
+		<project>kolja-util</project>
+		<project>kolja-viewer</project>
+	</projects>
+	<buildSpec>
+	</buildSpec>
+	<natures>
+	</natures>
+</projectDescription>
