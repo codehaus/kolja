@@ -8,6 +8,13 @@
 	<name>Kolja Parent POM</name>
 	<description>Kolja Parent POM.</description>
 	<url>http://kolja.codehaus.org/</url>
+	<licenses>
+		<license>
+			<name>LGPL</name>
+			<url>http://www.gnu.org/licenses/lgpl.txt</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
 	<developers>
 		<developer>
 			<id>yuri</id>
@@ -18,6 +25,10 @@
 			</roles>
 		</developer>
 	</developers>
+	<issueManagement>
+		<system>JIRA</system>
+		<url>http://jira.codehaus.org/browse/KOLJA</url>
+	</issueManagement>
 	<scm>
 		<connection>scm:svn:http://svn.codehaus.org/kolja/trunk</connection>
 		<developerConnection>scm:svn:svn+ssh://svn.codehaus.org/kolja/trunk</developerConnection>
@@ -41,6 +52,26 @@
 			</plugin>
 		</plugins>
     </build>
+  <reporting>
+    <plugins>
+      <plugin>
+	<groupId>org.codehaus.mojo</groupId>
+        <artifactId>changes-maven-plugin</artifactId>
+ 	<version>2.0-beta-1</version>
+        <reportSets>
+          <reportSet>
+            <reports>
+              <report>changes-report</report>
+            </reports>
+          </reportSet>
+        </reportSets>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+      </plugin>
+    </plugins>
+  </reporting>
 	<distributionManagement>		
 		<!--  
 			The servers here defined must also appear in ~/.m2/settings.xml
