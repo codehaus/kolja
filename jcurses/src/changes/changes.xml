@@ -1,0 +1,16 @@
+<document>
+  <properties>
+    <title>JCurses</title>
+    <author email="yuri.schimke@gmail.com">Yuri Schimke</author>
+  </properties>
+  <body>
+    <release version="0.9.5.1" date="2006-08-01" description="First release">
+      <action dev="yuri" type="add">
+      	Use commons-logging
+      </action>
+      <action dev="yuri" type="add">
+      	Initial Version
+      </action>
+    </release>
+  </body>
+</document>
