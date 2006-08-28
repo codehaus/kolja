@@ -2,7 +2,7 @@ package com.baulsupp.kolja.log.line;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -90,7 +90,7 @@ public class LogEntryLineIndex implements LineIndex, Reloadable {
 
     l.setContent(section);
 
-    Map<String, Object> emptyMap = Collections.emptyMap();
+    Map<String, Object> emptyMap = new HashMap<String, Object>();
     l.setValues(emptyMap);
 
     l.setOffset(lineStart);

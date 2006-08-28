@@ -18,6 +18,11 @@ public class RegexLineParser implements LineParser {
   public RegexLineParser() {
   }
 
+  public RegexLineParser(Pattern pattern, TypeList columns) {
+    setPattern(pattern);
+    setColumns(columns);
+  }
+
   public Pattern getPattern() {
     return pattern;
   }
