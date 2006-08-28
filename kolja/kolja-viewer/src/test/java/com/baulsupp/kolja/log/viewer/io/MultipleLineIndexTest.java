@@ -1,4 +1,4 @@
-package com.baulsupp.kolja.ansi;
+package com.baulsupp.kolja.log.viewer.io;
 
 import java.util.Collections;
 
@@ -6,6 +6,7 @@ import junit.framework.TestCase;
 
 import com.baulsupp.kolja.log.line.BasicLine;
 import com.baulsupp.kolja.log.line.Line;
+import com.baulsupp.kolja.log.viewer.io.MultipleLineIterator;
 
 public class MultipleLineIndexTest extends TestCase {
   public void testRemove() {

@@ -2,7 +2,9 @@ package com.baulsupp.kolja.ansi;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import jline.Terminal;
 
@@ -19,6 +21,7 @@ import com.baulsupp.kolja.log.line.Line;
 import com.baulsupp.kolja.log.viewer.importing.LogFormat;
 import com.baulsupp.kolja.log.viewer.importing.PlainTextLogFormat;
 import com.baulsupp.kolja.log.viewer.importing.SavedLogFormatLoader;
+import com.baulsupp.kolja.log.viewer.io.IoUtil;
 import com.baulsupp.kolja.log.viewer.renderer.DebugRenderer;
 import com.baulsupp.kolja.log.viewer.renderer.PrintfRenderer;
 import com.baulsupp.kolja.util.LogConfig;
@@ -89,32 +92,27 @@ public class CatMain {
 
   public static Iterator<Line> loadLineIterator(CommandLine cmd, LogFormat format) throws IOException {
     Iterator<Line> bli;
-    boolean byRequest = cmd.hasOption("r");
     
     if (cmd.hasOption("i")) {
-      bli = IoUtil.load(IoUtil.fromStdin(), format);
+      bli = IoUtil.loadFromStdin(format);
     } else if (cmd.getArgs().length == 0) {
       throw new RuntimeException("at least one filename expected");
-    } else if (cmd.getArgs().length == 1) {
-      File f = new File(cmd.getArgs()[0]);
-      
-      bli = IoUtil.loadLineIterator(format, byRequest, f);        
     } else {
-      MultipleLineIterator mli = new MultipleLineIterator();
-      
-      for (String s : cmd.getArgs()) {
-        File file = new File(s);
-        mli.add(getShortName(file), IoUtil.loadLineIterator(format, byRequest, file));
-      }
-      
-      bli = mli;
+      bli = IoUtil.loadFiles(format, commandFiles(cmd));
     }
     
     return bli;
   }
 
-  private static String getShortName(File file) {
-    return file.getName();
+  private static List<File> commandFiles(CommandLine cmd) {
+    List args = cmd.getArgList();
+    List<File> files = new ArrayList<File>();
+    
+    for (Object a : args) {
+      files.add(new File((String) a));
+    }
+    
+    return files;
   }
 
   public static LogFormat loadFormat(CommandLine cmd) throws InstantiationException, IllegalAccessException, ClassNotFoundException, IOException {
@@ -139,9 +137,6 @@ public class CatMain {
     Options options = new Options();
 
     options.addOption(OptionBuilder.hasArg(false).withDescription("usage information").withLongOpt("help").create('h'));
-
-    options.addOption(OptionBuilder.hasArg(false).withDescription("Group By Requests").withLongOpt("request").create(
-        'r'));
 
     options.addOption(OptionBuilder.hasArg(false).withDescription("B&W Coloring").create('a'));
 

@@ -61,7 +61,7 @@ public class DumpEventsMain {
       File f = new File(cmd.getArgs()[0]);
       ReloadableCharBuffer buffer = ReloadableCharBuffer.fromFileReloadable(f);
       
-      LineIndex lineIndex = format.getLineIndex(buffer, LogFormat.Direction.ANY_DIRECTION);
+      LineIndex lineIndex = format.getLineIndex(buffer);
 
       BasicLineIterator i = new BasicLineIterator(lineIndex);
       

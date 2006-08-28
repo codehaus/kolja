@@ -35,7 +35,7 @@
   <build>
   <plugins>
 	<plugin>
-		<groupId>com.baulsupp</groupId>
+		<groupId>com.baulsupp.kolja</groupId>
 		<artifactId>script-plugin</artifactId>
 		<executions>
 			<execution>

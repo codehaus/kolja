@@ -1,7 +1,10 @@
 package com.baulsupp.kolja.ansi;
 
+import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import jline.Terminal;
 
@@ -19,6 +22,7 @@ import com.baulsupp.kolja.log.line.LineIterator;
 import com.baulsupp.kolja.log.line.LineIteratorUtil;
 import com.baulsupp.kolja.log.util.TruncationException;
 import com.baulsupp.kolja.log.viewer.importing.LogFormat;
+import com.baulsupp.kolja.log.viewer.io.IoUtil;
 import com.baulsupp.kolja.log.viewer.renderer.DebugRenderer;
 import com.baulsupp.kolja.log.viewer.renderer.PrintfRenderer;
 import com.baulsupp.kolja.util.LogConfig;
@@ -51,7 +55,8 @@ public class TailMinusEffMain {
 
       tail.setAnsi(!cmd.hasOption("a"));
 
-      Iterator<Line> bli = CatMain.loadLineIterator(cmd, format);
+      List<File> files = commandFiles(cmd);
+      Iterator<Line> bli = IoUtil.tailFiles(format, files);
       
       if (bli instanceof LineIterator) {
         LineIteratorUtil.moveToLastTen((LineIterator) bli);
@@ -96,6 +101,17 @@ public class TailMinusEffMain {
     }
   }
 
+  private static List<File> commandFiles(CommandLine cmd) {
+    List args = cmd.getArgList();
+    List<File> files = new ArrayList<File>();
+    
+    for (Object a : args) {
+      files.add(new File((String) a));
+    }
+    
+    return files;
+  }
+
   private static void printHelp(Options options) {
     HelpFormatter formatter = new HelpFormatter();
     formatter.printHelp("tail", options);
@@ -105,9 +121,6 @@ public class TailMinusEffMain {
     Options options = new Options();
 
     options.addOption(OptionBuilder.hasArg(false).withDescription("usage information").withLongOpt("help").create('h'));
-
-    options.addOption(OptionBuilder.hasArg(false).withDescription("Group By Requests").withLongOpt("request").create(
-        'r'));
 
     options.addOption(OptionBuilder.hasArg(false).withDescription("B&W Coloring").create('a'));
 

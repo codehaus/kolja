@@ -7,6 +7,7 @@ import com.baulsupp.kolja.log.entry.LogEntryIndex;
 import com.baulsupp.kolja.log.entry.MemoryLogEntryIndex;
 import com.baulsupp.kolja.log.line.Line;
 import com.baulsupp.kolja.log.line.LineIndex;
+import com.baulsupp.kolja.log.line.LineParser;
 import com.baulsupp.kolja.log.line.LogEntryLineIndex;
 import com.baulsupp.kolja.log.viewer.event.EventList;
 import com.baulsupp.kolja.log.viewer.highlight.HighlightList;
@@ -23,13 +24,11 @@ public class PlainTextLogFormat implements LogFormat {
     return false;
   }
 
-  public LineIndex getLineIndex(CharSequence buffer, LogFormat.Direction direction) {
-    Pattern p = Pattern.compile("^", Pattern.MULTILINE);
+  public LineIndex getLineIndex(CharSequence buffer) {
+    Pattern p = getEntryPattern();
     LogEntryIndex entryIndex = new MemoryLogEntryIndex(buffer, p);
 
-    if (direction == LogFormat.Direction.ANY_DIRECTION) {
-      entryIndex = new BufferedLogEntryIndex(entryIndex);
-    }
+    entryIndex = new BufferedLogEntryIndex(entryIndex);
 
     LogEntryLineIndex parsingLineIndex = new LogEntryLineIndex(entryIndex, buffer);
 
@@ -55,5 +54,13 @@ public class PlainTextLogFormat implements LogFormat {
 
   public String getRequestField() {
     return null;
+  }
+
+  public Pattern getEntryPattern() {
+    return Pattern.compile("^", Pattern.MULTILINE);
+  }
+
+  public LineParser getLineParser() {
+    return new PlainTextLineParser();
   }
 }

@@ -1,9 +1,11 @@
 package com.baulsupp.kolja.log.viewer.importing;
 
 import java.io.Serializable;
+import java.util.regex.Pattern;
 
 import com.baulsupp.kolja.log.line.Line;
 import com.baulsupp.kolja.log.line.LineIndex;
+import com.baulsupp.kolja.log.line.LineParser;
 import com.baulsupp.kolja.log.viewer.event.EventList;
 import com.baulsupp.kolja.log.viewer.renderer.Renderer;
 import com.baulsupp.kolja.log.viewer.request.StandardRequestIndex;
@@ -48,8 +50,8 @@ public class ConfigurableLogFormat implements LogFormat, Serializable {
     this.requestFormat = requestFormat;
   }
 
-  public LineIndex getLineIndex(CharSequence buffer, LogFormat.Direction direction) {
-    return lineFormat.buildLineIndex(buffer, direction);
+  public LineIndex getLineIndex(CharSequence buffer) {
+    return lineFormat.buildLineIndex(buffer);
   }
 
   public Renderer<Line> getRenderer() {
@@ -74,5 +76,13 @@ public class ConfigurableLogFormat implements LogFormat, Serializable {
 
   public String getRequestField() {
     return requestFormat != null ? requestFormat.getRequestField() : null;
+  }
+
+  public Pattern getEntryPattern() {
+    return lineFormat.getEntryPattern();
+  }
+
+  public LineParser getLineParser() {
+    return lineFormat.getLineParser();
   }
 }

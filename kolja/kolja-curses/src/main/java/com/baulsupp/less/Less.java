@@ -100,7 +100,7 @@ public class Less extends CursesListWindow<Line> implements IScrollable, PaintLi
   private void loadIndexes(LogFormat format) {
     models = new ArrayList<LineIndex>();
     
-    LineIndex li = format.getLineIndex(buffer, LogFormat.Direction.ANY_DIRECTION);
+    LineIndex li = format.getLineIndex(buffer);
     models.add(li);
 
     if (format.supportsEvents()) {

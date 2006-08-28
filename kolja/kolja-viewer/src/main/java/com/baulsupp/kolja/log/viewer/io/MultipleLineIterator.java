@@ -1,4 +1,4 @@
-package com.baulsupp.kolja.ansi;
+package com.baulsupp.kolja.log.viewer.io;
 
 import java.util.ArrayList;
 import java.util.Iterator;
