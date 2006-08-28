@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.util.List;
 
 import jline.ANSIBuffer;
+import jline.Terminal;
 
 import com.baulsupp.kolja.log.line.Line;
 import com.baulsupp.kolja.log.viewer.renderer.Renderer;
@@ -15,6 +16,8 @@ public class TailRenderer implements ConsoleRenderer<Line> {
   private Renderer<Line> renderer;
 
   private boolean ansi;
+
+  private int fixedWidth;
 
   public TailRenderer(Renderer<Line> renderer, boolean ansi) {
     this.renderer = renderer;
@@ -32,6 +35,10 @@ public class TailRenderer implements ConsoleRenderer<Line> {
     List<MultiColourString> lines = row.getLines();
     
     for (MultiColourString string : lines) {
+      if (fixedWidth > 0 && string.length() > fixedWidth) {
+        string = string.part(0, fixedWidth);
+      }
+      
       append(buffy, string);
       buffy.append("\n");
     }
@@ -60,6 +67,14 @@ public class TailRenderer implements ConsoleRenderer<Line> {
       buffy.green(string.toString());
     } else {
       buffy.append(string.toString());
+    }
+  }
+
+  public void setFixedWidth(boolean b) {
+    if (b) {
+      this.fixedWidth = Terminal.getTerminal().getTerminalWidth();
+    } else {
+      this.fixedWidth = 0;
     }
   }
 }

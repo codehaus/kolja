@@ -57,7 +57,11 @@ public class FileLineIterator implements Iterator<Line> {
     readAhead();
 
     if (tailing) {
-      content.waitFor();
+      try {
+        content.waitFor();
+      } catch (IOException e) {
+        throw new RuntimeException(e);
+      } 
     } else if (content.isEmpty()) {
       throw new NoSuchElementException();
     }

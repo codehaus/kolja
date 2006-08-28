@@ -24,6 +24,7 @@ import com.baulsupp.kolja.log.viewer.importing.SavedLogFormatLoader;
 import com.baulsupp.kolja.log.viewer.io.IoUtil;
 import com.baulsupp.kolja.log.viewer.renderer.DebugRenderer;
 import com.baulsupp.kolja.log.viewer.renderer.PrintfRenderer;
+import com.baulsupp.kolja.log.viewer.renderer.Renderer;
 import com.baulsupp.kolja.util.LogConfig;
 
 public class CatMain {
@@ -56,20 +57,24 @@ public class CatMain {
 
       Iterator<Line> bli = loadLineIterator(cmd, format);
       
-      cat.load(bli, format.getRenderer());
       
       if (cmd.hasOption("o")) {
         cat.setRenderer(PrintfRenderer.parse(cmd.getOptionValue("o")));
-      }
-      
-      if (cmd.hasOption("d")) {
+      } else if (cmd.hasOption("d")) {
         cat.setRenderer(new DebugRenderer());
+      } else {
+        Renderer<Line> renderer = format.getRenderer();
+        cat.load(bli, renderer);
       }
 
       String highlightTerm = null;
       if (cmd.hasOption("s")) {
         highlightTerm = cmd.getOptionValue("s");
         cat.addHighlightTerm(highlightTerm);
+      }
+      
+      if (cmd.hasOption("f")) {
+        cat.setFixedWidth(true);
       }
 
       if (!cmd.hasOption("i")) {
@@ -156,6 +161,9 @@ public class CatMain {
     
     options.addOption(OptionBuilder.hasArg(false).withDescription("Debug Output").withLongOpt("debug").create(
         'd'));
+    
+    options.addOption(OptionBuilder.hasArg(false).withDescription("Fixed Screen Width").withLongOpt("fixed-width").create(
+        'f'));
 
     return options;
   }

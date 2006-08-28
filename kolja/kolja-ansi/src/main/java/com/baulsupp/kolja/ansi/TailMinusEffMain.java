@@ -71,6 +71,10 @@ public class TailMinusEffMain {
       if (cmd.hasOption("d")) {
         tail.setRenderer(new DebugRenderer());
       }
+      
+      if (cmd.hasOption("f")) {
+        tail.setFixedWidth(true);
+      }
 
       String highlightTerm = null;
       if (cmd.hasOption("s")) {
@@ -140,6 +144,9 @@ public class TailMinusEffMain {
     
     options.addOption(OptionBuilder.hasArg(false).withDescription("Debug Output").withLongOpt("debug").create(
         'd'));
+    
+    options.addOption(OptionBuilder.hasArg(false).withDescription("Fixed Screen Width").withLongOpt("fixed-width").create(
+        'f'));
 
     return options;
   }

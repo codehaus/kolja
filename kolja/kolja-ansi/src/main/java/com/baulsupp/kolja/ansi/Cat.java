@@ -128,4 +128,8 @@ public class Cat {
 
     this.renderer = new TailRenderer(grid, ansi);
   }
+
+  public void setFixedWidth(boolean b) {
+    renderer.setFixedWidth(b);
+  }
 }
