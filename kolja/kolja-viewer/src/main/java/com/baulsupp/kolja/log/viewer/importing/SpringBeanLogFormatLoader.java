@@ -33,9 +33,12 @@ public class SpringBeanLogFormatLoader {
     XmlBeanFactory beanFactory = new XmlBeanFactory(r);
     
     try {
-      CustomEditorConfigurer configurer = (CustomEditorConfigurer) beanFactory.getBean("customEditorConfigurer");    
-      configurer.postProcessBeanFactory(beanFactory);
+      if (beanFactory.containsBean("customEditorConfigurer")) {
+        CustomEditorConfigurer configurer = (CustomEditorConfigurer) beanFactory.getBean("customEditorConfigurer");    
+        configurer.postProcessBeanFactory(beanFactory);
+      }
     } catch (NoSuchBeanDefinitionException nsbde) {
+      throw new RuntimeException(nsbde);
     }
 
     Map<Class, PropertyEditor> map = new HashMap<Class, PropertyEditor>();

@@ -63,10 +63,8 @@ public class CursesList<T extends Object> extends Widget implements ItemModelLis
       }
 
       int rowsShown = rowHeight - fromRow;
-      if (currentRow == offsetList.rowCount() - 1) {
-        if (hiddenLinesBottom > 0) {
-          rowsShown -= hiddenLinesBottom;
-        }
+      if (currentRow == offsetList.rowCount() - 1 && hiddenLinesBottom > 0) {
+        rowsShown -= hiddenLinesBottom;
       }
 
       TextPanel rowPanel = panel.row(y, rowsShown);
@@ -549,7 +547,7 @@ public class CursesList<T extends Object> extends Widget implements ItemModelLis
 
     return true;
   }
-  
+    
   public Rectangle getRectangle() {
     return super.getRectangle();
   }

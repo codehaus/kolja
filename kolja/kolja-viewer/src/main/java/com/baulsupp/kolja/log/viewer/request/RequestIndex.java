@@ -174,10 +174,6 @@ public class RequestIndex extends ValueIndexer implements LineIndex {
   }
 
   public void addLineListener(LineListener listener) {
-    if (true) {
-      throw new UnsupportedOperationException("not tested");
-    }
-
     listeners.add(listener);
   }
 

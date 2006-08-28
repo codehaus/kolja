@@ -15,7 +15,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
 import org.apache.commons.collections.primitives.IntCollection;
-import org.apache.commons.collections.primitives.IntList;
 import org.apache.commons.collections.primitives.RandomAccessIntList;
 
 /**
