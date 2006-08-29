@@ -28,22 +28,6 @@ public abstract class BufferingStringBuilder implements CharSequence {
     return readContent.length() == 0;
   }
 
-  public void waitFor() throws IOException {
-    while (readContent.length() == 0) {
-      readAhead();
-      
-      if (readContent.length() > 0) {
-        break;
-      }
-        
-      try {
-        Thread.sleep(250);
-      } catch (InterruptedException e) {
-        throw new RuntimeException(e);
-      }
-    }
-  }
-
   public String trim(int i) {
     String s = readContent.substring(0, i).toString();
     

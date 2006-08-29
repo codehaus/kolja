@@ -14,8 +14,6 @@ import com.baulsupp.kolja.log.viewer.importing.ConfigurableLogFormat;
 import com.baulsupp.kolja.log.viewer.importing.LogFormat;
 
 public class FileLineIterator implements Iterator<Line> {
-  private boolean tailing;
-  
   private Matcher entryMatcher;
   private BufferingStringBuilder content;
   private LineParser lineParser;
@@ -44,25 +42,15 @@ public class FileLineIterator implements Iterator<Line> {
   }
 
   public boolean hasNext() {
-    if (tailing) {
-      return true;
-    } else {
-      readAhead();
+    readAhead();
 
-      return !content.isEmpty();
-    }
+    return !content.isEmpty();
   }
 
   public Line next() {
     readAhead();
 
-    if (tailing) {
-      try {
-        content.waitFor();
-      } catch (IOException e) {
-        throw new RuntimeException(e);
-      } 
-    } else if (content.isEmpty()) {
+    if (content.isEmpty()) {
       throw new NoSuchElementException();
     }
 
@@ -90,13 +78,5 @@ public class FileLineIterator implements Iterator<Line> {
 
   public void remove() { 
     throw new UnsupportedOperationException();
-  }
-
-  public void setTailing(boolean b) {
-    this.tailing = b;
-  }
-
-  public boolean isTailing() {
-    return tailing;
   }
 }

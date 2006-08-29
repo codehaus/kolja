@@ -107,27 +107,6 @@ public class IoUtil {
     }
   }
 
-  public static Iterator<Line> tailFiles(LogFormat format, List<File> files) throws IOException {
-    if (files.isEmpty()) {
-      return new ArrayList<Line>().iterator();
-    } else if (files.size() == 1) {
-      FileLineIterator i = FileLineIterator.load(format, files.get(0));
-      i.setTailing(true);
-      return i;
-    } else {
-      MultipleLineIterator mli = new MultipleLineIterator();
-
-      for (File file : files) {
-        log.info("opening " + file);
-        FileLineIterator i = FileLineIterator.load(format, file);
-        i.setTailing(true);
-        mli.add(getShortName(file), i);
-      }
-
-      return mli;
-    }
-  }
-
   public static Iterator<Line> loadFromStdin(LogFormat format) {
     // TODO Auto-generated method stub
     return null;

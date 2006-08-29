@@ -67,10 +67,6 @@ public class FileLineIteratorTest extends TestCase {
   }
 
   public void testTailing() throws IOException {
-    i.setTailing(true);
-    
-    assertTrue(i.hasNext());
-    
     IoUtil.writeContent(myFile, "A", "B");
     
     assertTrue(i.hasNext());
@@ -85,7 +81,7 @@ public class FileLineIteratorTest extends TestCase {
     assertFalse(l.isFailed());
     assertEquals("B", l.getValue("content"));
 
-    assertTrue(i.hasNext());
+    assertFalse(i.hasNext());
     
     IoUtil.writeContent(myFile, "A", "B");
     
