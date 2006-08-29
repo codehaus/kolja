@@ -56,7 +56,7 @@ public class CatMain {
       cat.setAnsi(!cmd.hasOption("a"));
 
       Iterator<Line> bli = loadLineIterator(cmd, format);
-      
+      cat.setI(bli);
       
       if (cmd.hasOption("o")) {
         cat.setRenderer(PrintfRenderer.parse(cmd.getOptionValue("o")));
@@ -64,7 +64,7 @@ public class CatMain {
         cat.setRenderer(new DebugRenderer());
       } else {
         Renderer<Line> renderer = format.getRenderer();
-        cat.load(bli, renderer);
+        cat.setGrid(renderer);
       }
 
       String highlightTerm = null;

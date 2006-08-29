@@ -18,13 +18,15 @@ import org.apache.commons.cli.PosixParser;
 import org.apache.log4j.Logger;
 
 import com.baulsupp.kolja.log.line.Line;
-import com.baulsupp.kolja.log.line.LineIterator;
-import com.baulsupp.kolja.log.line.LineIteratorUtil;
 import com.baulsupp.kolja.log.util.TruncationException;
+import com.baulsupp.kolja.log.viewer.highlight.FilenameHighlight;
 import com.baulsupp.kolja.log.viewer.importing.LogFormat;
 import com.baulsupp.kolja.log.viewer.io.IoUtil;
+import com.baulsupp.kolja.log.viewer.io.MultipleLineIterator;
 import com.baulsupp.kolja.log.viewer.renderer.DebugRenderer;
+import com.baulsupp.kolja.log.viewer.renderer.FieldRenderer;
 import com.baulsupp.kolja.log.viewer.renderer.PrintfRenderer;
+import com.baulsupp.kolja.log.viewer.renderer.Renderer;
 import com.baulsupp.kolja.util.LogConfig;
 
 public class TailMinusEffMain {
@@ -58,18 +60,20 @@ public class TailMinusEffMain {
       List<File> files = commandFiles(cmd);
       Iterator<Line> bli = IoUtil.tailFiles(format, files);
       
-      if (bli instanceof LineIterator) {
-        LineIteratorUtil.moveToLastTen((LineIterator) bli);
-      }
-      
-      tail.load(bli, format.getRenderer());
+      tail.setI(bli);
       
       if (cmd.hasOption("o")) {
         tail.setRenderer(PrintfRenderer.parse(cmd.getOptionValue("o")));
-      }
-      
-      if (cmd.hasOption("d")) {
+      } else if (cmd.hasOption("d")) {
         tail.setRenderer(new DebugRenderer());
+      } else {
+        Renderer<Line> renderer = format.getRenderer();
+        if (files.size() > 1 && renderer instanceof FieldRenderer) {
+          FieldRenderer fieldRenderer = (FieldRenderer) renderer;
+          fieldRenderer.prependColumn(MultipleLineIterator.FILE_NAME, 10);
+          fieldRenderer.addHighlight(new FilenameHighlight());
+        }
+        tail.setGrid(renderer);
       }
       
       if (cmd.hasOption("f")) {

@@ -15,8 +15,6 @@ import com.baulsupp.kolja.util.ColourPair;
 public class Cat {
   protected boolean ansi;
 
-  // protected boolean byRequest;
-
   protected Renderer<Line> grid;
 
   protected Iterator<Line> i;
@@ -102,14 +100,14 @@ public class Cat {
     Line l = i.next();
     renderer.show(l);
   }
-
-  public void load(Iterator<Line> bli, Renderer<Line> grid) {
-    this.i = bli;
-
+  
+  public void setI(Iterator<Line> i) {
+    this.i = i;
+  }
+  
+  public void setGrid(Renderer<Line> grid) {
     this.grid = grid;
-
     grid.setWidth(Terminal.getTerminal().getTerminalWidth());
-
     renderer = new TailRenderer(grid, ansi);
   }
 

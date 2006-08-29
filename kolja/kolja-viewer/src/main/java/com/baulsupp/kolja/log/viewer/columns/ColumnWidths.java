@@ -18,6 +18,10 @@ public class ColumnWidths implements Serializable {
     columns.add(column);
   }
 
+  public void addColumn(int i, Column column) {
+    columns.add(i, column);
+  }
+
   public int get(int i) {
     if (i >= widths.length)
       return 0;

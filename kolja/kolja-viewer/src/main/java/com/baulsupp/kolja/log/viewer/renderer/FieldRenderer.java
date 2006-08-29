@@ -8,8 +8,10 @@ import java.util.regex.Pattern;
 import org.apache.log4j.Logger;
 
 import com.baulsupp.kolja.log.line.Line;
+import com.baulsupp.kolja.log.viewer.columns.Column;
 import com.baulsupp.kolja.log.viewer.columns.ColumnWidths;
 import com.baulsupp.kolja.log.viewer.format.OutputFormat;
+import com.baulsupp.kolja.log.viewer.format.ToStringFormat;
 import com.baulsupp.kolja.log.viewer.highlight.Highlight;
 import com.baulsupp.kolja.log.viewer.highlight.HighlightList;
 import com.baulsupp.kolja.log.viewer.highlight.HighlightResult;
@@ -196,5 +198,11 @@ public class FieldRenderer implements Renderer<Line> {
 
   public void showAdditional(String column) {
     this.additional = column;
+  }
+
+  public void prependColumn(String name, int i) {
+    this.columns.add(0, name);
+    this.formats.add(0, new ToStringFormat());
+    this.widths.addColumn(0, new Column(i));
   }
 }

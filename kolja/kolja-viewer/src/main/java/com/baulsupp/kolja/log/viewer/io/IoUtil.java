@@ -118,6 +118,7 @@ public class IoUtil {
       MultipleLineIterator mli = new MultipleLineIterator();
 
       for (File file : files) {
+        log.info("opening " + file);
         FileLineIterator i = FileLineIterator.load(format, file);
         i.setTailing(true);
         mli.add(getShortName(file), i);
