@@ -4,8 +4,8 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.baulsupp.kolja.log.LogConstants;
 import com.baulsupp.kolja.log.line.Line;
-import com.baulsupp.kolja.log.viewer.io.MultipleLineIterator;
 import com.baulsupp.kolja.util.ColourPair;
 import com.baulsupp.kolja.util.ColourRotator;
 
@@ -25,10 +25,10 @@ public class FilenameHighlight implements Highlight<Line>, Serializable {
   }
 
   public HighlightResult getHighlights(Line viewRow) {
-    String name = (String) viewRow.getValue(MultipleLineIterator.FILE_NAME);
+    String name = (String) viewRow.getValue(LogConstants.FILE_NAME);
 
     if (name != null) {
-        return HighlightResult.column(MultipleLineIterator.FILE_NAME, getFileColour(name));
+        return HighlightResult.column(LogConstants.FILE_NAME, getFileColour(name));
     }
     
     return null;

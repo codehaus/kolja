@@ -2,6 +2,7 @@ package com.baulsupp.kolja.log.viewer.io;
 
 import java.util.Iterator;
 
+import com.baulsupp.kolja.log.LogConstants;
 import com.baulsupp.kolja.log.line.Line;
 
 public class NamedIterator implements Iterator<Line> {
@@ -20,7 +21,7 @@ public class NamedIterator implements Iterator<Line> {
   public Line next() {
     Line l = delegate.next();
     
-    l.setValue(MultipleLineIterator.FILE_NAME, name);
+    l.setValue(LogConstants.FILE_NAME, name);
     
     return l;
   }

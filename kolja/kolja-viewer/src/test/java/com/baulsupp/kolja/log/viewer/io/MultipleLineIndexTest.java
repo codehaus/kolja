@@ -4,6 +4,7 @@ import java.util.Collections;
 
 import junit.framework.TestCase;
 
+import com.baulsupp.kolja.log.LogConstants;
 import com.baulsupp.kolja.log.line.BasicLine;
 import com.baulsupp.kolja.log.line.Line;
 import com.baulsupp.kolja.log.viewer.io.MultipleLineIterator;
@@ -35,7 +36,7 @@ public class MultipleLineIndexTest extends TestCase {
     assertTrue(mli.hasNext());
     Line l = mli.next();
     assertNotNull(l);
-    assertEquals("1", l.getValue(MultipleLineIterator.FILE_NAME));
+    assertEquals("1", l.getValue(LogConstants.FILE_NAME));
     assertEquals("A", l.toString());
 
     assertFalse(mli.hasNext());
@@ -57,7 +58,7 @@ public class MultipleLineIndexTest extends TestCase {
     assertTrue(mli.hasNext());
     l = mli.next();
     assertNotNull(l);
-    assertEquals("2", l.getValue(MultipleLineIterator.FILE_NAME));
+    assertEquals("2", l.getValue(LogConstants.FILE_NAME));
     assertEquals("B", l.toString());
 
     assertFalse(mli.hasNext());

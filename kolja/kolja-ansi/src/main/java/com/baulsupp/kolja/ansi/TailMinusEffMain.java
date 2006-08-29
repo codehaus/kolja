@@ -17,12 +17,12 @@ import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.PosixParser;
 import org.apache.log4j.Logger;
 
+import com.baulsupp.kolja.log.LogConstants;
 import com.baulsupp.kolja.log.line.Line;
 import com.baulsupp.kolja.log.util.TruncationException;
 import com.baulsupp.kolja.log.viewer.highlight.FilenameHighlight;
 import com.baulsupp.kolja.log.viewer.importing.LogFormat;
 import com.baulsupp.kolja.log.viewer.io.IoUtil;
-import com.baulsupp.kolja.log.viewer.io.MultipleLineIterator;
 import com.baulsupp.kolja.log.viewer.renderer.DebugRenderer;
 import com.baulsupp.kolja.log.viewer.renderer.FieldRenderer;
 import com.baulsupp.kolja.log.viewer.renderer.PrintfRenderer;
@@ -70,7 +70,7 @@ public class TailMinusEffMain {
         Renderer<Line> renderer = format.getRenderer();
         if (files.size() > 1 && renderer instanceof FieldRenderer) {
           FieldRenderer fieldRenderer = (FieldRenderer) renderer;
-          fieldRenderer.prependColumn(MultipleLineIterator.FILE_NAME, 10);
+          fieldRenderer.prependColumn(LogConstants.FILE_NAME, 10);
           fieldRenderer.addHighlight(new FilenameHighlight());
         }
         tail.setGrid(renderer);

@@ -10,4 +10,5 @@ public interface LogConstants {
   public static final String EXCEPTION = "exception";
   
   public static final String DURATION = "duration";
+  public static final String FILE_NAME = "filename";
 }
