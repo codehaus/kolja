@@ -18,6 +18,8 @@ public class ConfigurableOutputFormat implements Serializable {
   private String additional;
 
   private HighlightList<Line> highlights;
+
+  private List<String> names;
   
   public List<OutputFormat> getFormats() {
     return formats;
@@ -46,8 +48,17 @@ public class ConfigurableOutputFormat implements Serializable {
     return highlights;
   }
   
+  public List<String> getNames() {
+    return names;
+  }
+  
+  public void setNames(List<String> names) {
+    this.names = names;
+  }
+  
   public Renderer<Line> getRenderer(ConfigurableLineFormat lineFormat) {
-    FieldRenderer grid = new FieldRenderer(widths, lineFormat.getTypeNames(), formats, getHighlights());
+    List<String> names = this.names != null ? this.names : lineFormat.getTypeNames();
+    FieldRenderer grid = new FieldRenderer(widths, names, formats, getHighlights());
     grid.showAdditional(additional);
     return grid;
   }
