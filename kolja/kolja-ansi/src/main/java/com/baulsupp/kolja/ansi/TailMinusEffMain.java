@@ -70,7 +70,7 @@ public class TailMinusEffMain {
         Renderer<Line> renderer = format.getRenderer();
         if (files.size() > 1 && renderer instanceof FieldRenderer) {
           FieldRenderer fieldRenderer = (FieldRenderer) renderer;
-          fieldRenderer.prependColumn(LogConstants.FILE_NAME, 10);
+          fieldRenderer.prependColumn(LogConstants.FILE_NAME, IoUtil.getMaxFilenameWidth(files));
           fieldRenderer.addHighlight(new FilenameHighlight());
         }
         tail.setGrid(renderer);

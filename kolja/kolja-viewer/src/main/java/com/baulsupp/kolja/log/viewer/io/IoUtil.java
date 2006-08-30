@@ -133,4 +133,14 @@ public class IoUtil {
   public static File createTestFile() throws IOException {
     return File.createTempFile("aaa", ".log");
   }
+
+  public static int getMaxFilenameWidth(List<File> files) {
+    int result = 0;
+    
+    for (File file : files) {
+      result = Math.max(result, file.getName().length());
+    }
+    
+    return result;
+  }
 }
