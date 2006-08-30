@@ -2,6 +2,8 @@ package com.baulsupp.kolja.util;
 
 import java.awt.Color;
 import java.io.Serializable;
+import java.util.Arrays;
+import java.util.List;
 
 public class ColourPair implements Serializable {
   private static final long serialVersionUID = -4505666159280979611L;
@@ -29,6 +31,19 @@ public class ColourPair implements Serializable {
   public static final ColourPair BLUE_ON_BLACK = new ColourPair(BLUE, BLACK);
 
   public static final ColourPair RED_ON_BLACK = new ColourPair(RED, BLACK);
+
+  public static final ColourPair BLUE_ON_WHITE = new ColourPair(BLUE, WHITE);
+
+  public static final ColourPair GREEN_ON_WHITE = new ColourPair(GREEN, WHITE);
+
+  public static final ColourPair BLACK_ON_WHITE = new ColourPair(BLACK, WHITE);
+
+  public static final ColourPair MAGENTA_ON_WHITE = new ColourPair(MAGENTA, WHITE);
+
+  public static final List<ColourPair> ALL_PAIRS = Arrays.asList(
+        ColourPair.BLUE_ON_BLACK, ColourPair.GREEN_ON_BLACK, ColourPair.MAGENTA_ON_BLACK, ColourPair.RED_ON_BLACK,
+        ColourPair.RED_ON_WHITE, ColourPair.WHITE_ON_BLACK, ColourPair.BLUE_ON_WHITE, ColourPair.GREEN_ON_WHITE,
+        ColourPair.MAGENTA_ON_WHITE, ColourPair.BLACK_ON_WHITE);
 
   private Color foreground;
 

@@ -65,6 +65,12 @@ public class TailRenderer implements ConsoleRenderer<Line> {
       buffy.magenta(string.toString());
     } else if (string.getForegroundColor() == Color.GREEN) {
       buffy.green(string.toString());
+    } else if (string.getForegroundColor() == Color.WHITE) {
+      buffy.yellow(string.toString());
+    } else if (string.getForegroundColor() == Color.BLACK) {
+      buffy.black(string.toString());
+    } else if (string.getForegroundColor() == Color.CYAN) {
+      buffy.cyan(string.toString());
     } else {
       buffy.append(string.toString());
     }

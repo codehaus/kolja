@@ -9,7 +9,7 @@ public class ColourRotator {
   private int pos = 0;
   
   public ColourRotator() {
-    this.colours = Arrays.asList(ColourPair.BLUE_ON_BLACK, ColourPair.GREEN_ON_BLACK, ColourPair.MAGENTA_ON_BLACK, ColourPair.RED_ON_BLACK);
+    this.colours = ColourPair.ALL_PAIRS;
   }
   
   public ColourRotator(ColourPair... colours) {
