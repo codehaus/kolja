@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans>
+  <bean name="logFormat" class="com.baulsupp.kolja.log.viewer.importing.ConfigurableLogFormat">
+    <property name="lineFormat">
+    		<bean class="com.baulsupp.kolja.log.viewer.importing.ConfigurableLineFormat">
+    			<property name="entryPattern" value="8:^20" />
+    			<property name="fieldPattern" value="40:(.*) \[(.*)\] ([A-Z]+)  ?(.*) - (.*?)$\n?(.*)\z" />
+    			<property name="types">
+    				<bean class="com.baulsupp.kolja.log.line.type.TypeList">
+		    			<property name="types">
+	    					<list>
+	    						<bean class="com.baulsupp.kolja.log.line.type.DateType">
+					    			<property name="dateFormat" value="yyyy-MM-dd HH:mm:ss,SSS" />
+	    						</bean>
+	    						<bean class="com.baulsupp.kolja.log.line.type.NameType">
+	    							<property name="name" value="thread" />
+	    						</bean>
+	    						<bean class="com.baulsupp.kolja.log.line.type.PriorityType" />
+	    						<bean class="com.baulsupp.kolja.log.line.type.NameType">
+	    							<property name="name" value="logger_id" />
+	    						</bean>
+	    						<bean class="com.baulsupp.kolja.log.line.type.MessageType" />
+	    						<bean class="com.baulsupp.kolja.log.line.type.ExceptionType" />
+	    					</list>
+	    				</property>
+    				</bean>
+    			</property>    		
+    		</bean>
+    </property>
+    <property name="outputFormat">
+    		<bean class="com.baulsupp.kolja.log.viewer.importing.ConfigurableOutputFormat">
+    			<property name="widths" value="8,12,5,20,102" />
+    			<property name="additional" value="exception" />
+    			<property name="formats">
+    				<list>
+				    	<bean class="com.baulsupp.kolja.log.viewer.format.FormatFormat" factory-method="shortTimeFormat" />
+				    	<bean class="com.baulsupp.kolja.log.viewer.format.ToStringFormat" />
+				    	<bean class="com.baulsupp.kolja.log.viewer.format.ToStringFormat" />
+				    	<bean class="com.baulsupp.kolja.log.viewer.format.CompressedPackageFormat" />
+				    	<bean class="com.baulsupp.kolja.log.viewer.format.ToStringFormat" />
+    				</list>
+    			</property>
+    			<property name="names">
+    				<list>
+					<value>date</value>
+					<value>thread</value>
+					<value>priority</value>
+					<value>logger_id</value>
+					<value>content</value>
+    				</list>
+    			</property>
+    			<property name="highlights">
+		    		<bean class="com.baulsupp.kolja.log.viewer.highlight.HighlightList">
+		    			<property name="highlights">	
+		    				<list>
+						    	<bean class="com.baulsupp.kolja.log.viewer.highlight.PriorityHighlight" />
+						    	<!-- bean class="com.baulsupp.kolja.log.viewer.highlight.RegexHighlight">
+					    			<property name="pattern" value="MSG SUMMARY" />
+					    			<property name="colours" value="blue:black" />
+						    	</bean -->
+		    				</list>
+	    				</property>
+    				</bean>
+    			</property>
+    		</bean>
+    </property>
+    <!-- property name="requestFormat">
+    		<bean class="com.baulsupp.kolja.log.viewer.importing.ConfigurableRequestFormat">   
+    			<property name="fields" value="request_id,thread" />    	  			
+    			<property name="offsetIsEnd" value="true" />    	  			
+    			<property name="startPattern" value="*** GET" />    	  			
+    			<property name="endPattern" value="*** END" />    	  			
+    			<property name="statusFormatter">
+			    	<bean class="com.baulsupp.kolja.log.viewer.PrintfLineFormatter">    			
+    					<property name="pattern" value="%s %s (%s ms)" />    	  			
+			    		<property name="fields" value="msisdn,country,duration" />    	  	
+			    	</bean>
+    			</property>    	  			
+    			<property name="matchers">
+    				<list>
+	    				<bean class="com.baulsupp.kolja.log.viewer.request.RegexFieldCopier">    		
+	    					<property name="pattern" value="x-zed-user-id: (.*)" />    	  		    			
+	    					<property name="fields" value="msisdn" />    	  		  	
+				    	</bean>
+	    				<bean class="com.baulsupp.kolja.log.viewer.request.RegexFieldCopier">    		
+	    					<property name="pattern" value="country:(.*)" />    	  		    			
+	    					<property name="fields" value="country" />    	  		  	
+				    	</bean>
+	    				<bean class="com.baulsupp.kolja.log.viewer.request.BasicFieldCopier">    			
+	    					<property name="field" value="exception" />    	  		    			
+				    	</bean>
+    				</list>
+    			</property>    	
+    		</bean>
+    </property -->
+    <property name="eventFormat">
+    		<bean class="com.baulsupp.kolja.log.viewer.importing.ConfigurableEventFormat">
+    			<property name="eventMatchers">
+    				<list>
+	    				<!-- bean class="com.baulsupp.kolja.log.viewer.event.PatternEventMatcher">  		
+	    					<property name="pattern" value="country:(.*)" />    	  		    			
+	    					<property name="message" value="Country Line Found (%s)" />    	  		  	
+				    	</bean -->
+	    				<bean class="com.baulsupp.kolja.log.viewer.event.WarnEventMatcher" />    	
+    				</list>
+    			</property>    	
+    		</bean>
+    </property>
+  </bean>
+</beans>
