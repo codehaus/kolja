@@ -52,6 +52,11 @@ public class FieldRenderer implements Renderer<Line> {
     OutputRow row = new OutputRow(viewRow);
     ColouredString seperator = null;
 
+    if (viewRow.isFailed()) {
+      row.append(viewRow.toString());
+      return row;
+    }
+    
     int l = widths.getColumnCount();
 
     HighlightResult highlightResults = null;
