@@ -24,11 +24,11 @@ public class FileLineIterator implements Iterator<Line> {
     this.content = content;
   }
 
-  public static FileLineIterator load(LogFormat format, File file) throws IOException {
+  public static FileLineIterator load(LogFormat format, File file, boolean end) throws IOException {
     Pattern entryPattern = format.getEntryPattern();
     LineParser lineParser = format.getLineParser();
 
-    BufferingStringBuilder content = new FileBufferingStringBuilder(file);
+    BufferingStringBuilder content = new FileBufferingStringBuilder(file, end);
     return new FileLineIterator(content, entryPattern, lineParser);
   }
   

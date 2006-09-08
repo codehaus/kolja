@@ -91,16 +91,16 @@ public class IoUtil {
     return file.getName();
   }
 
-  public static Iterator<Line> loadFiles(LogFormat format, List<File> files) throws IOException {
+  public static Iterator<Line> loadFiles(LogFormat format, List<File> files, boolean end) throws IOException {
     if (files.isEmpty()) {
       return new ArrayList<Line>().iterator();
     } else if (files.size() == 1) {
-      return FileLineIterator.load(format, files.get(0));
+      return FileLineIterator.load(format, files.get(0), end);
     } else {
       MultipleLineIterator mli = new MultipleLineIterator();
 
       for (File file : files) {
-        mli.add(getShortName(file), FileLineIterator.load(format, file));
+        mli.add(getShortName(file), FileLineIterator.load(format, file, end));
       }
 
       return mli;

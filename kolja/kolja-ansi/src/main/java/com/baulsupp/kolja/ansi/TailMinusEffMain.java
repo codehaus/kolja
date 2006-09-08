@@ -58,7 +58,7 @@ public class TailMinusEffMain {
       tail.setAnsi(!cmd.hasOption("a"));
 
       List<File> files = commandFiles(cmd);
-      Iterator<Line> bli = IoUtil.loadFiles(format, files);
+      Iterator<Line> bli = IoUtil.loadFiles(format, files, true);
       
       tail.setI(bli);
       

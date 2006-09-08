@@ -27,7 +27,7 @@ public class IoUtilTest extends TestCase {
 
     IoUtil.writeContent(f, "A", "B", "C");
     
-    Iterator<Line> i = IoUtil.loadFiles(format, Arrays.asList(f));
+    Iterator<Line> i = IoUtil.loadFiles(format, Arrays.asList(f), false);
 
     assertTrue(i.hasNext());
     Line l = i.next();

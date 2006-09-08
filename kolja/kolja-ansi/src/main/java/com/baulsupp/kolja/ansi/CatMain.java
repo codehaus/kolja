@@ -103,7 +103,7 @@ public class CatMain {
     } else if (cmd.getArgs().length == 0) {
       throw new RuntimeException("at least one filename expected");
     } else {
-      bli = IoUtil.loadFiles(format, commandFiles(cmd));
+      bli = IoUtil.loadFiles(format, commandFiles(cmd), false);
     }
     
     return bli;

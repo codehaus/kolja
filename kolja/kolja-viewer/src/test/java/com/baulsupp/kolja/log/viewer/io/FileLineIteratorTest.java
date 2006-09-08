@@ -22,7 +22,7 @@ public class FileLineIteratorTest extends TestCase {
     myFile = File.createTempFile("test-", ".log");
     myFile.deleteOnExit();
 
-    BufferingStringBuilder content = new FileBufferingStringBuilder(myFile);
+    BufferingStringBuilder content = new FileBufferingStringBuilder(myFile, false);
 
     Pattern entryPattern = Pattern.compile("^\\d", Pattern.MULTILINE);
     Pattern fieldPattern = Pattern.compile("(\\d+) - (.*)");

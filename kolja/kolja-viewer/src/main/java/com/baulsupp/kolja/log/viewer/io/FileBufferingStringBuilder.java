@@ -9,13 +9,23 @@ public class FileBufferingStringBuilder extends BufferingStringBuilder {
   private long fileLength = 0;
   private long position = 0;
 
-  public FileBufferingStringBuilder(File file) throws IOException {
+  public FileBufferingStringBuilder(File file, boolean end) throws IOException {
     this.file = file;
+    
+    if (end) {
+      position = file.length();
+    }
+    
     openFile();
   }
 
   private void openFile() throws IOException {
     this.fileLength = file.length();
+    
+    if (reader != null) {
+      reader.close();
+    }
+    
     this.reader = new FileReader(file);
     
     reader.skip(position);    
