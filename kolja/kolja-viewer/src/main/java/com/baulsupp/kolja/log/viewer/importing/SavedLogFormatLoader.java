@@ -1,4 +1,5 @@
 package com.baulsupp.kolja.log.viewer.importing;
+import java.io.File;
 import java.io.IOException;
 
 import org.springframework.core.io.FileSystemResource;
@@ -31,15 +32,33 @@ public class SavedLogFormatLoader {
   }
   
   private static Resource getConfigFile(String configName, String extension) {
+    File resource = null;
+    
     if (isShortName(configName)) {
-      configName = "conf/" + configName + "." + extension;
+      File confDirectory = getConfigDirectory();
+
+      configName = configName + "." + extension;
+      
+      resource = new File(confDirectory, configName);
     } else {
       if (!configName.endsWith("." + extension)) {
         configName += "." + extension;
       }
+      
+      resource = new File(configName);
     }
 
-    return new FileSystemResource(configName);
+    return new FileSystemResource(resource);
+  }
+
+  private static File getConfigDirectory() {
+    String koljaHome = System.getenv("KOLJA_HOME");
+    
+    if (koljaHome == null) {
+      koljaHome = ".";
+    }
+    
+    return new File(koljaHome, "conf");
   }
 
   private static boolean isShortName(String configName) {
