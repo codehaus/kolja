@@ -8,13 +8,17 @@ public class CompressedPackageFormat implements OutputFormat {
 
   private Pattern pattern = Pattern.compile("(\\w)\\w*\\.");
 
-  private Matcher matcher = pattern.matcher("");
+  private transient Matcher matcher = null;
 
   public String format(Object value) {
     if (value == null) {
       return "";
     }
-      
+    
+    if (matcher == null) {
+      matcher = pattern.matcher("");
+    }
+    
     matcher.reset(value.toString());
 
     return matcher.replaceAll("$1.");
