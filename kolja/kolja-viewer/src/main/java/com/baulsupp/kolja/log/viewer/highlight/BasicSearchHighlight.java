@@ -7,7 +7,9 @@ import com.baulsupp.kolja.log.line.Line;
 import com.baulsupp.kolja.util.ColourPair;
 
 public class BasicSearchHighlight implements Highlight<Line> {
-  private Matcher matcher;
+  private Pattern pattern;
+  
+  private transient Matcher matcher;
 
   private ColourPair colour;
 
@@ -17,8 +19,12 @@ public class BasicSearchHighlight implements Highlight<Line> {
 
   public HighlightResult getHighlights(Line viewRow) {
     HighlightResult result = null;
-    if (matcher != null) {
-      matcher.reset(viewRow);
+    if (pattern != null) {
+      if (matcher == null) {
+        matcher = pattern.matcher(viewRow);
+      } else {
+        matcher.reset(viewRow);
+      }
 
       while (matcher.find()) {
         String match = matcher.group();
@@ -33,10 +39,12 @@ public class BasicSearchHighlight implements Highlight<Line> {
   }
 
   public void setPattern(Pattern pattern) {
-    this.matcher = pattern.matcher("");
+    this.pattern = pattern;
+    this.matcher = null;
   }
 
   public void clear() {
     this.matcher = null;
+    this.pattern = null;
   }
 }

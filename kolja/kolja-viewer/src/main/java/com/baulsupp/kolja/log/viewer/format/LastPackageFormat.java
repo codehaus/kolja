@@ -6,15 +6,21 @@ import java.util.regex.Pattern;
 public class LastPackageFormat implements OutputFormat {
   private static final long serialVersionUID = 6750671123052767172L;
   
-  private Matcher matcher;
+  private Pattern pattern;
+  
+  private transient Matcher matcher;
   
   public LastPackageFormat(String seperator) {
-    this.matcher = Pattern.compile(seperator).matcher("");
+    this.pattern = Pattern.compile(seperator);
   }
 
   public String format(Object value) {
     if (value == null) {
       return "";
+    }
+    
+    if (matcher == null) {
+      this.matcher = pattern.matcher("");
     }
       
     int from = 0;

@@ -7,12 +7,14 @@ import com.baulsupp.curses.list.ItemModel;
 import com.baulsupp.kolja.log.line.Line;
 
 public class BasicSearch implements Search {
-  private Matcher matcher;
+  private Pattern pattern;
+  
+  private transient Matcher matcher;
 
   private ItemModel model;
 
   public BasicSearch(Pattern pattern) {
-    this.matcher = pattern.matcher("");
+    this.pattern = pattern;
   }
 
   public void setModel(ItemModel model) {
@@ -44,7 +46,12 @@ public class BasicSearch implements Search {
   }
 
   private boolean matches(Line l) {
-    matcher.reset(l);
+    if (matcher == null) {
+      matcher = pattern.matcher(l);
+    } else {
+      matcher.reset(l);
+    }
+    
     return matcher.find();
   }
 }
