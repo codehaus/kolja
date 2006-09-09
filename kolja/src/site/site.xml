@@ -1,13 +1,20 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <project name="Kolja">
-    <bannerLeft>
-        <name>Kolja Log Tools</name>
-    </bannerLeft>
+	<bannerLeft>
+		<name>Kolja Log Tools</name>
+	</bannerLeft>
 
-    <publishDate format="dd MMM yyyy" />
+	<publishDate format="dd MMM yyyy" />
 
-    <body>        
-	    <menu ref="modules" inherit="top" />
-	    <menu ref="reports" />
-    </body>
+	<body>
+		<menu name="Kolja">
+			<item name="Log4J Appender" href="log4jappender.html" />
+			<item name="Configuration" href="configuration.html" />
+			<item name="Less Style Apps" href="less.html" />
+			<item name="Tail and Cat Style Apps" href="tail.html" />
+		</menu>
+
+		<menu ref="modules" inherit="top" />
+		<menu ref="reports" />
+	</body>
 </project>
