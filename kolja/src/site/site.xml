@@ -8,10 +8,12 @@
 
 	<body>
 		<menu name="Kolja">
+			<item name="About" href="index.html" />
+			<item name="Getting Started" href="gettingstarted.html" />
 			<item name="Log4J Appender" href="log4jappender.html" />
 			<item name="Configuration" href="configuration.html" />
-			<item name="Less Style Apps" href="less.html" />
-			<item name="Tail and Cat Style Apps" href="tail.html" />
+			<item name="Less Style Tools" href="less.html" />
+			<item name="Tail and Cat Style Tools" href="tail.html" />
 		</menu>
 
 		<menu ref="modules" inherit="top" />

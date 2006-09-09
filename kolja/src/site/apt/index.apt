@@ -3,3 +3,27 @@
                                     ------
                                     Yuri Schimke
                                     ------
+
+Kolja Log Tools
+
+  The Kolja Log Tools are designed for making log files more accessible from
+  a terminal console.  
+  
+  The tools are mean to be familiar to anyone currently using less, grep, tail, cat
+  etc.  These unix favourites tools are still widely in use, and this is the target
+  group for Kolja Loog Tools.
+  
+  These tools deliberately don't require special log file formats i.e. XML or
+  use GUIs for viewing log files.  
+  
+  {{{gettingstarted.html}Getting Started}}   
+  
+  {{{configuration.html}Configuration}}   
+  
+  {{{log4jappender.html}Log4J Appender}}   
+  
+  {{{less.html}Less Style Tools}}   
+  
+  {{{tail.html}Tail and Cat Style Tools}}     
+  
+                                   

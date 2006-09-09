@@ -3,12 +3,14 @@
                                     ------
                                     Yuri Schimke
                                     ------
+
+Kolja Log4J Appender
                                     
   The Kolja Log4J Appender can be used for any java processes using Log4J to write to 
   the console.  It handles a Log4J 
-  {{http://logging.apache.org/log4j/docs/api/org/apache/log4j/spi/LoggingEvent.html}}, 
+  {{{http://logging.apache.org/log4j/docs/api/org/apache/log4j/spi/LoggingEvent.html}LoggingEvent}}, 
   by converting it to a Kolja 
-  {{http://kolja.codehaus.org/gloogy/apidocs/com/baulsupp/kolja/log/line/Line.html}} object, 
+  {{{http://kolja.codehaus.org/gloogy/apidocs/com/baulsupp/kolja/log/line/Line.html}Line}} object, 
   then using the formatters and highlighters used for tail.sh.
 
 *-------------------------*---------------*------------------*
