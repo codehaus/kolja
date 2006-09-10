@@ -7,6 +7,7 @@
 Tail and Cat Style Tools 
 
   Options
+  
 +---+
  -f,--fixed-width                     Fixed Screen Width
  -a                                   B&W Coloring
@@ -19,7 +20,10 @@ Tail and Cat Style Tools
  -x,--formatConfig <formatConfig>     Log format definition 
 +---+
 
-  Keybindings
-+---+
-space                                 Pause output
-+---+
+*-------------------------*----------------*
+| Action                  | Key            |
+*-------------------------*----------------*
+| Space                   | Pause          |
+*-------------------------*----------------*
+Keybindings
+
