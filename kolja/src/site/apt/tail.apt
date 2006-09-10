@@ -4,4 +4,22 @@
                                     Yuri Schimke
                                     ------
 
-Tail and Cat Style Tools                                    
+Tail and Cat Style Tools 
+
+  Options
++---+
+ -f,--fixed-width                     Fixed Screen Width
+ -a                                   B&W Coloring
+ -c,--formatClass <formatClass>       An implementation of LogFormat to use
+ -d,--debug                           Debug Output
+ -h,--help                            usage information
+ -i,--stdin                           Read from STDIN
+ -o,--printf <outputFormat>           printf output format
+ -s,--highlightTerm <highlightTerm>   An expression to highlight
+ -x,--formatConfig <formatConfig>     Log format definition 
++---+
+
+  Keybindings
++---+
+space                                 Pause output
++---+
