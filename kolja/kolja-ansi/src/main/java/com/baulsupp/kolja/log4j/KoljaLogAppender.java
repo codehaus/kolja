@@ -18,40 +18,41 @@ import com.baulsupp.kolja.log.viewer.renderer.Renderer;
 
 public class KoljaLogAppender extends AppenderSkeleton {
   private ConsoleRenderer<Line> renderer = null;
-  private LogFormat logFormat;
-  
+
   @Override
   public void activateOptions() {
+    // Logger.getLogger("com.baulsupp.kolja").setLevel(Level.WARN);
+
     super.activateOptions();
-    
+
+    Renderer<Line> gridRenderer;
     try {
-      logFormat = loadFormat();
-      
-      Renderer<Line> gridRenderer = logFormat.getRenderer();
-      renderer = new TailRenderer(gridRenderer, true);
+      LogFormat logFormat = loadFormat();
+      gridRenderer = logFormat.getRenderer();
     } catch (Exception e) {
-      e.printStackTrace();
-      renderer = new ConsoleRenderer<Line>() {
-        public void show(Line item) {
-          System.out.println(item);
-        }
-      };
+      System.err.println(e);
+      gridRenderer = Log4JRenderer.create();
     }
+    renderer = new TailRenderer(gridRenderer, true);
   }
-  
+
   private LogFormat loadFormat() throws IOException {
     return SavedLogFormatLoader.load(name);
   }
 
   @Override
   protected void append(LoggingEvent arg0) {
-    Line l = buildLine(arg0);
-    renderer.show(l);
+    try {
+      Line l = buildLine(arg0);
+      renderer.show(l);
+    } catch (Exception e) {
+      System.err.println(e);
+    }
   }
 
   private Line buildLine(LoggingEvent arg0) {
-    Line line = new BasicLine();
-    
+    Line line = new BasicLine(arg0.toString());
+
     line.setValue(LogConstants.DATE, new Date(arg0.timeStamp));
     line.setValue(LogConstants.CONTENT, arg0.getMessage());
 
@@ -59,7 +60,7 @@ public class KoljaLogAppender extends AppenderSkeleton {
     line.setValue(LogConstants.PRIORITY, Priority.getByName(arg0.getLevel().toString()));
     line.setValue(LogConstants.LOGGER, arg0.getLoggerName());
     line.setValue(LogConstants.THREAD, arg0.getThreadName());
-    
+
     return line;
   }
 
@@ -67,17 +68,17 @@ public class KoljaLogAppender extends AppenderSkeleton {
     if (throwableStrRep == null) {
       return null;
     }
-    
+
     StringBuilder buffer = new StringBuilder();
-    
+
     for (String string : throwableStrRep) {
       if (buffer.length() > 0) {
         buffer.append('\n');
       }
-        
+
       buffer.append(string);
     }
-    
+
     return buffer.toString();
   }
 

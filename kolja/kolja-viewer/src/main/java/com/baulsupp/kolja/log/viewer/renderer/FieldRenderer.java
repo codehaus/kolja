@@ -1,5 +1,6 @@
 package com.baulsupp.kolja.log.viewer.renderer;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.regex.Matcher;
@@ -46,6 +47,12 @@ public class FieldRenderer implements Renderer<Line> {
     this.columns = columns;
     this.formats = formats;
     this.highlight = highlight;
+  }
+
+  public FieldRenderer() {
+    widths = new ColumnWidths();
+    columns = new ArrayList<String>();
+    formats = new ArrayList<OutputFormat>();
   }
 
   public TextDisplayRow getRow(Line viewRow) {
@@ -205,9 +212,23 @@ public class FieldRenderer implements Renderer<Line> {
     this.additional = column;
   }
 
-  public void prependColumn(String name, int i) {
+  public void prependColumn(String name, int width) {
+    prependColumn(name, width, new ToStringFormat());
+  }
+
+  public void appendColumn(String name, int width) {
+    appendColumn(name, width, new ToStringFormat());
+  }
+  
+  public void prependColumn(String name, int width, OutputFormat of) {
     this.columns.add(0, name);
-    this.formats.add(0, new ToStringFormat());
-    this.widths.addColumn(0, new Column(i));
+    this.formats.add(0, of);
+    this.widths.addColumn(0, new Column(width));
+  }
+
+  public void appendColumn(String name, int width, OutputFormat of) {
+    this.columns.add(name);
+    this.formats.add(of);
+    this.widths.addColumn(new Column(width));
   }
 }

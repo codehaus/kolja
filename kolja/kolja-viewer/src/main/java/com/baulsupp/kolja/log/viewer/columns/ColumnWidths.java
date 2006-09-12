@@ -2,6 +2,7 @@ package com.baulsupp.kolja.log.viewer.columns;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class ColumnWidths implements Serializable {
@@ -88,14 +89,7 @@ public class ColumnWidths implements Serializable {
   
   @Override
   public String toString() {
-    StringBuilder sb = new StringBuilder();
-    
-    for (int i : widths) {
-      sb.append(i);
-      sb.append(' ');
-    }
-    
-    return sb.toString();
+    return Arrays.toString(widths);
   }
 
   public int[] getSteps() {
