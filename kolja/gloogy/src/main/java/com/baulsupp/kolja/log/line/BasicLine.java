@@ -1,6 +1,5 @@
 package com.baulsupp.kolja.log.line;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -76,7 +75,7 @@ public class BasicLine implements Line {
   }
 
   public void setFailed() {
-    this.values = Collections.emptyMap();
+    this.values = new HashMap<String, Object>();
     this.failed = true;
   }
 
