@@ -2,8 +2,13 @@ package com.baulsupp.kolja.log4j;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import org.apache.log4j.AppenderSkeleton;
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+import org.apache.log4j.MDC;
 import org.apache.log4j.spi.LoggingEvent;
 
 import com.baulsupp.kolja.ansi.ConsoleRenderer;
@@ -21,7 +26,8 @@ public class KoljaLogAppender extends AppenderSkeleton {
 
   @Override
   public void activateOptions() {
-    // Logger.getLogger("com.baulsupp.kolja").setLevel(Level.WARN);
+    // TODO am I just being paranoid
+    Logger.getLogger("com.baulsupp.kolja").setLevel(Level.OFF);
 
     super.activateOptions();
 
@@ -60,6 +66,12 @@ public class KoljaLogAppender extends AppenderSkeleton {
     line.setValue(LogConstants.PRIORITY, Priority.getByName(arg0.getLevel().toString()));
     line.setValue(LogConstants.LOGGER, arg0.getLoggerName());
     line.setValue(LogConstants.THREAD, arg0.getThreadName());
+    
+    for (Object e : MDC.getContext().entrySet()) {
+      Entry entry = (Map.Entry) e;
+      line.setValue((String) entry.getKey(), entry.getValue());
+    }
+    
 
     return line;
   }
