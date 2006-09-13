@@ -20,6 +20,7 @@ import com.baulsupp.kolja.log.line.type.Priority;
 import com.baulsupp.kolja.log.viewer.importing.LogFormat;
 import com.baulsupp.kolja.log.viewer.importing.SavedLogFormatLoader;
 import com.baulsupp.kolja.log.viewer.renderer.Renderer;
+import com.baulsupp.kolja.util.PlatformUtil;
 
 public class KoljaLogAppender extends AppenderSkeleton {
   private ConsoleRenderer<Line> renderer = null;
@@ -39,7 +40,8 @@ public class KoljaLogAppender extends AppenderSkeleton {
       System.err.println(e);
       gridRenderer = Log4JRenderer.create();
     }
-    renderer = new TailRenderer(gridRenderer, true);
+    
+    renderer = new TailRenderer(gridRenderer, !PlatformUtil.isWindows());
   }
 
   private LogFormat loadFormat() throws IOException {
