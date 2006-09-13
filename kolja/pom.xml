@@ -8,6 +8,32 @@
 	<version>1.0-SNAPSHOT</version>
     <url>http://kolja.codehaus.org/</url>
     <inceptionYear>2002</inceptionYear>
+    <mailingLists>
+    	<mailingList>
+    		<name>User</name>
+				<archive>http://archive.kolja.codehaus.org/user</archive>
+				<subscribe>http://xircles.codehaus.org/lists/user%40kolja.codehaus.org/subscribe</subscribe>
+				<post>user@kolja.codehaus.org</post>
+    	</mailingList>
+    	<mailingList>
+    		<name>SCM</name>
+				<archive>http://archive.kolja.codehaus.org/scm</archive>
+				<subscribe>http://xircles.codehaus.org/lists/scm%40kolja.codehaus.org/subscribe</subscribe>
+				<post>scm@kolja.codehaus.org</post>
+    	</mailingList>
+    	<mailingList>
+    		<name>Dev</name>
+				<archive>http://archive.kolja.codehaus.org/dev</archive>
+				<subscribe>http://xircles.codehaus.org/lists/dev%40kolja.codehaus.org/subscribe</subscribe>
+				<post>dev@kolja.codehaus.org</post>
+    	</mailingList>
+    	<mailingList>
+    		<name>Announce</name>
+				<archive>http://archive.kolja.codehaus.org/announce</archive>
+				<subscribe>http://xircles.codehaus.org/lists/announce%40kolja.codehaus.org/subscribe</subscribe>
+				<post>announce@kolja.codehaus.org</post>
+    	</mailingList>
+    </mailingLists>
 	<licenses>
 		<license>
 			<name>LGPL</name>
