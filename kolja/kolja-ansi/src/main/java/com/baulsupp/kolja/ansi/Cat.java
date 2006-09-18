@@ -6,6 +6,10 @@ import java.util.regex.Pattern;
 
 import jline.Terminal;
 
+import com.baulsupp.kolja.ansi.commands.CommandList;
+import com.baulsupp.kolja.ansi.commands.HelpCommand;
+import com.baulsupp.kolja.ansi.commands.PauseCommand;
+import com.baulsupp.kolja.ansi.commands.QuitCommand;
 import com.baulsupp.kolja.log.line.Line;
 import com.baulsupp.kolja.log.viewer.highlight.BasicSearchHighlight;
 import com.baulsupp.kolja.log.viewer.renderer.FieldRenderer;
@@ -24,6 +28,12 @@ public class Cat {
   protected volatile boolean isPaused = false;
 
   protected TailRenderer renderer;
+  
+  protected CommandList commands = new CommandList();
+  
+  public Cat() {
+    createDefaultCommands();
+  }
 
   public boolean isAnsi() {
     return ansi;
@@ -41,7 +51,7 @@ public class Cat {
     this.isQuit = isQuit;
   }
 
-  private boolean isPaused() {
+  public boolean isPaused() {
     return isPaused;
   }
 
@@ -58,15 +68,10 @@ public class Cat {
   }
 
   protected void processInput() throws IOException {
-    while (true) {
+    while (!isQuit()) {
       String c = readCommand();
 
-      if (c.equals("q")) {
-        quit();
-        break;
-      } else if (c.equals(" ")) {
-        setPaused(!isPaused());
-      }
+      commands.run(c, this);      
     }
   }
 
@@ -129,5 +134,15 @@ public class Cat {
 
   public void setFixedWidth(boolean b) {
     renderer.setFixedWidth(b);
+  }
+  
+  protected void createDefaultCommands() {
+    commands.add("h", new HelpCommand());
+    commands.add(" ", new PauseCommand());
+    commands.add("q", new QuitCommand());
+  } 
+
+  public CommandList getCommands() {
+    return commands;
   }
 }
