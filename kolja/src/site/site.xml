@@ -15,6 +15,13 @@
 			<item name="Less Style Tools" href="less.html" />
 			<item name="Tail and Cat Style Tools" href="tail.html" />
 		</menu>
+		
+		<menu name="Configuration">
+			<item name="Config Format" href="configuration.html" />
+			<item name="Field Formats" href="formats.html" />
+			<item name="Highlights" href="highlights.html" />
+			<item name="Event Matchers" href="eventmatchers.html" />
+		</menu>
 
 		<menu ref="modules" inherit="top" />
 		<menu ref="reports" />

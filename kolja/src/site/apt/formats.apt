@@ -1,0 +1,47 @@
+                                    ------
+                                    Field Formats
+                                    ------
+                                    Yuri Schimke
+                                    ------
+
+  Field Formats are use to output individual fields.  
+
+Format Format
+
+  A Format that uses a standard java.text.Format
+
++---+  
+<bean class="com.baulsupp.kolja.log.viewer.format.FormatFormat">
+	<property name="format" class="..." />
+</bean>
++---+
+
+*-------------------------*---------------*
+| Factory Method          | Example       |
+*-------------------------*---------------*
+| shortTimeFormat         | 12:15:00      |
+*-------------------------*---------------*
+
+Compressed Package Format
+
+  Returns abbreviated package names e.g. c.b.k.l.v.f.CompressedPackageFormat
+
++---+  
+<bean class="com.baulsupp.kolja.log.viewer.format.CompressedPackageFormat" />
++---+  
+
+Last Package Format
+
+  Returns abbreviated package names e.g. LastPackageFormat
+
++---+  
+<bean class="com.baulsupp.kolja.log.viewer.format.LastPackageFormat" />
++---+  
+
+To String Format
+
+  Returns String.valueOf()
+
++---+  
+<bean class="com.baulsupp.kolja.log.viewer.format.ToStringFormat" />
++---+  
