@@ -3,7 +3,7 @@ package com.baulsupp.curses.list;
 import jcurses.system.CharColor;
 import jcurses.system.Toolkit;
 
-import com.baulsupp.kolja.util.ColouredString;
+import com.baulsupp.kolja.util.colours.ColouredString;
 
 public class TextPanel {
   private int xOffset = 0;

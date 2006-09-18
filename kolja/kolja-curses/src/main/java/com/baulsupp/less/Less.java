@@ -44,7 +44,7 @@ import com.baulsupp.kolja.log.viewer.request.RequestIndex;
 import com.baulsupp.kolja.log.viewer.request.RequestLine;
 import com.baulsupp.kolja.log.viewer.search.BasicSearch;
 import com.baulsupp.kolja.log.viewer.search.Search;
-import com.baulsupp.kolja.util.ColourPair;
+import com.baulsupp.kolja.util.colours.ColourPair;
 
 public class Less extends CursesListWindow<Line> implements IScrollable, PaintListener {
   private static final int BACKGROUND_READAHEAD = 25000;

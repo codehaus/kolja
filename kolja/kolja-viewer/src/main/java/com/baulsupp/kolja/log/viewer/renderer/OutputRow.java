@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.baulsupp.kolja.log.line.Line;
-import com.baulsupp.kolja.util.ColourPair;
-import com.baulsupp.kolja.util.ColouredString;
-import com.baulsupp.kolja.util.MultiColourString;
+import com.baulsupp.kolja.util.colours.ColourPair;
+import com.baulsupp.kolja.util.colours.ColouredString;
+import com.baulsupp.kolja.util.colours.MultiColourString;
 
 public class OutputRow implements TextDisplayRow {
   protected List<MultiColourString> text = new ArrayList<MultiColourString>(10);

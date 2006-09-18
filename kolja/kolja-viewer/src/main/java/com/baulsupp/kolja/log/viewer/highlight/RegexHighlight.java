@@ -6,7 +6,7 @@ import java.util.regex.Pattern;
 
 import com.baulsupp.kolja.log.LogConstants;
 import com.baulsupp.kolja.log.line.Line;
-import com.baulsupp.kolja.util.ColourPair;
+import com.baulsupp.kolja.util.colours.ColourPair;
 
 // TODO select highlight scope, line, field etc
 public class RegexHighlight implements Highlight<Line>, Serializable {

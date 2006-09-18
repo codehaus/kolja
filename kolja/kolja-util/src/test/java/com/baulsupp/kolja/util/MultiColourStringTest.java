@@ -2,6 +2,10 @@ package com.baulsupp.kolja.util;
 
 import java.util.List;
 
+import com.baulsupp.kolja.util.colours.ColourPair;
+import com.baulsupp.kolja.util.colours.ColouredString;
+import com.baulsupp.kolja.util.colours.MultiColourString;
+
 import junit.framework.TestCase;
 
 public class MultiColourStringTest extends TestCase {

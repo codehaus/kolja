@@ -6,7 +6,8 @@ import jcurses.system.CharColor;
 
 import org.apache.log4j.Logger;
 
-import com.baulsupp.kolja.util.ColourPair;
+import com.baulsupp.kolja.util.colours.Colour;
+import com.baulsupp.kolja.util.colours.ColourPair;
 
 public class ColorList {
   public static final Logger logger = Logger.getLogger(ColorList.class);
@@ -53,7 +54,7 @@ public class ColorList {
     return c;
   }
 
-  private static short getColor(Color foreground, short defaultColor) {
+  private static short getColor(Colour foreground, short defaultColor) {
     if (foreground.equals(Color.BLACK)) {
       return CharColor.BLACK;
     } else if (foreground.equals(Color.BLUE)) {

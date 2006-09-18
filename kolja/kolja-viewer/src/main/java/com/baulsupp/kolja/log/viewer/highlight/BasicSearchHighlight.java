@@ -4,7 +4,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.baulsupp.kolja.log.line.Line;
-import com.baulsupp.kolja.util.ColourPair;
+import com.baulsupp.kolja.util.colours.ColourPair;
 
 public class BasicSearchHighlight implements Highlight<Line> {
   private Pattern pattern;

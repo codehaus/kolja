@@ -3,8 +3,8 @@ package com.baulsupp.curses.list;
 import static com.baulsupp.kolja.util.TextUtil.hardWrap;
 import static com.baulsupp.kolja.util.TextUtil.softWrap;
 
-import com.baulsupp.kolja.util.ColourPair;
-import com.baulsupp.kolja.util.ColouredString;
+import com.baulsupp.kolja.util.colours.ColourPair;
+import com.baulsupp.kolja.util.colours.ColouredString;
 
 public class TextRenderer<T> implements CursesListRenderer<T> {
   public static final int NO_WRAP = -1;

@@ -9,7 +9,7 @@ import com.baulsupp.kolja.log.line.BasicLine;
 import com.baulsupp.kolja.log.viewer.columns.ColumnWidths;
 import com.baulsupp.kolja.log.viewer.format.OutputFormat;
 import com.baulsupp.kolja.log.viewer.format.ToStringFormat;
-import com.baulsupp.kolja.util.MultiColourString;
+import com.baulsupp.kolja.util.colours.MultiColourString;
 
 public class FieldRendererTest extends TestCase {
   private BasicLine l;

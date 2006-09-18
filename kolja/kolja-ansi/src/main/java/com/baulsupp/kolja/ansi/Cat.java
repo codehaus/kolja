@@ -14,7 +14,7 @@ import com.baulsupp.kolja.log.line.Line;
 import com.baulsupp.kolja.log.viewer.highlight.BasicSearchHighlight;
 import com.baulsupp.kolja.log.viewer.renderer.FieldRenderer;
 import com.baulsupp.kolja.log.viewer.renderer.Renderer;
-import com.baulsupp.kolja.util.ColourPair;
+import com.baulsupp.kolja.util.colours.ColourPair;
 
 public class Cat {
   protected boolean ansi;

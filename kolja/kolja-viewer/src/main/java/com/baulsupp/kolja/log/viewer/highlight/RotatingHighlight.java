@@ -5,8 +5,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.baulsupp.kolja.log.line.Line;
-import com.baulsupp.kolja.util.ColourPair;
-import com.baulsupp.kolja.util.ColourRotator;
+import com.baulsupp.kolja.util.colours.ColourPair;
+import com.baulsupp.kolja.util.colours.ColourRotator;
 
 public class RotatingHighlight implements Highlight<Line>, Serializable {
   private static final long serialVersionUID = 2264643873100280184L;

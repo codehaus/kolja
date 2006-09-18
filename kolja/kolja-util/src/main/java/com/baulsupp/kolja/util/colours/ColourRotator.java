@@ -1,4 +1,4 @@
-package com.baulsupp.kolja.util;
+package com.baulsupp.kolja.util.colours;
 
 import java.util.Arrays;
 import java.util.List;
@@ -9,7 +9,7 @@ public class ColourRotator {
   private int pos = 0;
   
   public ColourRotator() {
-    this.colours = ColourPair.ALL_PAIRS;
+    this.colours = Arrays.asList(ColourPair.values());
   }
   
   public ColourRotator(ColourPair... colours) {

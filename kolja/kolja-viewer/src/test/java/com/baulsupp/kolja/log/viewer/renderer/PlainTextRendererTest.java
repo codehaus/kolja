@@ -5,7 +5,7 @@ import java.util.List;
 import junit.framework.TestCase;
 
 import com.baulsupp.kolja.log.line.BasicLine;
-import com.baulsupp.kolja.util.MultiColourString;
+import com.baulsupp.kolja.util.colours.MultiColourString;
 
 public class PlainTextRendererTest extends TestCase {
   private BasicLine l;

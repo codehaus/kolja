@@ -1,7 +1,7 @@
 package com.baulsupp.kolja.log.viewer.highlight;
 
 import com.baulsupp.kolja.log.line.Line;
-import com.baulsupp.kolja.util.ColourPair;
+import com.baulsupp.kolja.util.colours.ColourPair;
 
 public class FieldHighlight implements Highlight<Line> {
   private String fieldName;

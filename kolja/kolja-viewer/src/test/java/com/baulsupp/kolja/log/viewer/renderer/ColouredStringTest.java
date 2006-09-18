@@ -2,8 +2,9 @@ package com.baulsupp.kolja.log.viewer.renderer;
 
 import junit.framework.TestCase;
 
-import com.baulsupp.kolja.util.ColourPair;
-import com.baulsupp.kolja.util.ColouredString;
+import com.baulsupp.kolja.util.colours.Colour;
+import com.baulsupp.kolja.util.colours.ColourPair;
+import com.baulsupp.kolja.util.colours.ColouredString;
 
 public class ColouredStringTest extends TestCase {
   public void testColourChange() {
@@ -28,8 +29,8 @@ public class ColouredStringTest extends TestCase {
     ColouredString cs = new ColouredString(ColourPair.BLUE_ON_BLACK, "a");
 
     assertEquals(ColourPair.BLUE_ON_BLACK, cs.getColorPair());
-    assertEquals(ColourPair.BLUE, cs.getForegroundColor());
-    assertEquals(ColourPair.BLACK, cs.getBackgroundColor());
+    assertEquals(Colour.BLUE, cs.getForegroundColor());
+    assertEquals(Colour.BLACK, cs.getBackgroundColor());
   }
   
   public void testStringOps() {

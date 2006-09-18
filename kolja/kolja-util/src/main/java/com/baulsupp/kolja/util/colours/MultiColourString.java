@@ -1,4 +1,4 @@
-package com.baulsupp.kolja.util;
+package com.baulsupp.kolja.util.colours;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -3,7 +3,7 @@ package com.baulsupp.kolja.log.viewer.request;
 import com.baulsupp.kolja.log.line.Line;
 import com.baulsupp.kolja.log.viewer.highlight.Highlight;
 import com.baulsupp.kolja.log.viewer.highlight.HighlightResult;
-import com.baulsupp.kolja.util.ColourPair;
+import com.baulsupp.kolja.util.colours.ColourPair;
 
 public class RequestHighlight implements Highlight<Line> {
   private RequestIndex requestIndex;

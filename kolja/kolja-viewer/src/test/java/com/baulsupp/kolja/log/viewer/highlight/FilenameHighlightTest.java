@@ -5,7 +5,7 @@ import junit.framework.TestCase;
 import com.baulsupp.kolja.log.LogConstants;
 import com.baulsupp.kolja.log.line.BasicLine;
 import com.baulsupp.kolja.log.line.Line;
-import com.baulsupp.kolja.util.ColourPair;
+import com.baulsupp.kolja.util.colours.ColourPair;
 
 public class FilenameHighlightTest extends TestCase {
   public void testGetHighlights() {

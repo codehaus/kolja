@@ -5,7 +5,7 @@ import java.io.Serializable;
 import com.baulsupp.kolja.log.LogConstants;
 import com.baulsupp.kolja.log.line.Line;
 import com.baulsupp.kolja.log.line.type.Priority;
-import com.baulsupp.kolja.util.ColourPair;
+import com.baulsupp.kolja.util.colours.ColourPair;
 
 public class PriorityHighlight implements Highlight<Line>, Serializable {
   private static final long serialVersionUID = 2264643873100280184L;

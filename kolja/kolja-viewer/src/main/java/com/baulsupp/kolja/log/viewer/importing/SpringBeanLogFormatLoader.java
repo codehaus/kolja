@@ -1,6 +1,5 @@
 package com.baulsupp.kolja.log.viewer.importing;
 
-import java.awt.Color;
 import java.beans.PropertyEditor;
 import java.text.DateFormat;
 import java.util.HashMap;
@@ -16,9 +15,6 @@ import org.springframework.core.io.Resource;
 
 import com.baulsupp.kolja.log.viewer.columns.ColumnWidths;
 import com.baulsupp.kolja.log.viewer.columns.ColumnWidthsPropertyEditor;
-import com.baulsupp.kolja.util.ColourPair;
-import com.baulsupp.kolja.util.ColourPairPropertyEditor;
-import com.baulsupp.kolja.util.ColourPropertyEditor;
 import com.baulsupp.kolja.util.DateFormatPropertyEditor;
 import com.baulsupp.kolja.util.PatternPropertyEditor;
 
@@ -42,8 +38,6 @@ public class SpringBeanLogFormatLoader {
     }
 
     Map<Class, PropertyEditor> map = new HashMap<Class, PropertyEditor>();
-    map.put(ColourPair.class, new ColourPairPropertyEditor());
-    map.put(Color.class, new ColourPropertyEditor());
     map.put(Pattern.class, new PatternPropertyEditor());
     map.put(DateFormat.class, new DateFormatPropertyEditor());
     map.put(ColumnWidths.class, new ColumnWidthsPropertyEditor());

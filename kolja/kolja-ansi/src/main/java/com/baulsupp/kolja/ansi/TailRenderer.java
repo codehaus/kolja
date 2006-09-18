@@ -1,6 +1,5 @@
 package com.baulsupp.kolja.ansi;
 
-import java.awt.Color;
 import java.util.List;
 
 import jline.ANSIBuffer;
@@ -9,8 +8,9 @@ import jline.Terminal;
 import com.baulsupp.kolja.log.line.Line;
 import com.baulsupp.kolja.log.viewer.renderer.Renderer;
 import com.baulsupp.kolja.log.viewer.renderer.TextDisplayRow;
-import com.baulsupp.kolja.util.ColouredString;
-import com.baulsupp.kolja.util.MultiColourString;
+import com.baulsupp.kolja.util.colours.Colour;
+import com.baulsupp.kolja.util.colours.ColouredString;
+import com.baulsupp.kolja.util.colours.MultiColourString;
 
 public class TailRenderer implements ConsoleRenderer<Line> {
   private Renderer<Line> renderer;
@@ -57,19 +57,19 @@ public class TailRenderer implements ConsoleRenderer<Line> {
   }
 
   private void append(ANSIBuffer buffy, ColouredString string) {
-    if (string.getForegroundColor() == Color.BLUE) {
+    if (string.getForegroundColor() == Colour.BLUE) {
       buffy.blue(string.toString());
-    } else if (string.getForegroundColor() == Color.RED) {
+    } else if (string.getForegroundColor() == Colour.RED) {
       buffy.red(string.toString());
-    } else if (string.getForegroundColor() == Color.MAGENTA) {
+    } else if (string.getForegroundColor() == Colour.MAGENTA) {
       buffy.magenta(string.toString());
-    } else if (string.getForegroundColor() == Color.GREEN) {
+    } else if (string.getForegroundColor() == Colour.GREEN) {
       buffy.green(string.toString());
-    } else if (string.getForegroundColor() == Color.WHITE) {
+    } else if (string.getForegroundColor() == Colour.WHITE) {
       buffy.yellow(string.toString());
-    } else if (string.getForegroundColor() == Color.BLACK) {
+    } else if (string.getForegroundColor() == Colour.BLACK) {
       buffy.black(string.toString());
-    } else if (string.getForegroundColor() == Color.CYAN) {
+    } else if (string.getForegroundColor() == Colour.CYAN) {
       buffy.cyan(string.toString());
     } else {
       buffy.append(string.toString());

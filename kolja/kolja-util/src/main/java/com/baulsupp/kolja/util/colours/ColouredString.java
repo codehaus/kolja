@@ -1,6 +1,5 @@
-package com.baulsupp.kolja.util;
+package com.baulsupp.kolja.util.colours;
 
-import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,14 +49,14 @@ public class ColouredString implements CharSequence {
   /**
    * Returns the foreground colour, or null for default.
    */
-  public Color getForegroundColor() {
+  public Colour getForegroundColor() {
     return colour == null ? null : colour.getForeground();
   }
 
   /**
    * Returns the background colour, or null for default.
    */
-  public Color getBackgroundColor() {
+  public Colour getBackgroundColor() {
     return colour == null ? null : colour.getBackground();
   }
 

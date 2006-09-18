@@ -2,6 +2,10 @@ package com.baulsupp.kolja.util;
 
 import junit.framework.TestCase;
 
+import com.baulsupp.kolja.util.colours.Colour;
+import com.baulsupp.kolja.util.colours.ColourPair;
+import com.baulsupp.kolja.util.colours.ColouredString;
+
 public class ColouredStringTest extends TestCase {
   public void testUncoloured() {
     ColouredString s = new ColouredString(null, "abc");
@@ -14,8 +18,8 @@ public class ColouredStringTest extends TestCase {
   public void testColoured() {
     ColouredString s = new ColouredString(ColourPair.RED_ON_WHITE, "abc");
     
-    assertEquals(ColourPair.WHITE, s.getBackgroundColor());
-    assertEquals(ColourPair.RED, s.getForegroundColor());
+    assertEquals(Colour.WHITE, s.getBackgroundColor());
+    assertEquals(Colour.RED, s.getForegroundColor());
     assertEquals("abc", s.toString());
   }
   

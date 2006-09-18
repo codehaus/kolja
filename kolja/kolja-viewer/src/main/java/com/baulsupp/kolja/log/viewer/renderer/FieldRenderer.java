@@ -16,10 +16,10 @@ import com.baulsupp.kolja.log.viewer.format.ToStringFormat;
 import com.baulsupp.kolja.log.viewer.highlight.Highlight;
 import com.baulsupp.kolja.log.viewer.highlight.HighlightList;
 import com.baulsupp.kolja.log.viewer.highlight.HighlightResult;
-import com.baulsupp.kolja.util.ColourPair;
-import com.baulsupp.kolja.util.ColouredString;
-import com.baulsupp.kolja.util.MultiColourString;
 import com.baulsupp.kolja.util.TextUtil;
+import com.baulsupp.kolja.util.colours.ColourPair;
+import com.baulsupp.kolja.util.colours.ColouredString;
+import com.baulsupp.kolja.util.colours.MultiColourString;
 
 public class FieldRenderer implements Renderer<Line> {
   public static final Logger logger = Logger.getLogger(FieldRenderer.class);

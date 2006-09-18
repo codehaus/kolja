@@ -7,8 +7,8 @@ import org.apache.log4j.Logger;
 import com.baulsupp.curses.list.DisplayRow;
 import com.baulsupp.curses.list.TextPanel;
 import com.baulsupp.kolja.log.viewer.renderer.TextDisplayRow;
-import com.baulsupp.kolja.util.ColouredString;
-import com.baulsupp.kolja.util.MultiColourString;
+import com.baulsupp.kolja.util.colours.ColouredString;
+import com.baulsupp.kolja.util.colours.MultiColourString;
 
 public class LessRow implements DisplayRow {
   public static final Logger logger = Logger.getLogger(LessRow.class);
