@@ -33,4 +33,9 @@ class MockLineIndex implements LineIndex {
     public void addLine(Line line) {
         lines.add(line);
     }
+
+    public void removeLineListener(LineListener listener) {
+      // TODO Auto-generated method stub
+      
+    }
 }

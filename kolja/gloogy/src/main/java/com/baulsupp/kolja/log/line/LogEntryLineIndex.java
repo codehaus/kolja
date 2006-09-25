@@ -82,6 +82,10 @@ public class LogEntryLineIndex implements LineIndex, Reloadable {
     listeners.add(listener);
   }
 
+  public void removeLineListener(LineListener listener) {
+    listeners.remove(listener);
+  }
+
   // TODO parse values
   protected Line buildLine(int lineStart, int lineEnd) {
     BasicLine l = new BasicLine();
@@ -112,5 +116,4 @@ public class LogEntryLineIndex implements LineIndex, Reloadable {
     }
     return false;
   }
-  
 }

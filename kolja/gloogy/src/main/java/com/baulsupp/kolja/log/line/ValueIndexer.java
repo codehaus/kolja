@@ -78,4 +78,8 @@ public class ValueIndexer implements LineListener, CompletionStatus {
     
     return totalUnknown / range.getLength();
   }
+
+  public void deregister() {
+    li.removeLineListener(this);
+  }
 }

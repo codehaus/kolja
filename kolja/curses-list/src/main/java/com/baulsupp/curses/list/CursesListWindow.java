@@ -1,17 +1,29 @@
 package com.baulsupp.curses.list;
 
+import java.beans.PropertyChangeListener;
+import java.util.concurrent.Callable;
+import java.util.concurrent.locks.Lock;
+
 import jcurses.system.InputChar;
-import jcurses.system.Toolkit;
 import jcurses.util.Message;
 import jcurses.widgets.BorderLayoutManager;
 import jcurses.widgets.WidgetsConstants;
 
 import org.apache.log4j.Logger;
 
-public class CursesListWindow<T> implements InputHandler {
+import com.baulsupp.curses.application.Command;
+import com.baulsupp.curses.application.CommandList;
+import com.baulsupp.curses.application.HelpCommand;
+import com.baulsupp.curses.application.ListMovementCommand;
+import com.baulsupp.curses.application.QuitCommand;
+import com.baulsupp.curses.application.util.ResponsiveLock;
+import com.baulsupp.kolja.util.event.PropertyChangeListenerList;
+
+public class CursesListWindow<T, S extends CursesListWindow<T, S>> implements InputHandler {
   private static final Logger log = Logger.getLogger("com.baulsupp.list.CursesListWindow");
 
-  protected CursesList<T> list = new CursesList<T>();
+  // TODO reduce visibility
+  public CursesList<T> list = new CursesList<T>();
 
   protected LineNumberIndex lineNumbers = null;
 
@@ -19,62 +31,81 @@ public class CursesListWindow<T> implements InputHandler {
 
   protected BasicWindow window;
 
+  protected CommandList commands = new CommandList();
+  
+  protected PropertyChangeListenerList listeners = new PropertyChangeListenerList();
+
+  // TODO make private
+  public ResponsiveLock uiLock = new ResponsiveLock();
+  private Lock backgroundLock = uiLock.createBackgroundLock(1500);
+
   public void setLineNumbers(LineNumberIndex lineNumbers) {
     this.lineNumbers = lineNumbers;
   }
 
+  public CommandList getCommands() {
+    return commands;
+  }
+  
+  public void createDefaultCommands() {
+    addCommand(new HelpCommand());
+    addCommand(new QuitCommand());
+    addCommand(new ListMovementCommand());
+  }
+
+  public void addCommand(Command command) {
+    commands.add(command);
+    
+    if (command instanceof PropertyChangeListener) {
+      addPropertyChangeListener((PropertyChangeListener) command);
+    }
+  }
+
+  public void addPropertyChangeListener(PropertyChangeListener listener) {
+    listeners.add(listener);
+  }
+
   public boolean handleInput(InputChar inp) {
     try {
-      if (Util.was_q(inp)) {
-        shutdown();
-      } else if (usesLineNumbers() && Util.wasLetter(inp, 'g')) {
-        gotoLine();
-      } else if (list.handleInput(inp)) {
+      uiLock.lock();
+
+      boolean handled = commands.run(inp, this);
+      
+      if (handled) {
         return true;
-      } else {
+      }
+      
+//      if (list.handleInput(inp)) {
+//        return true;
+//      } else {
         log.debug("unknown keystroke");
         log.debug("special " + inp.isSpecialCode());
         log.debug("code " + inp.getCode());
         if (!inp.isSpecialCode())
           log.debug("char " + inp.getCharacter());
         return false;
-      }
+//      }
     } catch (Exception e) {
       log.error("error", e);
-    }
-
-    return true;
-  }
-
-  private boolean usesLineNumbers() {
-    return lineNumbers != null;
-  }
-
-  private void gotoLine() {
-    String a = TextDialog.getValue("Goto Line");
-
-    if (a != null) {
-      try {
-        if (a.equals("")) {
-          list.end();
-        } else {
-          int line = Integer.parseInt(a);
-          list.moveTo(lineNumbers.offset(line - 1));
-        }
-      } catch (NumberFormatException nfe) {
-        showMessage(nfe.toString());
-      }
+      showError(e);
+      return true;
+    } finally {
+      uiLock.unlock();
     }
   }
-
-  protected void showMessage(String message) {
-    new Message("", message, "ok").show();
+  
+  protected void showError(Exception e) {
+    new Message("Error", String.valueOf(e.getMessage()), "ok").show();
   }
 
-  protected void shutdown() {
-    Toolkit.clearScreen(ColorList.blackOnWhite);
-    Toolkit.shutdown();
-    System.exit(-1);
+  public <R> R performWithLock(Callable<R> runnable) throws Exception {
+    backgroundLock.lock();
+    
+    try {
+      return runnable.call();
+    } finally {
+      backgroundLock.unlock();
+    }
   }
 
   public void show() {
@@ -93,5 +124,21 @@ public class CursesListWindow<T> implements InputHandler {
     window.setHandler(this);
     manager.addWidget(list, BorderLayoutManager.CENTER, WidgetsConstants.ALIGNMENT_CENTER,
         WidgetsConstants.ALIGNMENT_CENTER);
+  }
+
+  public void setRenderer(CursesListRenderer<T> renderer) {
+    CursesListRenderer oldRenderer = list.getRenderer();
+    
+    list.setRenderer(renderer);
+
+    listeners.firePropertyChangeEvent(this, "renderer", oldRenderer, renderer);
+  }
+
+  public void setModel(ItemModel<T> model) {
+    ItemModel oldModel = list.getModel();
+    
+    list.setModel(model);
+
+    listeners.firePropertyChangeEvent(this, "model", oldModel, model);
   }
 }

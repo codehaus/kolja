@@ -4,10 +4,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.TreeMap;
 
 import org.apache.commons.collections.primitives.ArrayIntList;
@@ -17,11 +15,10 @@ import org.apache.commons.collections.primitives.IntList;
 import com.baulsupp.kolja.log.field.MemoryIntField;
 import com.baulsupp.kolja.log.line.Line;
 import com.baulsupp.kolja.log.line.LineIndex;
-import com.baulsupp.kolja.log.line.LineListener;
 import com.baulsupp.kolja.log.line.ValueIndexer;
 import com.baulsupp.kolja.log.util.IntRange;
 
-public class RequestIndex extends ValueIndexer implements LineIndex {
+public class RequestIndex extends ValueIndexer {
   protected String requestField;
 
   protected String messageField;
@@ -31,8 +28,6 @@ public class RequestIndex extends ValueIndexer implements LineIndex {
   protected Map<Integer, RequestLine> requests = new TreeMap<Integer, RequestLine>();
 
   protected List<String> fields;
-
-  private Set<LineListener> listeners = new HashSet<LineListener>();
 
   protected List<FieldCopier> matchers = new ArrayList<FieldCopier>();
 
@@ -163,18 +158,6 @@ public class RequestIndex extends ValueIndexer implements LineIndex {
 
   public void addMatcher(FieldCopier fieldCopier) {
     matchers.add(fieldCopier);
-  }
-
-  public void fireListeners(IntRange region, List<Line> lines) {
-    if (listeners.size() > 0) {
-      for (LineListener listener : listeners) {
-        listener.linesAvailable(region, lines);
-      }
-    }
-  }
-
-  public void addLineListener(LineListener listener) {
-    listeners.add(listener);
   }
 
   public Object getRequestIdentifier(Line viewRow) {

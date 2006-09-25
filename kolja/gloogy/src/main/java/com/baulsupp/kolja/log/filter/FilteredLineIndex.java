@@ -51,6 +51,10 @@ public class FilteredLineIndex implements LineIndex {
     listeners.add(listener);
   }
 
+  public void removeLineListener(LineListener listener) {
+    listeners.remove(listener);
+  }
+
   public int length() {
     return lineIndex.length();
   }

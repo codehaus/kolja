@@ -1,4 +1,4 @@
-package com.baulsupp.less;
+package com.baulsupp.curses.application.util;
 
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -7,6 +7,7 @@ import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+// TODO move to util project
 public class ResponsiveLock implements Lock {
   private Lock target = new ReentrantLock();
 

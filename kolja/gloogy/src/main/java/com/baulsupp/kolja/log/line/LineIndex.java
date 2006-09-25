@@ -10,5 +10,7 @@ public interface LineIndex {
   // TODO where should this be?
   int length();
 
-  void addLineListener(LineListener requestIndex);
+  void addLineListener(LineListener listener);
+
+  void removeLineListener(LineListener listener);
 }

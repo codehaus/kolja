@@ -11,9 +11,17 @@ import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.PosixParser;
 import org.apache.log4j.Logger;
 
+import com.baulsupp.kolja.log.util.WrappedCharBuffer;
+import com.baulsupp.kolja.log.viewer.commands.BackgroundProcess;
+import com.baulsupp.kolja.log.viewer.commands.ModelsCommand;
+import com.baulsupp.kolja.log.viewer.commands.RendererCommand;
+import com.baulsupp.kolja.log.viewer.commands.ScrollbarCommand;
+import com.baulsupp.kolja.log.viewer.commands.SelectEventCommand;
+import com.baulsupp.kolja.log.viewer.commands.SelectRequestCommand;
 import com.baulsupp.kolja.log.viewer.importing.LogFormat;
 import com.baulsupp.kolja.log.viewer.importing.PlainTextLogFormat;
 import com.baulsupp.kolja.log.viewer.importing.SavedLogFormatLoader;
+import com.baulsupp.kolja.log.viewer.linenumbers.BasicLineNumberIndex;
 import com.baulsupp.kolja.util.LogConfig;
 
 public class LessMain {
@@ -50,11 +58,26 @@ public class LessMain {
           format = new PlainTextLogFormat();
         }
 
+        WrappedCharBuffer buffer = WrappedCharBuffer.fromFile(f);
+        
         Less tool = new Less();
-        tool.open(format, f);
+        tool.createDefaultCommands();
+        tool.addCommand(new RendererCommand(tool, format));
+        tool.addCommand(new ModelsCommand(format, buffer, tool));
+        if (format.supportsEvents()) {
+          tool.addCommand(new SelectEventCommand(format, tool));
+        }
+        if (format.supportsRequests()) {
+          tool.addCommand(new SelectRequestCommand(format, tool));
+        }
+        tool.addCommand(new ScrollbarCommand(tool, buffer));
+        
+        tool.setLineNumbers(BasicLineNumberIndex.create(buffer));
+
         
         if (cmd.hasOption("b")) {
-          tool.startBackgroundThread();
+          BackgroundProcess process = new BackgroundProcess(tool);
+          process.startBackgroundThread();
         }
         
         tool.show();

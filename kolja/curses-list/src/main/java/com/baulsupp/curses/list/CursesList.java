@@ -44,6 +44,10 @@ public class CursesList<T extends Object> extends Widget implements ItemModelLis
 
   public synchronized void doPaint() {
     clearBox();
+    
+    if (isNotReady()) {
+      return;
+    }
 
     TextPanel panel = buildPanel();
 
@@ -77,6 +81,14 @@ public class CursesList<T extends Object> extends Widget implements ItemModelLis
     enoughFound = y == panel.getHeight();
     
     triggerPaintListener();
+  }
+
+  public boolean isNotReady() {
+    return model == null;
+  }
+  
+  public boolean isReady() {
+    return !isNotReady();
   }
 
   private void triggerPaintListener() {
@@ -170,9 +182,10 @@ public class CursesList<T extends Object> extends Widget implements ItemModelLis
     int offset = offsetList.rowCount() != 0 ? offsetList.getMinRowOffset() : 0;
     reset();
     this.renderer = renderer;
-    this.model.moveTo(offset);
-    if (model != null)
+    if (isReady()) {
+      this.model.moveTo(offset);
       paint();
+    }
   }
 
   public synchronized void reset() {
@@ -417,7 +430,7 @@ public class CursesList<T extends Object> extends Widget implements ItemModelLis
     triggerMovementListener();
   }
   
-  private void left() {
+  public void left() {
     int normalLeft = xPos - sidewaysMove;
     
     if (xPos > 0) {
@@ -445,7 +458,7 @@ public class CursesList<T extends Object> extends Widget implements ItemModelLis
     return maxLess;
   }
 
-  private void right() { 
+  public void right() { 
     int normalRight = xPos + sidewaysMove;
     
     if (sidewaysSteps != null) {
@@ -521,7 +534,6 @@ public class CursesList<T extends Object> extends Widget implements ItemModelLis
   }
 
   public boolean handleInput(InputChar inp) {
-    logger.info("list.handleInput " + inp.getCode() + " " + inp.isSpecialCode());
 
     if (inp.getCode() == InputChar.KEY_DOWN) {
       down();

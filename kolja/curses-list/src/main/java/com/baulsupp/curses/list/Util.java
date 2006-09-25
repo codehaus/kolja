@@ -48,8 +48,18 @@ public class Util {
 //    return inp.isSpecialCode() && inp.getCode() == 261;
 //  }
 
-  public static boolean wasLetter(InputChar inp, char value) {
-    return !inp.isSpecialCode() && inp.getCharacter() == value;
+  public static boolean wasLetter(InputChar inp, char... values) {
+    if (inp.isSpecialCode()) {
+      return false;
+    }
+    
+    for (char c : values) {
+      if (inp.getCharacter() == c) {
+        return true;
+      }
+    }
+    
+    return false;
   }
 
   public static void showError(Exception e) {
@@ -107,5 +117,15 @@ public class Util {
   public static boolean wasHome(InputChar inp) {
     return false;
 //    return inp.isSpecialCode() && inp.equals(KEY_RIGHT);
+  }
+
+  public static boolean isCode(InputChar inp, int... key) {
+    for (int i : key) {
+      if (inp.getCode() == i) {
+        return true;
+      }
+    }
+    
+    return false;
   }
 }
