@@ -1,10 +1,13 @@
 package com.baulsupp.kolja.log.viewer.commands;
 
 import java.beans.PropertyChangeEvent;
+import java.util.Collection;
+import java.util.Collections;
 
 import jcurses.system.InputChar;
 
 import com.baulsupp.curses.application.Command;
+import com.baulsupp.curses.application.KeyBinding;
 import com.baulsupp.curses.list.Util;
 import com.baulsupp.kolja.log.viewer.importing.LogFormat;
 import com.baulsupp.kolja.log.viewer.request.RequestHighlight;
@@ -67,7 +70,7 @@ public class SelectRequestCommand implements Command<Less> {
     return true;
   }
 
-  public String getDescription() {
-    return "t - Select Request";
+  public Collection<KeyBinding> getDescription() {
+    return Collections.singleton(new KeyBinding(new InputChar('t'), "Search", "Select Request"));
   }
 }

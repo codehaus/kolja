@@ -2,12 +2,15 @@ package com.baulsupp.kolja.log.viewer.commands;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.Collection;
+import java.util.Collections;
 
 import jcurses.system.InputChar;
 
 import org.apache.log4j.Logger;
 
 import com.baulsupp.curses.application.Command;
+import com.baulsupp.curses.application.KeyBinding;
 import com.baulsupp.curses.list.Util;
 import com.baulsupp.kolja.log.viewer.event.Event;
 import com.baulsupp.kolja.log.viewer.event.EventList;
@@ -68,7 +71,7 @@ public class SelectEventCommand implements Command<Less>, PropertyChangeListener
     return true;
   }
 
-  public String getDescription() {
-    return "e - Select Event";
+  public Collection<KeyBinding> getDescription() {
+    return Collections.singleton(new KeyBinding(new InputChar('e'), "Search", "Select Event"));
   }
 }

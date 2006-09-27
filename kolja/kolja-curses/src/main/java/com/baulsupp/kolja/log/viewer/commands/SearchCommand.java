@@ -2,11 +2,14 @@ package com.baulsupp.kolja.log.viewer.commands;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.regex.Pattern;
 
 import jcurses.system.InputChar;
 
 import com.baulsupp.curses.application.Command;
+import com.baulsupp.curses.application.KeyBinding;
 import com.baulsupp.curses.list.TextDialog;
 import com.baulsupp.curses.list.Util;
 import com.baulsupp.kolja.log.line.BasicLineIterator;
@@ -80,9 +83,12 @@ public class SearchCommand implements Command<Less>, PropertyChangeListener {
     }
   }
 
-
-  public String getDescription() {
-    return "s - Toggle Scrollbar";
+  public Collection<KeyBinding> getDescription() {
+    return Arrays.asList(
+        new KeyBinding(new InputChar('/'), "Search", "New Search"),
+        new KeyBinding(new InputChar('n'), "Search", "Next Match"),
+        new KeyBinding(new InputChar('p'), "Search", "Previous Match")
+      );
   }
 
   public void propertyChange(PropertyChangeEvent evt) {

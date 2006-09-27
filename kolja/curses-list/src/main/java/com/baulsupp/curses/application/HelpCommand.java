@@ -1,5 +1,9 @@
 package com.baulsupp.curses.application;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Map;
+
 import jcurses.system.InputChar;
 import jcurses.util.Message;
 
@@ -17,11 +21,28 @@ public class HelpCommand implements Command<CursesListWindow> {
     return true;
   }
 
-  public String getDescription() {
-    return "h - Help";
+  public Collection<KeyBinding> getDescription() {
+    return Collections.singleton(new KeyBinding(new InputChar('h'), "General", "Help"));
   }
   
-  void showHelp(CommandList list) {
-    new Message("Help", "Help\nUse arrow keys to move.  q to quit.", "ok").show();
+  void showHelp(CommandList<?> list) {
+    Map<String, Collection<KeyBinding>> bindings = list.getBindings();
+    
+    StringBuilder buffy = new StringBuilder("Help\n");
+    
+    for (Map.Entry<String, Collection<KeyBinding>> e : bindings.entrySet()) {
+      buffy.append("\n    " + e.getKey() + "\n");
+      buffy.append("    " + underlines(e.getKey().length()) + "\n");
+      
+      for (KeyBinding key : e.getValue()) {
+        buffy.append(key + "\n");        
+      }
+    }
+    
+    new Message("Help", buffy.toString(), "ok").show();
+  }
+
+  private String underlines(int i) {
+    return "--------------------".substring(0, Math.min(20, i));
   }
 }

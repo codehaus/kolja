@@ -1,8 +1,12 @@
 package com.baulsupp.kolja.log.viewer.commands;
 
+import java.util.Collection;
+import java.util.Collections;
+
 import jcurses.system.InputChar;
 
 import com.baulsupp.curses.application.Command;
+import com.baulsupp.curses.application.KeyBinding;
 import com.baulsupp.curses.list.TextDialog;
 import com.baulsupp.curses.list.Util;
 import com.baulsupp.less.Less;
@@ -27,7 +31,7 @@ public class GotoLineCommand implements Command<Less> {
     return true;
   }
 
-  public String getDescription() {
-    return "g - Goto Line";
+  public Collection<KeyBinding> getDescription() {
+    return Collections.singleton(new KeyBinding(new InputChar('g'), "Movement", "Goto Line"));
   }
 }

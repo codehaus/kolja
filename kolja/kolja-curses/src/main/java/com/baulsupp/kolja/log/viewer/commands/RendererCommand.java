@@ -1,11 +1,14 @@
 package com.baulsupp.kolja.log.viewer.commands;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 
 import jcurses.system.InputChar;
 import jcurses.system.Toolkit;
 
 import com.baulsupp.curses.application.Command;
+import com.baulsupp.curses.application.KeyBinding;
 import com.baulsupp.curses.list.CursesListRenderer;
 import com.baulsupp.curses.list.TextRenderer;
 import com.baulsupp.curses.list.Util;
@@ -91,7 +94,7 @@ public class RendererCommand implements Command<Less> {
     return r;
   }
 
-  public String getDescription() {
-    return "r - Change Renderer";
+  public Collection<KeyBinding> getDescription() {
+    return Collections.singleton(new KeyBinding(new InputChar('r'), "View", "Next Renderer"));
   }
 }

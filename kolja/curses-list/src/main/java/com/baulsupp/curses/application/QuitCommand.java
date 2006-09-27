@@ -1,5 +1,8 @@
 package com.baulsupp.curses.application;
 
+import java.util.Collection;
+import java.util.Collections;
+
 import jcurses.system.InputChar;
 import jcurses.system.Toolkit;
 
@@ -12,14 +15,14 @@ public class QuitCommand implements Command<CursesListWindow> {
     if (!Util.wasLetter(input, 'q')) {
       return false;
     }
-    
+
     Toolkit.clearScreen(ColorList.blackOnWhite);
     Toolkit.shutdown();
     System.exit(-1);
     return true;
   }
 
-  public String getDescription() {
-    return "q - Quit";
+  public Collection<KeyBinding> getDescription() {
+    return Collections.singleton(new KeyBinding(new InputChar('q'), "General", "Quit"));
   }
 }

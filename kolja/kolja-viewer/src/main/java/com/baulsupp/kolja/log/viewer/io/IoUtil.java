@@ -15,7 +15,6 @@ import com.baulsupp.kolja.log.line.LineIndex;
 import com.baulsupp.kolja.log.util.ReloadableCharBuffer;
 import com.baulsupp.kolja.log.util.SystemInCharSequence;
 import com.baulsupp.kolja.log.viewer.importing.LogFormat;
-import com.baulsupp.kolja.log.viewer.request.StandardRequestIndex;
 
 public class IoUtil {
   private static final Logger log = Logger.getLogger(IoUtil.class);
@@ -43,48 +42,29 @@ public class IoUtil {
     return ReloadableCharBuffer.fromFileReloadable(file);
   }
 
-  public static Iterator<Line> loadByRequests(CharSequence buffer, LogFormat format) {
-    LineIndex lineIndex = format.getLineIndex(buffer);
-
-    StandardRequestIndex requestIndex = format.getRequestIndex(lineIndex);
-
-    return new BasicLineIterator(requestIndex);
-  }
-
-  @Deprecated
-  public static BasicLineIterator load(CharSequence buffer, LogFormat format) {
-    LineIndex lineIndex = format.getLineIndex(buffer);
-
-    return new BasicLineIterator(lineIndex);
-  }
-
-  public static Iterator<Line> loadLineIterator(LogFormat format, boolean byRequest, File f) throws IOException {
-    Iterator<Line> bli;
-    if (byRequest) {
-      bli = IoUtil.loadByRequests(IoUtil.fromFile(f), format);
-    } else {
-      bli = IoUtil.load(IoUtil.fromFile(f), format);
-    }
-    return bli;
-  }
-
-  public static Iterator<Line> loadFiles(String[] args, boolean byRequest, LogFormat format) throws IOException {
+  public static Iterator<Line> loadFiles(String[] args, LogFormat format) throws IOException {
     Iterator<Line> bli;
     if (args.length == 1) {
       File f = new File(args[0]);
 
-      bli = IoUtil.loadLineIterator(format, byRequest, f);
+      bli = IoUtil.loadLineIterator(format, fromFile(f));
     } else {
       MultipleLineIterator mli = new MultipleLineIterator();
 
       for (String s : args) {
         File file = new File(s);
-        mli.add(getShortName(file), IoUtil.loadLineIterator(format, byRequest, file));
+        mli.add(getShortName(file), IoUtil.loadLineIterator(format, fromFile(file)));
       }
 
       bli = mli;
     }
     return bli;
+  }
+
+  public static Iterator<Line> loadLineIterator(LogFormat format, CharSequence sequence) {
+    LineIndex lineIndex = format.getLineIndex(sequence);
+
+    return new BasicLineIterator(lineIndex);
   }
 
   private static String getShortName(File file) {
@@ -136,11 +116,11 @@ public class IoUtil {
 
   public static int getMaxFilenameWidth(List<File> files) {
     int result = 0;
-    
+
     for (File file : files) {
       result = Math.max(result, file.getName().length());
     }
-    
+
     return result;
   }
 }

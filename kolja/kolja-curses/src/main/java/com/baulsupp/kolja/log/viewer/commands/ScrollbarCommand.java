@@ -1,5 +1,8 @@
 package com.baulsupp.kolja.log.viewer.commands;
 
+import java.util.Collection;
+import java.util.Collections;
+
 import jcurses.system.CharColor;
 import jcurses.system.InputChar;
 import jcurses.util.Rectangle;
@@ -7,6 +10,7 @@ import jcurses.widgets.IScrollable;
 import jcurses.widgets.ScrollbarPainter;
 
 import com.baulsupp.curses.application.Command;
+import com.baulsupp.curses.application.KeyBinding;
 import com.baulsupp.curses.list.ColorList;
 import com.baulsupp.curses.list.PaintListener;
 import com.baulsupp.curses.list.Util;
@@ -110,7 +114,7 @@ public class ScrollbarCommand implements Command<Less>, IScrollable, PaintListen
     return true;
   }
 
-  public String getDescription() {
-    return "s - Toggle Scrollbar";
+  public Collection<KeyBinding> getDescription() {
+    return Collections.singleton(new KeyBinding(new InputChar('s'), "View", "Toggle Scrollbar"));
   }
 }

@@ -1,5 +1,8 @@
 package com.baulsupp.curses.application;
 
+import java.util.Arrays;
+import java.util.Collection;
+
 import jcurses.system.InputChar;
 
 import com.baulsupp.curses.list.CursesListWindow;
@@ -39,7 +42,12 @@ public class ListMovementCommand implements Command<CursesListWindow> {
     return false;
   }
 
-  public String getDescription() {
-    return "Movement Commands";
+  public Collection<KeyBinding> getDescription() {
+    return Arrays.asList(
+        new KeyBinding(new InputChar(InputChar.KEY_PPAGE), "Movement", "Page Up"),
+        new KeyBinding(new InputChar(InputChar.KEY_NPAGE), "Movement", "Page Down"),
+        new KeyBinding(new InputChar(InputChar.KEY_HOME), "Movement", "Start of File"),
+        new KeyBinding(new InputChar(InputChar.KEY_END), "Movement", "End of File")
+      );
   }
 }

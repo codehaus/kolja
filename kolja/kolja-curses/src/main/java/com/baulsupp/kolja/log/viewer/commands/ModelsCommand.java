@@ -1,11 +1,14 @@
 package com.baulsupp.kolja.log.viewer.commands;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import jcurses.system.InputChar;
 
 import com.baulsupp.curses.application.Command;
+import com.baulsupp.curses.application.KeyBinding;
 import com.baulsupp.curses.list.Util;
 import com.baulsupp.kolja.log.filter.Filter;
 import com.baulsupp.kolja.log.filter.FilteredLineIndex;
@@ -46,7 +49,7 @@ public class ModelsCommand implements Command<Less> {
     return true;
   }
 
-  public String getDescription() {
-    return "f - change filter";
+  public Collection<KeyBinding> getDescription() {
+    return Collections.singleton(new KeyBinding(new InputChar('f'), "View", "Next Model"));
   }
 }
