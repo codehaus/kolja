@@ -28,16 +28,18 @@ public class HelpCommand implements Command<CursesListWindow> {
   void showHelp(CommandList<?> list) {
     Map<String, Collection<KeyBinding>> bindings = list.getBindings();
     
-    StringBuilder buffy = new StringBuilder("Help\n");
+    StringBuilder buffy = new StringBuilder();
     
     for (Map.Entry<String, Collection<KeyBinding>> e : bindings.entrySet()) {
-      buffy.append("\n    " + e.getKey() + "\n");
+      buffy.append("    " + e.getKey() + "\n");
       buffy.append("    " + underlines(e.getKey().length()) + "\n");
       
       for (KeyBinding key : e.getValue()) {
         buffy.append(key + "\n");        
       }
-    }
+      
+      buffy.append("\n");
+    }    
     
     new Message("Help", buffy.toString(), "ok").show();
   }
