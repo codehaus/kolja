@@ -1,6 +1,7 @@
 package com.baulsupp.less;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -27,7 +28,7 @@ import com.baulsupp.kolja.util.LogConfig;
 public class LessMain {
   private static final Logger log = Logger.getLogger(LessMain.class);
 
-  public static void main(String[] args) throws Exception {
+  public static void main(String[] args) {
     LogConfig.config("less");
     
     CommandLineParser parser = new PosixParser();
@@ -36,7 +37,7 @@ public class LessMain {
     try {
       cmd = parser.parse(options, args, true);
     } catch (ParseException pe) {
-      System.out.println("error: " + pe.getMessage());
+      handleError(pe, "config error", pe.getMessage());
       printHelp(options);
       System.exit(2);
     }
@@ -81,10 +82,17 @@ public class LessMain {
         }
         
         tool.show();
+      } catch (FileNotFoundException fnfe) {
+        handleError(fnfe, "error", "file not found: " + f);
       } catch (Throwable e) {
-        log.error("error", e);
+        handleError(e, "error", e.getMessage());
       }
     }
+  }
+
+  private static void handleError(Throwable pe, String type, String string) {
+    System.err.println(type + ": " + string);
+    log.error(type, pe);
   }
 
   private static void printHelp(Options options) {

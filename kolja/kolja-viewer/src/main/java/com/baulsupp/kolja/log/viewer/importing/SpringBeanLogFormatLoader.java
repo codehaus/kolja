@@ -19,13 +19,13 @@ import com.baulsupp.kolja.util.DateFormatPropertyEditor;
 import com.baulsupp.kolja.util.PatternPropertyEditor;
 
 public class SpringBeanLogFormatLoader {
-  public static final LogFormat load(Resource r) {
+  public static final LogFormat load(Resource r) throws Exception {
     XmlBeanFactory beanFactory = loadBeanFactory(r);
     
     return (LogFormat) beanFactory.getBean("logFormat");
   }
 
-  public static XmlBeanFactory loadBeanFactory(Resource r) {
+  public static XmlBeanFactory loadBeanFactory(Resource r) throws Exception {
     XmlBeanFactory beanFactory = new XmlBeanFactory(r);
     
     try {
@@ -48,7 +48,7 @@ public class SpringBeanLogFormatLoader {
     return beanFactory;
   }
 
-  public static BeanFactory loadBeanFactory(String string) {
+  public static BeanFactory loadBeanFactory(String string) throws Exception {
     return loadBeanFactory(new ClassPathResource(string));
   }
 }

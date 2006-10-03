@@ -1,6 +1,7 @@
 package com.baulsupp.kolja.ansi;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -32,7 +33,7 @@ import com.baulsupp.kolja.util.LogConfig;
 public class TailMinusEffMain {
   private static final Logger log = Logger.getLogger(TailMinusEffMain.class);
 
-  public static void main(String[] args) throws IOException, InstantiationException, IllegalAccessException, ClassNotFoundException, InterruptedException {
+  public static void main(String[] args) {
     LogConfig.config("tail");
     
     Terminal.setupTerminal();
@@ -51,62 +52,77 @@ public class TailMinusEffMain {
     if (cmd.hasOption("h")) {
       printHelp(options);
     } else {
-      final TailMinusEff tail = new TailMinusEff();
-
-      LogFormat format = CatMain.loadFormat(cmd);
-
-      tail.setAnsi(!cmd.hasOption("a"));
-
-      List<File> files = commandFiles(cmd);
-      Iterator<Line> bli = IoUtil.loadFiles(format, files, true);
-      
-      tail.setI(bli);
-      
-      if (cmd.hasOption("o")) {
-        tail.setRenderer(PrintfRenderer.parse(cmd.getOptionValue("o")));
-      } else if (cmd.hasOption("d")) {
-        tail.setRenderer(new DebugRenderer());
-      } else {
-        Renderer<Line> renderer = format.getRenderer();
-        if (files.size() > 1 && renderer instanceof FieldRenderer) {
-          FieldRenderer fieldRenderer = (FieldRenderer) renderer;
-          fieldRenderer.prependColumn(LogConstants.FILE_NAME, IoUtil.getMaxFilenameWidth(files));
-          fieldRenderer.addHighlight(new FilenameHighlight());
-        }
-        tail.setGrid(renderer);
-      }
-      
-      if (cmd.hasOption("f")) {
-        tail.setFixedWidth(true);
-      }
-
-      String highlightTerm = null;
-      if (cmd.hasOption("s")) {
-        highlightTerm = cmd.getOptionValue("s");
-        tail.addHighlightTerm(highlightTerm);
-      }
-
-      if (!cmd.hasOption("i")) {
-        Thread t = new Thread("InputProcessor") {
-          public void run() {
-            try {
-              tail.processInput();
-            } catch (IOException e) {
-              log.error("error", e);
-            }
-          }
-        };
-        t.setDaemon(true);
-        t.start();
-      }
-
       try {
-        tail.run();
-      } catch (TruncationException te) {
-        // TODO implement
-        throw new UnsupportedOperationException();
+        run(cmd);
+      } catch (FileNotFoundException e) {
+        handleError(e, "file not found", e.getMessage());
+      } catch (Exception e) {
+        handleError(e, "error", e.getMessage());
       }
     }
+  }
+
+  private static void run(CommandLine cmd) throws InstantiationException, IllegalAccessException, ClassNotFoundException, IOException, InterruptedException {
+    final TailMinusEff tail = new TailMinusEff();
+
+    LogFormat format = CatMain.loadFormat(cmd);
+
+    tail.setAnsi(!cmd.hasOption("a"));
+
+    List<File> files = commandFiles(cmd);
+    Iterator<Line> bli = IoUtil.loadFiles(format, files, true);
+    
+    tail.setI(bli);
+    
+    if (cmd.hasOption("o")) {
+      tail.setRenderer(PrintfRenderer.parse(cmd.getOptionValue("o")));
+    } else if (cmd.hasOption("d")) {
+      tail.setRenderer(new DebugRenderer());
+    } else {
+      Renderer<Line> renderer = format.getRenderer();
+      if (files.size() > 1 && renderer instanceof FieldRenderer) {
+        FieldRenderer fieldRenderer = (FieldRenderer) renderer;
+        fieldRenderer.prependColumn(LogConstants.FILE_NAME, IoUtil.getMaxFilenameWidth(files));
+        fieldRenderer.addHighlight(new FilenameHighlight());
+      }
+      tail.setGrid(renderer);
+    }
+    
+    if (cmd.hasOption("f")) {
+      tail.setFixedWidth(true);
+    }
+
+    String highlightTerm = null;
+    if (cmd.hasOption("s")) {
+      highlightTerm = cmd.getOptionValue("s");
+      tail.addHighlightTerm(highlightTerm);
+    }
+
+    if (!cmd.hasOption("i")) {
+      Thread t = new Thread("InputProcessor") {
+        public void run() {
+          try {
+            tail.processInput();
+          } catch (IOException e) {
+            log.error("error", e);
+          }
+        }
+      };
+      t.setDaemon(true);
+      t.start();
+    }
+
+    try {
+      tail.run();
+    } catch (TruncationException te) {
+      // TODO implement
+      throw new UnsupportedOperationException();
+    }
+  }
+
+  private static void handleError(Throwable pe, String type, String string) {
+    System.err.println(type + ": " + string);
+    log.error(type, pe);
   }
 
   private static List<File> commandFiles(CommandLine cmd) {
