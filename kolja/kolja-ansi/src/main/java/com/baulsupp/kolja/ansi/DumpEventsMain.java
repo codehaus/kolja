@@ -1,7 +1,6 @@
 package com.baulsupp.kolja.ansi;
 
 import java.io.File;
-import java.io.IOException;
 
 import jline.Terminal;
 
@@ -29,7 +28,7 @@ public class DumpEventsMain {
   @SuppressWarnings("unused")
   private static final Logger logger = Logger.getLogger(DumpEventsMain.class);
 
-  public static void main(String[] args) throws IOException, InstantiationException, IllegalAccessException, ClassNotFoundException  {
+  public static void main(String[] args) throws Exception  {
     LogConfig.config("dumpevents");
     
     Terminal.setupTerminal();

@@ -14,7 +14,7 @@ import com.baulsupp.kolja.log.viewer.importing.ConfigurableRequestFormat;
 import com.baulsupp.kolja.log.viewer.importing.SpringBeanLogFormatLoader;
 
 public class KoljaNamespaceHandlerTest extends TestCase {
-  public void testEventFormat() {
+  public void testEventFormat() throws Exception {
     BeanFactory applicationContext = SpringBeanLogFormatLoader.loadBeanFactory("/kolja-test.xml");
 
     ConfigurableEventFormat cef = (ConfigurableEventFormat) applicationContext.getBean("events");
@@ -30,7 +30,7 @@ public class KoljaNamespaceHandlerTest extends TestCase {
     assertEquals("Country Line Found (%s)", pattern.getMessage());
   }
 
-  public void testRequestFormat() {
+  public void testRequestFormat() throws Exception {
     BeanFactory applicationContext = SpringBeanLogFormatLoader.loadBeanFactory("/kolja-test.xml");
 
     ConfigurableRequestFormat cef = (ConfigurableRequestFormat) applicationContext.getBean("requests");

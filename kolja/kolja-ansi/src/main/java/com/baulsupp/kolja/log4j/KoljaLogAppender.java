@@ -1,6 +1,5 @@
 package com.baulsupp.kolja.log4j;
 
-import java.io.IOException;
 import java.util.Date;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -34,7 +33,7 @@ public class KoljaLogAppender extends AppenderSkeleton {
 
     Renderer<Line> gridRenderer;
     try {
-      LogFormat logFormat = loadFormat();
+      LogFormat logFormat = SavedLogFormatLoader.load(name);
       gridRenderer = logFormat.getRenderer();
     } catch (Exception e) {
       System.err.println(e);
@@ -42,10 +41,6 @@ public class KoljaLogAppender extends AppenderSkeleton {
     }
     
     renderer = new TailRenderer(gridRenderer, !PlatformUtil.isWindows());
-  }
-
-  private LogFormat loadFormat() throws IOException {
-    return SavedLogFormatLoader.load(name);
   }
 
   @Override

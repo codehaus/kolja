@@ -8,7 +8,7 @@ import org.springframework.core.io.Resource;
 import com.baulsupp.kolja.util.SerializationUtil;
 
 public class SavedLogFormatLoader {
-  public static final LogFormat load(String name) throws IOException {
+  public static final LogFormat load(String name) throws Exception {
     if (!isShortName(name)) {
       return SpringBeanLogFormatLoader.load(new FileSystemResource(name));
     } else {

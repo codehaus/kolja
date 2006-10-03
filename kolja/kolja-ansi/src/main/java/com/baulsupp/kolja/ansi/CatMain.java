@@ -1,6 +1,7 @@
 package com.baulsupp.kolja.ansi;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -30,7 +31,7 @@ import com.baulsupp.kolja.util.LogConfig;
 public class CatMain {
   private static final Logger log = Logger.getLogger(CatMain.class);
 
-  public static void main(String[] args) throws IOException, InstantiationException, IllegalAccessException, ClassNotFoundException, InterruptedException {
+  public static void main(String[] args) {
     LogConfig.config("cat");
     
     Terminal.setupTerminal();
@@ -49,50 +50,65 @@ public class CatMain {
     if (cmd.hasOption("h")) {
       printHelp(options);
     } else {
-      final Cat cat = new Cat();
-
-      LogFormat format = loadFormat(cmd);
-
-      cat.setAnsi(!cmd.hasOption("a"));
-
-      Iterator<Line> bli = loadLineIterator(cmd, format);
-      cat.setI(bli);
-      
-      if (cmd.hasOption("o")) {
-        cat.setRenderer(PrintfRenderer.parse(cmd.getOptionValue("o")));
-      } else if (cmd.hasOption("d")) {
-        cat.setRenderer(new DebugRenderer());
-      } else {
-        Renderer<Line> renderer = format.getRenderer();
-        cat.setGrid(renderer);
+      try {
+        run(cmd);
+      } catch (FileNotFoundException e) {
+        handleError(e, "file not found", e.getMessage());
+      } catch (Exception e) {
+        handleError(e, "error", e.getMessage());
       }
-
-      String highlightTerm = null;
-      if (cmd.hasOption("s")) {
-        highlightTerm = cmd.getOptionValue("s");
-        cat.addHighlightTerm(highlightTerm);
-      }
-      
-      if (cmd.hasOption("f")) {
-        cat.setFixedWidth(true);
-      }
-
-      if (!cmd.hasOption("i")) {
-        Thread t = new Thread("InputProcessor") {
-          public void run() {
-            try {
-              cat.processInput();
-            } catch (IOException e) {
-              log.error("error", e);
-            }
-          }
-        };
-        t.setDaemon(true);
-        t.start();
-      }
-
-      cat.run();
     }
+  }
+
+  private static void handleError(Throwable pe, String type, String string) {
+    System.err.println(type + ": " + string);
+    log.error(type, pe);
+  }
+
+  private static void run(CommandLine cmd) throws Exception, IOException, InterruptedException {
+    final Cat cat = new Cat();
+
+    LogFormat format = loadFormat(cmd);
+
+    cat.setAnsi(!cmd.hasOption("a"));
+
+    Iterator<Line> bli = loadLineIterator(cmd, format);
+    cat.setI(bli);
+    
+    if (cmd.hasOption("o")) {
+      cat.setRenderer(PrintfRenderer.parse(cmd.getOptionValue("o")));
+    } else if (cmd.hasOption("d")) {
+      cat.setRenderer(new DebugRenderer());
+    } else {
+      Renderer<Line> renderer = format.getRenderer();
+      cat.setGrid(renderer);
+    }
+
+    String highlightTerm = null;
+    if (cmd.hasOption("s")) {
+      highlightTerm = cmd.getOptionValue("s");
+      cat.addHighlightTerm(highlightTerm);
+    }
+    
+    if (cmd.hasOption("f")) {
+      cat.setFixedWidth(true);
+    }
+
+    if (!cmd.hasOption("i")) {
+      Thread t = new Thread("InputProcessor") {
+        public void run() {
+          try {
+            cat.processInput();
+          } catch (IOException e) {
+            log.error("error", e);
+          }
+        }
+      };
+      t.setDaemon(true);
+      t.start();
+    }
+
+    cat.run();
   }
 
   public static Iterator<Line> loadLineIterator(CommandLine cmd, LogFormat format) throws IOException {
@@ -120,7 +136,7 @@ public class CatMain {
     return files;
   }
 
-  public static LogFormat loadFormat(CommandLine cmd) throws InstantiationException, IllegalAccessException, ClassNotFoundException, IOException {
+  public static LogFormat loadFormat(CommandLine cmd) throws Exception {
     LogFormat format;
     if (cmd.hasOption("c")) {
       format = (LogFormat) Class.forName(cmd.getOptionValue("c")).newInstance();

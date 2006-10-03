@@ -62,7 +62,7 @@ public class TailMinusEffMain {
     }
   }
 
-  private static void run(CommandLine cmd) throws InstantiationException, IllegalAccessException, ClassNotFoundException, IOException, InterruptedException {
+  private static void run(CommandLine cmd) throws Exception {
     final TailMinusEff tail = new TailMinusEff();
 
     LogFormat format = CatMain.loadFormat(cmd);
