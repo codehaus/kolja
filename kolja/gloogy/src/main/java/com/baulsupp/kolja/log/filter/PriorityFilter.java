@@ -10,6 +10,6 @@ public class PriorityFilter implements Filter {
   public boolean lineMatches(Line line) {
     Priority priority = (Priority) line.getValue("priority");
 
-    return priority.atleast(Priority.INFO);
+    return priority != null && priority.atleast(Priority.INFO);
   }
 }
