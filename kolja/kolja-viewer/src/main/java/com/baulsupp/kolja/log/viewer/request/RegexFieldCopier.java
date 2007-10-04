@@ -51,12 +51,16 @@ public class RegexFieldCopier implements FieldCopier, Serializable {
 
   public void copy(Line line, RequestLine requestLine) {
     String content = (String) line.getValue(sourceField);
-    
-    reset(content);
 
-    if (matcher.find()) {
-      for (int i = 0; i < fields.length; i++) {
-        requestLine.setValue(fields[i], matcher.group(i + 1));
+    if (content != null) {
+      reset(content);
+  
+      if (matcher.find()) {
+        for (int i = 0; i < fields.length; i++) {
+          String value = matcher.group(i + 1);
+          
+          requestLine.setValue(fields[i], value);
+        }
       }
     }
   }
@@ -64,8 +68,8 @@ public class RegexFieldCopier implements FieldCopier, Serializable {
   private void reset(String content) {
     if (matcher == null) {
       matcher = pattern.matcher("");
-    } else {
-      matcher.reset(content);
     }
+
+    matcher.reset(content);
   }
 }
