@@ -1,5 +1,7 @@
 package com.baulsupp.curses.list;
 
+import com.baulsupp.kolja.util.colours.ColourPair;
+
 import jcurses.system.InputChar;
 import jcurses.system.Toolkit;
 import jcurses.widgets.Window;
@@ -11,7 +13,7 @@ public class BasicWindow extends Window {
     super(Toolkit.getScreenWidth(), Toolkit.getScreenHeight(), false, "");
     setShadow(false);
     setClosingChar(new InputChar(0));
-    getRootPanel().setColors(ColorList.blackOnWhite);
+    getRootPanel().setColors(ColorList.lookup(ColourPair.BLACK_ON_WHITE));
   }
 
   protected void handleInput(InputChar inp) {

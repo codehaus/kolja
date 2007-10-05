@@ -71,8 +71,8 @@ public class ColorList {
       return CharColor.WHITE;
     } else if (foreground.equals(Color.YELLOW)) {
       return CharColor.YELLOW;
-    } else 
-    
-    return defaultColor;
+    } else {
+      return defaultColor;
+    }
   }
 }

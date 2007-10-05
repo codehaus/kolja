@@ -10,8 +10,8 @@ import com.baulsupp.curses.list.ColorList;
 import com.baulsupp.curses.list.CursesListWindow;
 import com.baulsupp.curses.list.Util;
 
-public class QuitCommand implements Command<CursesListWindow> {
-  public boolean handle(CursesListWindow less, InputChar input) {
+public class QuitCommand implements Command<CursesListWindow<?, ?>> {
+  public boolean handle(CursesListWindow<?, ?> less, InputChar input) {
     if (!Util.wasLetter(input, 'q')) {
       return false;
     }

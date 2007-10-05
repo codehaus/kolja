@@ -7,11 +7,11 @@ public class ColourRotator {
   public List<ColourPair> colours = null;
 
   private int pos = 0;
-  
+
   public ColourRotator() {
-    this.colours = Arrays.asList(ColourPair.values());
+    this.colours = ColourPair.HIGHLIGHT_PAIRS;
   }
-  
+
   public ColourRotator(ColourPair... colours) {
     this.colours = Arrays.asList(colours);
   }
@@ -22,9 +22,9 @@ public class ColourRotator {
 
   public ColourPair next() {
     ColourPair p = colours.get(pos);
-    
+
     pos = (pos + 1) % colours.size();
-    
+
     return p;
   }
 }

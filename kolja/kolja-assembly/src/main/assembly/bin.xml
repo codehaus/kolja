@@ -30,20 +30,15 @@
             </includes>
         </fileSet>
     </fileSets>
-    <moduleSets>
-    <moduleSet>
-      <includes>
-        <include>com.baulsupp.kolja:kolja-ansi</include>
-        <include>com.baulsupp.kolja:kolja-curses</include>
-      </includes>      
-      <binaries>
-        <outputDirectory>lib</outputDirectory>
-        <outputFileNameMapping>${artifactId}.${extension}</outputFileNameMapping>
-        <includeDependencies>true</includeDependencies>
-        <unpack>false</unpack>
-      </binaries>
-    </moduleSet>
-    </moduleSets>
+    
+    <dependencySets>
+        <dependencySet>
+          <outputDirectory>lib</outputDirectory>
+          <outputFileNameMapping></outputFileNameMapping>
+          <unpack>false</unpack>
+          <scope>runtime</scope>
+        </dependencySet>
+    </dependencySets>
 </assembly>
 
 

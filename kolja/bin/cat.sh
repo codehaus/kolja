@@ -1,1 +1,0 @@
-../kolja-ansi/src/main/scripts/cat.sh
