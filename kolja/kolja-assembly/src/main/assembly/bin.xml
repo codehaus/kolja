@@ -5,7 +5,7 @@
     </formats>
      <fileSets>
         <fileSet>
-            <directory>kolja-curses/src/main/scripts</directory>
+            <directory>../kolja-curses/src/main/scripts</directory>
             <outputDirectory></outputDirectory>
             <includes>
                 <include>*.sh</include>
@@ -14,7 +14,7 @@
             <fileMode>0755</fileMode>
         </fileSet>
         <fileSet>
-            <directory>kolja-ansi/src/main/scripts</directory>
+            <directory>../kolja-ansi/src/main/scripts</directory>
             <outputDirectory></outputDirectory>
             <includes>
                 <include>*.sh</include>
@@ -23,7 +23,7 @@
             <fileMode>0755</fileMode>
         </fileSet>
         <fileSet>
-            <directory>kolja-viewer/src/main/resources</directory>
+            <directory>../kolja-viewer/src/main/resources</directory>
             <outputDirectory>conf</outputDirectory>
             <includes>
                 <include>*.xml</include>
