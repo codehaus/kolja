@@ -1,13 +1,18 @@
 <?xml version="1.0"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.baulsupp</groupId>
 	<artifactId>kolja-parent</artifactId>
 	<packaging>pom</packaging>
-	<version>1.0</version>
+	<version>1.1-SNAPSHOT</version>
+
 	<name>Kolja Parent POM</name>
 	<description>Kolja Parent POM.</description>
 	<url>http://kolja.codehaus.org/</url>
+
 	<licenses>
 		<license>
 			<name>LGPL</name>
@@ -15,6 +20,7 @@
 			<distribution>repo</distribution>
 		</license>
 	</licenses>
+
 	<developers>
 		<developer>
 			<id>yuri</id>
@@ -25,78 +31,89 @@
 			</roles>
 		</developer>
 	</developers>
+
 	<issueManagement>
 		<system>JIRA</system>
 		<url>http://jira.codehaus.org/browse/KOLJA</url>
 	</issueManagement>
+
 	<scm>
-		<connection>scm:svn:http://svn.codehaus.org/kolja/trunk</connection>
-		<developerConnection>scm:svn:svn+ssh://svn.codehaus.org/kolja/trunk</developerConnection>
+		<connection>
+			scm:svn:http://svn.codehaus.org/kolja/trunk
+		</connection>
+		<developerConnection>
+			scm:svn:svn+ssh://svn.codehaus.org/kolja/trunk
+		</developerConnection>
 		<url>http://fisheye.codehaus.org/browse/kolja/trunk</url>
 	</scm>
+
 	<build>
-	    <extensions>
-	      <extension>
-			<groupId>org.apache.maven.wagon</groupId>
-			<artifactId>wagon-webdav</artifactId>
-			<version>1.0-beta-1</version>
-		  </extension>
-    	</extensions>
-    	<plugins>
+		<extensions>
+			<extension>
+				<groupId>org.apache.maven.wagon</groupId>
+				<artifactId>wagon-webdav</artifactId>
+				<version>1.0-beta-1</version>
+			</extension>
+		</extensions>
+
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<configuration>
+						<source>1.5</source>
+						<target>1.5</target>
+					</configuration>
+				</plugin>
+
+				<plugin>
+					<artifactId>maven-surefire-plugin</artifactId>
+					<version>2.3</version>
+					<configuration>
+						<redirectTestOutputToFile>
+							true
+						</redirectTestOutputToFile>
+					</configuration>
+				</plugin>
+
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-eclipse-plugin</artifactId>
+					<version>2.4</version>
+					<configuration>
+						<additionalProjectnatures>
+							<projectnature>
+								org.springframework.ide.eclipse.core.springnature
+							</projectnature>
+						</additionalProjectnatures>
+						<additionalBuildcommands>
+							<buildcommand>
+								org.springframework.ide.eclipse.core.springbuilder
+							</buildcommand>
+						</additionalBuildcommands>
+						<downloadSources>true</downloadSources>
+						<wtpversion>1.5</wtpversion>
+					</configuration>
+				</plugin>
+
+
+			</plugins>
+		</pluginManagement>
+	</build>
+
+	<reporting>
+		<plugins>
 			<plugin>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<configuration>
-					<source>1.5</source>
-					<target>1.5</target>
-				</configuration>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<artifactId>maven-surefire-report-plugin</artifactId>
 			</plugin>
 		</plugins>
-    </build>
-  <reporting>
-    <plugins>
-      <plugin>
-	<groupId>org.codehaus.mojo</groupId>
-        <artifactId>changes-maven-plugin</artifactId>
- 	<version>2.0-beta-1</version>
-        <reportSets>
-          <reportSet>
-            <reports>
-              <report>changes-report</report>
-            </reports>
-          </reportSet>
-        </reportSets>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-javadoc-plugin</artifactId>
-      </plugin>
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>findbugs-maven-plugin</artifactId>
-      </plugin>
-      <plugin>
-        <artifactId>maven-surefire-report-plugin</artifactId>
-      </plugin>
-    <plugin>
-      <groupId>org.apache.maven.plugins</groupId>
-      <artifactId>maven-pmd-plugin</artifactId>
-      <configuration>
-        <linkXref>true</linkXref>
-        <sourceEncoding>utf-8</sourceEncoding>
-        <minimumTokens>100</minimumTokens>
-        <targetJdk>1.5</targetJdk>
-      </configuration>
-    </plugin>
-              <plugin>
-                  <groupId>org.apache.maven.plugins</groupId>
-                  <artifactId>maven-jxr-plugin</artifactId>
-      <!-- configuration>
-        <aggregate>true</aggregate>
-      </configuration -->
-                  </plugin>
-    </plugins>
-  </reporting>
-	<distributionManagement>		
+	</reporting>
+
+	<distributionManagement>
 		<!--  
 			The servers here defined must also appear in ~/.m2/settings.xml
 			<settings>
@@ -114,7 +131,7 @@
 			</servers>
 			</settings>          
 		-->
-	
+
 		<repository>
 			<id>codehaus-kolja-repository</id>
 			<name>Codehaus Kolja Repository</name>

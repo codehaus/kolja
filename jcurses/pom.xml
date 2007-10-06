@@ -3,29 +3,18 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.baulsupp.kolja</groupId>
 	<artifactId>jcurses</artifactId>
-	<name>JCurses</name>
 	<version>0.9.5.2-SNAPSHOT</version>
+
+	<name>JCurses</name>
 	<description>Internal Version of JCurses for use with Kolja. For projects please use http://sourceforge.net/projects/javacurses/</description>
+	
 	<parent>
 		<groupId>com.baulsupp</groupId>
 		<artifactId>kolja-parent</artifactId>
-		<version>1.0</version>
+		<version>1.1-SNAPSHOT</version>
+		<relativePath>../pom.xml</relativePath>
 	</parent> 
-	<reporting>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-javadoc-plugin</artifactId>
-				<configuration>
-					<links>
-						<link>
-							http://java.sun.com/j2se/1.5.0/docs/api/
-						</link>
-					</links>
-				</configuration>
-			</plugin>
-		</plugins>
-	</reporting>
+	
 	<distributionManagement>
 		<site>
 			<id>codehaus-kolja-site</id>
@@ -33,6 +22,7 @@
 			<url>dav:https://dav.codehaus.org/kolja/jcurses/</url>
 		</site>
 	</distributionManagement>
+
 	<dependencies>
 		<dependency>
 			<groupId>commons-logging</groupId>
