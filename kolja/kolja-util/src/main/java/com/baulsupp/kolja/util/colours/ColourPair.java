@@ -18,6 +18,7 @@
 
 package com.baulsupp.kolja.util.colours;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -27,7 +28,9 @@ import java.util.List;
  * 
  * @author nbk7xsp
  */
-public class ColourPair {
+public class ColourPair implements Serializable {
+  private static final long serialVersionUID = -6492938675447744798L;
+
   public static final ColourPair WHITE_ON_BLACK = new ColourPair(Colour.WHITE, Colour.BLACK);
   public static final ColourPair RED_ON_WHITE = new ColourPair(Colour.RED, Colour.WHITE);
   public static final ColourPair GREEN_ON_BLACK = new ColourPair(Colour.GREEN, Colour.BLACK);

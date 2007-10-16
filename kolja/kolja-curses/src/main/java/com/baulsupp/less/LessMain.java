@@ -1,3 +1,20 @@
+/**
+ * Copyright (c) 2002-2007 Yuri Schimke. All Rights Reserved.
+ * 
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ * 
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this library; if not, write to the Free Software Foundation, Inc.,
+ * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ */
 package com.baulsupp.less;
 
 import java.io.File;
@@ -25,12 +42,15 @@ import com.baulsupp.kolja.log.viewer.importing.SavedLogFormatLoader;
 import com.baulsupp.kolja.log.viewer.linenumbers.BasicLineNumberIndex;
 import com.baulsupp.kolja.util.LogConfig;
 
+/**
+ * Launcher for Less Tool
+ */
 public class LessMain {
   private static final Logger log = Logger.getLogger(LessMain.class);
 
   public static void main(String[] args) {
     LogConfig.config("less");
-    
+
     CommandLineParser parser = new PosixParser();
     Options options = buildOptions();
     CommandLine cmd = null;
@@ -60,7 +80,7 @@ public class LessMain {
         }
 
         WrappedCharBuffer buffer = WrappedCharBuffer.fromFile(f);
-        
+
         Less tool = new Less();
         tool.createDefaultCommands();
         tool.addCommand(new RendererCommand(tool, format));
@@ -72,15 +92,14 @@ public class LessMain {
           tool.addCommand(new SelectRequestCommand(format, tool));
         }
         tool.addCommand(new ScrollbarCommand(tool, buffer));
-        
+
         tool.setLineNumbers(BasicLineNumberIndex.create(buffer));
 
-        
         if (cmd.hasOption("b")) {
           BackgroundProcess process = new BackgroundProcess(tool);
           process.startBackgroundThread();
         }
-        
+
         tool.show();
       } catch (FileNotFoundException fnfe) {
         handleError(fnfe, "error", "file not found: " + f);
@@ -105,14 +124,13 @@ public class LessMain {
 
     options.addOption(OptionBuilder.hasArg(false).withDescription("usage information").withLongOpt("help").create('h'));
 
-    options.addOption(OptionBuilder.withArgName("formatClass").hasArg().withDescription(
-        "An implementation of LogFormat to use").withLongOpt("formatClass").create('c'));
+    options.addOption(OptionBuilder.withArgName("formatClass").hasArg().withDescription("An implementation of LogFormat to use")
+        .withLongOpt("formatClass").create('c'));
 
-    options.addOption(OptionBuilder.withArgName("formatConfig").hasArg().withDescription("Log format definition")
-        .withLongOpt("formatConfig").create('x'));
+    options.addOption(OptionBuilder.withArgName("formatConfig").hasArg().withDescription("Log format definition").withLongOpt(
+        "formatConfig").create('x'));
 
-    options.addOption(OptionBuilder.withDescription("Incremental Background Processing")
-        .withLongOpt("background").create('b'));
+    options.addOption(OptionBuilder.withDescription("Incremental Background Processing").withLongOpt("background").create('b'));
 
     return options;
   }

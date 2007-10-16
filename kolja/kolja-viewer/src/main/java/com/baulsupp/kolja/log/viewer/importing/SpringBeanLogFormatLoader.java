@@ -1,54 +1,54 @@
+/**
+ * Copyright (c) 2002-2007 Yuri Schimke. All Rights Reserved.
+ * 
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ * 
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this library; if not, write to the Free Software Foundation, Inc.,
+ * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ */
 package com.baulsupp.kolja.log.viewer.importing;
 
-import java.beans.PropertyEditor;
-import java.text.DateFormat;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.regex.Pattern;
-
 import org.springframework.beans.factory.BeanFactory;
-import org.springframework.beans.factory.NoSuchBeanDefinitionException;
-import org.springframework.beans.factory.config.CustomEditorConfigurer;
 import org.springframework.beans.factory.xml.XmlBeanFactory;
-import org.springframework.core.io.ClassPathResource;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.GenericApplicationContext;
+import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 
-import com.baulsupp.kolja.log.viewer.columns.ColumnWidths;
-import com.baulsupp.kolja.log.viewer.columns.ColumnWidthsPropertyEditor;
-import com.baulsupp.kolja.util.DateFormatPropertyEditor;
-import com.baulsupp.kolja.util.PatternPropertyEditor;
-
+/**
+ * Kolja Log Viewer Configuration Loader.
+ * 
+ * @author Yuri Schimke
+ */
 public class SpringBeanLogFormatLoader {
   public static final LogFormat load(Resource r) throws Exception {
-    XmlBeanFactory beanFactory = loadBeanFactory(r);
-    
+    BeanFactory beanFactory = loadBeanFactory(r);
+
     return (LogFormat) beanFactory.getBean("logFormat");
   }
 
-  public static XmlBeanFactory loadBeanFactory(Resource r) throws Exception {
+  public static BeanFactory loadBeanFactory(Resource r) throws Exception {
     XmlBeanFactory beanFactory = new XmlBeanFactory(r);
-    
-    try {
-      if (beanFactory.containsBean("customEditorConfigurer")) {
-        CustomEditorConfigurer configurer = (CustomEditorConfigurer) beanFactory.getBean("customEditorConfigurer");    
-        configurer.postProcessBeanFactory(beanFactory);
-      }
-    } catch (NoSuchBeanDefinitionException nsbde) {
-      throw new RuntimeException(nsbde);
-    }
+    beanFactory.addPropertyEditorRegistrar(new KoljaPropertyEditorRegistrar());
 
-    Map<Class, PropertyEditor> map = new HashMap<Class, PropertyEditor>();
-    map.put(Pattern.class, new PatternPropertyEditor());
-    map.put(DateFormat.class, new DateFormatPropertyEditor());
-    map.put(ColumnWidths.class, new ColumnWidthsPropertyEditor());
+    ApplicationContext appContext = new GenericApplicationContext(beanFactory);
 
-    CustomEditorConfigurer configurer = new CustomEditorConfigurer();
-    configurer.setCustomEditors(map);  
-    configurer.postProcessBeanFactory(beanFactory);
-    return beanFactory;
+    return appContext;
   }
 
   public static BeanFactory loadBeanFactory(String string) throws Exception {
-    return loadBeanFactory(new ClassPathResource(string));
+    ResourceLoader r = new DefaultResourceLoader();
+
+    return loadBeanFactory(r.getResource(string));
   }
 }

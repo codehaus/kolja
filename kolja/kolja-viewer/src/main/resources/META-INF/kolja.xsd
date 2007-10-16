@@ -1,81 +1,337 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsd:schema xmlns="http://baulsupp.com/schema/kolja" xmlns:xsd="http://www.w3.org/2001/XMLSchema" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://baulsupp.com/schema/kolja">
-    <xsd:element name="event-format" type="EventFormat"></xsd:element>
-    
-    <xsd:complexType name="EventFormat">
+<xsd:schema xmlns="http://baulsupp.com/schema/kolja" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+  xmlns:beans="http://www.springframework.org/schema/beans" attributeFormDefault="unqualified" elementFormDefault="qualified"
+  targetNamespace="http://baulsupp.com/schema/kolja">
+
+  <xsd:import namespace="http://www.springframework.org/schema/beans"
+    schemaLocation="http://www.springframework.org/schema/beans/spring-beans-2.0.xsd" />
+
+  <xsd:element name="format" type="ViewerFormat">
+    <xsd:annotation>
+      <xsd:documentation source="java:com.baulsupp.kolja.log.viewer.importing.ConfigurableLogFormat">
+        Configuration of the Kolja Viewer Log Format.
+      </xsd:documentation>
+    </xsd:annotation>
+  </xsd:element>
+
+  <xsd:complexType name="ViewerFormat">
+    <xsd:complexContent>
+      <xsd:extension base="beans:identifiedType">
         <xsd:sequence>
-        	<xsd:element name="warn" type="WarnEventFormat"
-        		maxOccurs="1" minOccurs="0">
-        	</xsd:element>
-        	<xsd:element name="pattern" type="PatternEventFormat"
-        		maxOccurs="unbounded" minOccurs="0">
-        	</xsd:element>
+          <xsd:element name="line-format" type="LineFormat" maxOccurs=" 1" minOccurs="1">
+            <xsd:annotation>
+              <xsd:documentation source="java:com.baulsupp.kolja.log.viewer.importing.ConfigurableLineFormat">
+                The import format of the log viewer, i.e. each line of the file being viewed.
+              </xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
+          <xsd:element name="output-format" type="OutputFormat" maxOccurs=" 1" minOccurs="1">
+            <xsd:annotation>
+              <xsd:documentation source="java:com.baulsupp.kolja.log.viewer.importing.ConfigurableOutputFormat">
+                The output format of the log viewer.
+              </xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
+          <xsd:element name="events" type="Events" maxOccurs=" 1" minOccurs="0">
+            <xsd:annotation>
+              <xsd:documentation source="java:com.baulsupp.kolja.log.viewer.importing.ConfigurableEventFormat">
+                Event detection in the log file.
+              </xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
+          <xsd:element name="requests" type="Requests" maxOccurs=" 1" minOccurs="0">
+            <xsd:annotation>
+              <xsd:documentation source="java:com.baulsupp.kolja.log.viewer.importing.ConfigurableEventFormat">
+                Grouping of lines into logical requests.
+              </xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
         </xsd:sequence>
-        <xsd:attribute name="id" type="xsd:string"></xsd:attribute>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+
+  <xsd:complexType name="LineFormat">
+    <xsd:sequence>
+      <xsd:element name="entry-format" maxOccurs=" 1" minOccurs="1">
+        <xsd:annotation>
+          <xsd:documentation>Log entry detection pattern.</xsd:documentation>
+        </xsd:annotation>
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:string" />
+        </xsd:simpleType>
+      </xsd:element>
+      <xsd:element name="field-pattern" maxOccurs=" 1" minOccurs="1">
+        <xsd:annotation>
+          <xsd:documentation>
+            Field extraction pattern, for parsing the log line. Should be a java regular expression
+          </xsd:documentation>
+        </xsd:annotation>
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:string" />
+        </xsd:simpleType>
+      </xsd:element>
+      <xsd:element name="types" maxOccurs=" 1" minOccurs="1">
+        <xsd:annotation>
+          <xsd:documentation>Set of fields parsed from the field extraction.</xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+          <xsd:sequence minOccurs="1" maxOccurs="unbounded">
+            <xsd:element ref="input-type" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:element name="input-type" type="input-type" abstract="true" />
+
+  <xsd:complexType name="input-type">
+    <xsd:attribute name="name" use="required" />
+  </xsd:complexType>
+
+  <xsd:element name="name-type" substitutionGroup="input-type">
+    <xsd:complexType>
+      <xsd:complexContent>
+        <xsd:extension base="input-type"></xsd:extension>
+      </xsd:complexContent>
     </xsd:complexType>
+  </xsd:element>
 
-    <xsd:complexType name="PatternEventFormat">
-    	<xsd:attribute name="pattern" type="xsd:string"></xsd:attribute>
-    	<xsd:attribute name="message" type="xsd:string"></xsd:attribute>
+  <xsd:element name="date-type" substitutionGroup="input-type">
+    <xsd:complexType>
+      <xsd:complexContent>
+        <xsd:extension base="input-type">
+          <xsd:sequence>
+            <xsd:element name="pattern">
+              <xsd:simpleType>
+                <xsd:restriction base="xsd:string" />
+              </xsd:simpleType>
+            </xsd:element>
+          </xsd:sequence>
+        </xsd:extension>
+      </xsd:complexContent>
     </xsd:complexType>
+  </xsd:element>
 
-    <xsd:complexType name="WarnEventFormat">
-    	<xsd:attribute name="message" type="xsd:string"></xsd:attribute>
-    	<xsd:attribute name="priority-field" type="xsd:string"></xsd:attribute>
+  <xsd:element name="priority-type" substitutionGroup="input-type">
+    <xsd:complexType>
+      <xsd:complexContent>
+        <xsd:extension base="input-type"></xsd:extension>
+      </xsd:complexContent>
     </xsd:complexType>
+  </xsd:element>
 
-    <xsd:complexType name="RegexFieldCopier">
-    	<xsd:attribute name="pattern" type="xsd:string"></xsd:attribute>
-    	<xsd:attribute name="fields" type="Fields"></xsd:attribute>
+  <xsd:element name="message-type" substitutionGroup="input-type">
+    <xsd:complexType>
+      <xsd:complexContent>
+        <xsd:extension base="input-type"></xsd:extension>
+      </xsd:complexContent>
     </xsd:complexType>
+  </xsd:element>
 
-    <xsd:complexType name="BasicFieldCopier">
-    	<xsd:attribute name="field" type="Field"></xsd:attribute>
+  <xsd:element name="exception-type" substitutionGroup="input-type">
+    <xsd:complexType>
+      <xsd:complexContent>
+        <xsd:extension base="input-type"></xsd:extension>
+      </xsd:complexContent>
     </xsd:complexType>
+  </xsd:element>
 
-    <xsd:element name="request-format" type="RequestFormat"></xsd:element>
-    
-    <xsd:complexType name="RequestFormat">
-        <xsd:sequence>
-        	<xsd:element name="fields" type="Fields" maxOccurs="1" minOccurs="1"></xsd:element>
-        	<xsd:element name="start-pattern" type="xsd:string" maxOccurs="1" minOccurs="0"></xsd:element>
-        	<xsd:element name="end-pattern" type="xsd:string" maxOccurs="1" minOccurs="0"></xsd:element>
-        	<xsd:element name="field-matchers" type="FieldMatchers" maxOccurs="1" minOccurs="1"></xsd:element>
-        	<xsd:element name="printf-status-formatter"
-        		type="PrintfStatusFormatter" maxOccurs="1" minOccurs="1">
-        	</xsd:element>
-        </xsd:sequence>
-        <xsd:attribute name="id" type="xsd:string"></xsd:attribute>
-    	<xsd:attribute name="offset-is-end" type="xsd:string"></xsd:attribute>
+  <xsd:complexType name="OutputFormat">
+    <xsd:sequence>
+      <xsd:element name="widths" maxOccurs=" 1" minOccurs="1">
+        <xsd:annotation>
+          <xsd:documentation>Default column widths.</xsd:documentation>
+        </xsd:annotation>
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:string" />
+        </xsd:simpleType>
+      </xsd:element>
+      <xsd:element name="additional" maxOccurs=" 1" minOccurs="1">
+        <xsd:annotation>
+          <xsd:documentation>Additional output to be shown after the first line.</xsd:documentation>
+        </xsd:annotation>
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:string" />
+        </xsd:simpleType>
+      </xsd:element>
+      <xsd:element name="formats" maxOccurs=" 1" minOccurs="1">
+        <xsd:annotation>
+          <xsd:documentation>Output formats.</xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+          <xsd:sequence minOccurs="1" maxOccurs="unbounded">
+            <xsd:element ref="output-format" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="highlights" maxOccurs=" 1" minOccurs="1">
+        <xsd:annotation>
+          <xsd:documentation>Highlights</xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+          <xsd:sequence minOccurs="1" maxOccurs="unbounded">
+            <xsd:element ref="highlight" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:element name="output-format" type="output-format" abstract="true" />
+
+  <xsd:complexType name="output-format">
+    <xsd:attribute name="field" use="required" />
+  </xsd:complexType>
+
+  <xsd:element name="time-format" substitutionGroup="output-format">
+    <xsd:complexType>
+      <xsd:complexContent>
+        <xsd:extension base="output-format">
+          <xsd:attribute name="style">
+            <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+                <xsd:enumeration value="short-time" />
+              </xsd:restriction>
+            </xsd:simpleType>
+          </xsd:attribute>
+        </xsd:extension>
+      </xsd:complexContent>
     </xsd:complexType>
+  </xsd:element>
 
-    <xsd:simpleType name="Fields">
-    	<xsd:restriction base="xsd:string">
-    		<xsd:pattern value="\s*[\w_]+\s*(,\s*[\w_]+\s*)*"></xsd:pattern>
-    	</xsd:restriction>
-    </xsd:simpleType>
-
-    <xsd:simpleType name="Field">
-    	<xsd:restriction base="xsd:string">
-    		<xsd:pattern value="[\w_]+"></xsd:pattern>
-    	</xsd:restriction>
-    </xsd:simpleType>
-
-    <xsd:complexType name="FieldMatchers">
-        <xsd:sequence>
-        	<xsd:element name="regex" type="RegexFieldCopier"
-        		maxOccurs="unbounded" minOccurs="0">
-        	</xsd:element>
-        	<xsd:element name="basic" type="BasicFieldCopier"
-        		maxOccurs="unbounded" minOccurs="0">
-        	</xsd:element>
-        </xsd:sequence>
+  <xsd:element name="string-format" substitutionGroup="output-format">
+    <xsd:complexType>
+      <xsd:complexContent>
+        <xsd:extension base="output-format"></xsd:extension>
+      </xsd:complexContent>
     </xsd:complexType>
+  </xsd:element>
 
-    <xsd:complexType name="PrintfStatusFormatter">
-        <xsd:sequence>
-            <xsd:element name="fields" type="Fields" maxOccurs="1" minOccurs="1"></xsd:element>
-        </xsd:sequence>
-        <xsd:attribute name="pattern" type="xsd:string"></xsd:attribute>
+  <xsd:element name="package-format" substitutionGroup="output-format">
+    <xsd:complexType>
+      <xsd:complexContent>
+        <xsd:extension base="output-format">
+          <xsd:attribute name="style">
+            <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+                <xsd:enumeration value="compressed" />
+              </xsd:restriction>
+            </xsd:simpleType>
+          </xsd:attribute>
+        </xsd:extension>
+      </xsd:complexContent>
     </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="highlight" abstract="true"></xsd:element>
+
+  <xsd:element name="priority-highlight" substitutionGroup="highlight">
+    <xsd:complexType>
+      <xsd:attribute name="field" use="required" />
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="regex-highlight" substitutionGroup="highlight">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="pattern">
+          <xsd:simpleType>
+            <xsd:restriction base="xsd:string" />
+          </xsd:simpleType>
+        </xsd:element>
+        <xsd:element name="colours" type="Colours"></xsd:element>
+      </xsd:sequence>
+      <xsd:attribute name="field" use="required" />
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:complexType name="Colours">
+    <xsd:attribute name="background"></xsd:attribute>
+    <xsd:attribute name="foreground"></xsd:attribute>
+  </xsd:complexType>
+
+  <xsd:complexType name="Events">
+    <xsd:sequence minOccurs="1">
+      <xsd:element ref="event-matcher" />
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:element name="event-matcher" type="event-matcher" abstract="true" />
+
+  <xsd:complexType name="event-matcher"></xsd:complexType>
+
+  <xsd:element name="priority-events" substitutionGroup="event-matcher"></xsd:element>
+
+
+  <xsd:complexType name="Requests">
+    <xsd:sequence>
+      <xsd:element name="fields" maxOccurs=" 1" minOccurs="1" type="Fields"></xsd:element>
+      <xsd:element name="start-pattern" minOccurs="1" maxOccurs="1">
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:string" />
+        </xsd:simpleType>
+      </xsd:element>
+      <xsd:element name="end-pattern" minOccurs="1" maxOccurs="1">
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:string" />
+        </xsd:simpleType>
+      </xsd:element>
+      <xsd:element name="matchers" minOccurs="1">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element ref="request-matcher" minOccurs="1" maxOccurs="unbounded" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element ref="status-formatter" maxOccurs=" 1" minOccurs="1"></xsd:element>
+    </xsd:sequence>
+    <xsd:attribute name="offset-is-end" use="optional" default="true" type="xsd:boolean"></xsd:attribute>
+  </xsd:complexType>
+
+  <xsd:complexType name="Fields">
+    <xsd:sequence>
+      <xsd:element name="field" minOccurs="1" maxOccurs="unbounded">
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:string" />
+        </xsd:simpleType>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:element name="request-matcher" abstract="true" />
+
+  <xsd:element name="regex-field-copier" substitutionGroup="request-matcher">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="pattern" minOccurs="1" maxOccurs="1" type="Pattern" />
+        <xsd:element name="fields" maxOccurs=" 1" minOccurs="1" type="Fields"></xsd:element>
+      </xsd:sequence>
+      <xsd:attribute name="field" type="xsd:string" use="required"></xsd:attribute>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="field-copier" substitutionGroup="request-matcher"></xsd:element>
+
+  <xsd:element name="status-formatter" type="status-formatter" abstract="true" />
+
+  <xsd:complexType name="status-formatter"></xsd:complexType>
+
+  <xsd:element name="printf-line-formatter" substitutionGroup="status-formatter">
+    <xsd:complexType>
+      <xsd:complexContent>
+        <xsd:extension base="status-formatter">
+          <xsd:sequence>
+            <xsd:element name="pattern" minOccurs="1" maxOccurs="1" type="Pattern" />
+            <xsd:element name="fields" maxOccurs=" 1" minOccurs="1" type="Fields"></xsd:element>
+          </xsd:sequence>
+        </xsd:extension>
+      </xsd:complexContent>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:simpleType name="Pattern">
+    <xsd:restriction base="xsd:string" />
+  </xsd:simpleType>
 </xsd:schema>
