@@ -18,6 +18,7 @@
 package com.baulsupp.kolja.log.viewer.spring;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -76,6 +77,11 @@ public class XmlReaderUtil {
 
   public static List<Element> getChildElements(Element element, String tag) {
     Element group = getSingleElement(element, tag);
+
+    if (group == null) {
+      return Collections.emptyList();
+    }
+
     NodeList childNodes = group.getChildNodes();
 
     return elements(childNodes);

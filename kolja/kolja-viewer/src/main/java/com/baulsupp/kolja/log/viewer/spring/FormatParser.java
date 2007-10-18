@@ -43,9 +43,18 @@ public class FormatParser extends AbstractSingleBeanDefinitionParser {
   @Override
   protected void doParse(Element element, BeanDefinitionBuilder bean) {
     bean.addPropertyValue("lineFormat", parseLineFormat(element));
+
     bean.addPropertyValue("outputFormat", parseOutputFormat(element));
-    bean.addPropertyValue("requestFormat", parseRequestFormat(element));
-    bean.addPropertyValue("eventFormat", parseEventFormat(element));
+
+    ConfigurableRequestFormat requestFormat = parseRequestFormat(element);
+    if (requestFormat != null) {
+      bean.addPropertyValue("requestFormat", requestFormat);
+    }
+
+    ConfigurableEventFormat eventFormat = parseEventFormat(element);
+    if (eventFormat != null) {
+      bean.addPropertyValue("eventFormat", eventFormat);
+    }
   }
 
   private ConfigurableLineFormat parseLineFormat(Element element) {
@@ -57,10 +66,12 @@ public class FormatParser extends AbstractSingleBeanDefinitionParser {
   }
 
   private ConfigurableEventFormat parseEventFormat(Element element) {
-    return new EventParser(getSingleElement(element, "events")).parse();
+    Element e = getSingleElement(element, "events");
+    return e != null ? new EventParser(e).parse() : null;
   }
 
   private ConfigurableRequestFormat parseRequestFormat(Element element) {
-    return new RequestParser(getSingleElement(element, "requests")).parse();
+    Element e = getSingleElement(element, "requests");
+    return e != null ? new RequestParser(e).parse() : null;
   }
 }

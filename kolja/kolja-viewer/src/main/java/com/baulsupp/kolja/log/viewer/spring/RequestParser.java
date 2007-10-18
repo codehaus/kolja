@@ -20,6 +20,7 @@ package com.baulsupp.kolja.log.viewer.spring;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.util.Assert;
 import org.w3c.dom.Element;
 
 import com.baulsupp.kolja.log.viewer.LineFormatter;
@@ -38,6 +39,8 @@ public class RequestParser {
   private Element element;
 
   public RequestParser(Element element) {
+    Assert.notNull(element);
+
     this.element = element;
   }
 

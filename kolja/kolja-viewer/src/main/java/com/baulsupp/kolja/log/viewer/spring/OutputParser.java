@@ -21,6 +21,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.util.ClassUtils;
 import org.w3c.dom.Element;
 
 import com.baulsupp.kolja.log.line.Line;
@@ -76,6 +77,8 @@ public class OutputParser {
       return parsePriorityHighlight(e);
     } else if (e.getNodeName().equals("regex-highlight")) {
       return parseRegexHighlight(e);
+    } else if (e.getNodeName().equals("custom-highlight")) {
+      return parseCustomHighlight(e);
     }
 
     throw new IllegalArgumentException("unknown type '" + e.getNodeName() + "'");
@@ -97,6 +100,21 @@ public class OutputParser {
     priorityHighlight.setPriorityField(e.getAttribute("field"));
 
     return priorityHighlight;
+  }
+
+  @SuppressWarnings("unchecked")
+  private Highlight<Line> parseCustomHighlight(Element e) {
+    String className = e.getAttribute("class");
+
+    try {
+      Class c = ClassUtils.forName(className);
+
+      return (Highlight<Line>) c.newInstance();
+    } catch (RuntimeException ex) {
+      throw ex;
+    } catch (Exception ex) {
+      throw new RuntimeException(ex);
+    }
   }
 
   private List<OutputFormat> parseFormats() {
@@ -126,6 +144,8 @@ public class OutputParser {
       return parseStringFormat(e);
     } else if (e.getNodeName().equals("package-format")) {
       return parsePackageFormat(e);
+    } else if (e.getNodeName().equals("custom-format")) {
+      return parseCustomFormat(e);
     }
 
     throw new IllegalArgumentException("unknown type '" + e.getNodeName() + "'");
@@ -141,5 +161,20 @@ public class OutputParser {
 
   private CompressedPackageFormat parsePackageFormat(Element e) {
     return new CompressedPackageFormat();
+  }
+
+  @SuppressWarnings("unchecked")
+  private OutputFormat parseCustomFormat(Element e) {
+    String className = e.getAttribute("class");
+
+    try {
+      Class c = ClassUtils.forName(className);
+
+      return (OutputFormat) c.newInstance();
+    } catch (RuntimeException ex) {
+      throw ex;
+    } catch (Exception ex) {
+      throw new RuntimeException(ex);
+    }
   }
 }

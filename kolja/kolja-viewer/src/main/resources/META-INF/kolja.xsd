@@ -138,6 +138,16 @@
     </xsd:complexType>
   </xsd:element>
 
+  <xsd:element name="custom-type" substitutionGroup="input-type">
+    <xsd:complexType>
+      <xsd:complexContent>
+        <xsd:extension base="input-type">
+          <xsd:attribute name="class" use="required"></xsd:attribute>
+        </xsd:extension>
+      </xsd:complexContent>
+    </xsd:complexType>
+  </xsd:element>
+
   <xsd:complexType name="OutputFormat">
     <xsd:sequence>
       <xsd:element name="widths" maxOccurs=" 1" minOccurs="1">
@@ -148,7 +158,7 @@
           <xsd:restriction base="xsd:string" />
         </xsd:simpleType>
       </xsd:element>
-      <xsd:element name="additional" maxOccurs=" 1" minOccurs="1">
+      <xsd:element name="additional" maxOccurs=" 1" minOccurs="0">
         <xsd:annotation>
           <xsd:documentation>Additional output to be shown after the first line.</xsd:documentation>
         </xsd:annotation>
@@ -166,7 +176,7 @@
           </xsd:sequence>
         </xsd:complexType>
       </xsd:element>
-      <xsd:element name="highlights" maxOccurs=" 1" minOccurs="1">
+      <xsd:element name="highlights" maxOccurs=" 1" minOccurs="0">
         <xsd:annotation>
           <xsd:documentation>Highlights</xsd:documentation>
         </xsd:annotation>
@@ -209,6 +219,16 @@
     </xsd:complexType>
   </xsd:element>
 
+  <xsd:element name="custom-format" substitutionGroup="output-format">
+    <xsd:complexType>
+      <xsd:complexContent>
+        <xsd:extension base="output-format">
+          <xsd:attribute name="class" use="required"></xsd:attribute>
+        </xsd:extension>
+      </xsd:complexContent>
+    </xsd:complexType>
+  </xsd:element>
+
   <xsd:element name="package-format" substitutionGroup="output-format">
     <xsd:complexType>
       <xsd:complexContent>
@@ -230,6 +250,12 @@
   <xsd:element name="priority-highlight" substitutionGroup="highlight">
     <xsd:complexType>
       <xsd:attribute name="field" use="required" />
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="custom-highlight" substitutionGroup="highlight">
+    <xsd:complexType>
+      <xsd:attribute name="class" use="required" />
     </xsd:complexType>
   </xsd:element>
 
@@ -258,11 +284,15 @@
     </xsd:sequence>
   </xsd:complexType>
 
-  <xsd:element name="event-matcher" type="event-matcher" abstract="true" />
-
-  <xsd:complexType name="event-matcher"></xsd:complexType>
+  <xsd:element name="event-matcher" abstract="true" />
 
   <xsd:element name="priority-events" substitutionGroup="event-matcher"></xsd:element>
+
+  <xsd:element name="custom-events" substitutionGroup="event-matcher">
+    <xsd:complexType>
+      <xsd:attribute name="class" use="required"></xsd:attribute>
+    </xsd:complexType>
+  </xsd:element>
 
 
   <xsd:complexType name="Requests">

@@ -20,6 +20,8 @@ package com.baulsupp.kolja.log.viewer.spring;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.util.Assert;
+import org.springframework.util.ClassUtils;
 import org.w3c.dom.Element;
 
 import com.baulsupp.kolja.log.viewer.event.EventMatcher;
@@ -35,6 +37,8 @@ public class EventParser {
   private Element element;
 
   public EventParser(Element element) {
+    Assert.notNull(element);
+
     this.element = element;
   }
 
@@ -55,6 +59,8 @@ public class EventParser {
   private EventMatcher parseMatcher(Element e) {
     if (e.getNodeName().equals("priority-events")) {
       return parsePriorityEvents(e);
+    } else if (e.getNodeName().equals("custom-events")) {
+      return parseCustomEvents(e);
     }
 
     throw new IllegalArgumentException("unknown type '" + e.getNodeName() + "'");
@@ -62,5 +68,20 @@ public class EventParser {
 
   private WarnEventMatcher parsePriorityEvents(Element e) {
     return new WarnEventMatcher();
+  }
+
+  @SuppressWarnings("unchecked")
+  private EventMatcher parseCustomEvents(Element e) {
+    String className = e.getAttribute("class");
+
+    try {
+      Class c = ClassUtils.forName(className);
+
+      return (EventMatcher) c.newInstance();
+    } catch (RuntimeException ex) {
+      throw ex;
+    } catch (Exception ex) {
+      throw new RuntimeException(ex);
+    }
   }
 }

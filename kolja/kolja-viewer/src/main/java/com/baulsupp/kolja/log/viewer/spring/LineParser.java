@@ -17,8 +17,10 @@
  */
 package com.baulsupp.kolja.log.viewer.spring;
 
+import java.lang.reflect.Constructor;
 import java.util.regex.Pattern;
 
+import org.springframework.util.ClassUtils;
 import org.w3c.dom.Element;
 
 import com.baulsupp.kolja.log.line.type.DateType;
@@ -70,6 +72,8 @@ public class LineParser {
       return parseMessageType(e);
     } else if (e.getNodeName().equals("exception-type")) {
       return parseExceptionType(e);
+    } else if (e.getNodeName().equals("custom-type")) {
+      return parseCustomType(e);
     }
 
     throw new IllegalArgumentException("unknown type '" + e.getNodeName() + "'");
@@ -89,6 +93,23 @@ public class LineParser {
 
   private NameType parseNameType(Element e) {
     return new NameType(e.getAttribute("name"));
+  }
+
+  @SuppressWarnings("unchecked")
+  private Type parseCustomType(Element e) {
+    String className = e.getAttribute("class");
+
+    try {
+      Class c = ClassUtils.forName(className);
+
+      Constructor constructor = ClassUtils.getConstructorIfAvailable(c, new Class[] { String.class });
+
+      return (Type) constructor.newInstance(e.getAttribute("name"));
+    } catch (RuntimeException ex) {
+      throw ex;
+    } catch (Exception ex) {
+      throw new RuntimeException(ex);
+    }
   }
 
   private DateType parseDateType(Element e) {
