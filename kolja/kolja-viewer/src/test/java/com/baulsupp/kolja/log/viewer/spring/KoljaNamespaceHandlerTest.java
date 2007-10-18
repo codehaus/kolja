@@ -42,12 +42,6 @@ import com.baulsupp.kolja.util.colours.Colour;
 public class KoljaNamespaceHandlerTest extends TestCase {
   private static final Date DATE = new Date(107, 9, 12);
 
-  public void testLoadsWideFinderConfig() {
-    ApplicationContext ac = new ClassPathXmlApplicationContext("wf.xml");
-
-    assertNotNull(ac);
-  }
-
   public void testLoadsXml() {
     ApplicationContext ac = new ClassPathXmlApplicationContext("sample.xml");
 

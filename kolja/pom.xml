@@ -68,6 +68,7 @@
 		<module>kolja-ansi</module>
 		<module>kolja-util</module>
 		<module>kolja-assembly</module>
+		<module>kolja-widefinder</module>
 	</modules>
 
 	<dependencyManagement>
