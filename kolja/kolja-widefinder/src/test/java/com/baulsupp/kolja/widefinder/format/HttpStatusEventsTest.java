@@ -1,4 +1,4 @@
-package com.baulsupp.kolja.log.viewer.http;
+package com.baulsupp.kolja.widefinder.format;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
@@ -9,6 +9,7 @@ import org.junit.Test;
 
 import com.baulsupp.kolja.log.line.BasicLine;
 import com.baulsupp.kolja.log.viewer.event.Event;
+import com.baulsupp.kolja.widefinder.format.HttpStatusEvents;
 
 public class HttpStatusEventsTest {
   private HttpStatusEvents events;

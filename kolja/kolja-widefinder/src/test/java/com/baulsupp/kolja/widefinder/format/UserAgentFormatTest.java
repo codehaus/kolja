@@ -1,9 +1,11 @@
-package com.baulsupp.kolja.log.viewer.http;
+package com.baulsupp.kolja.widefinder.format;
 
 import static junit.framework.Assert.assertEquals;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import com.baulsupp.kolja.widefinder.format.UserAgentFormat;
 
 public class UserAgentFormatTest {
   private UserAgentFormat format;

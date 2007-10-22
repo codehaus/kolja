@@ -1,4 +1,4 @@
-package com.baulsupp.kolja.log.viewer.http;
+package com.baulsupp.kolja.widefinder.format;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNull;
@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import com.baulsupp.kolja.log.line.BasicLine;
 import com.baulsupp.kolja.util.colours.ColourPair;
+import com.baulsupp.kolja.widefinder.format.HttpStatusHighlight;
 
 public class HttpStatusHighlightTest {
   private HttpStatusHighlight h;

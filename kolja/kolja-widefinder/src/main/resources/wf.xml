@@ -18,7 +18,7 @@ http://baulsupp.com/schema/kolja http://baulsupp.com/schema/kolja.xsd">
         <name-type name="action" />
         <name-type name="url" />
         <name-type name="status" />
-        <custom-type name="size" class="com.baulsupp.kolja.log.viewer.http.BytesType" />
+        <custom-type name="size" class="com.baulsupp.kolja.widefinder.format.BytesType" />
         <name-type name="useragent" />
       </types>
     </line-format>
@@ -30,15 +30,15 @@ http://baulsupp.com/schema/kolja http://baulsupp.com/schema/kolja.xsd">
         <string-format field="action" />
         <string-format field="status" />
         <string-format field="size" />
-        <custom-format field="useragent" class="com.baulsupp.kolja.log.viewer.http.UserAgentFormat" />
+        <custom-format field="useragent" class="com.baulsupp.kolja.widefinder.format.UserAgentFormat" />
         <string-format field="url" />
       </formats>
       <highlights>
-        <custom-highlight class="com.baulsupp.kolja.log.viewer.http.HttpStatusHighlight" />
+        <custom-highlight class="com.baulsupp.kolja.widefinder.format.HttpStatusHighlight" />
       </highlights>
     </output-format>
     <events>
-      <custom-events class="com.baulsupp.kolja.log.viewer.http.HttpStatusEvents" />
+      <custom-events class="com.baulsupp.kolja.widefinder.format.HttpStatusEvents" />
     </events>
   </format>
 </beans:beans>

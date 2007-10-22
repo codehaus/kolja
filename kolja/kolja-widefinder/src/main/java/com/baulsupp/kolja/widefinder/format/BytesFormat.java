@@ -15,31 +15,44 @@
  * along with this library; if not, write to the Free Software Foundation, Inc.,
  * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
-package com.baulsupp.kolja.log.viewer.http;
+package com.baulsupp.kolja.widefinder.format;
 
-import com.baulsupp.kolja.log.line.type.Type;
+import com.baulsupp.kolja.log.viewer.format.OutputFormat;
 
 /**
- * Bytes type that parse the access log bytes into a long.
+ * User Agent Format
  * 
  * @author Yuri Schimke
  */
-public class BytesType extends Type {
-  private static final long serialVersionUID = -469580635494842870L;
+public class BytesFormat implements OutputFormat {
+  private static final long serialVersionUID = -2166842740967293740L;
 
-  public BytesType() {
+  public static final long KB = 1024;
+  public static final long MB = KB * KB;
+  public static final long GB = KB * KB * KB;
+
+  public BytesFormat() {
   }
 
-  public BytesType(String string) {
-    super(string);
-  }
-
-  @Override
-  public Object parse(String string) {
-    if (string.equals("-")) {
+  public String format(Object value) {
+    if (value == null) {
       return null;
     }
 
-    return Long.parseLong(string);
+    long bytes = (Long) value;
+
+    if (bytes >= GB) {
+      return (bytes / GB) + "GB";
+    }
+
+    if (bytes >= MB) {
+      return (bytes / MB) + "MB";
+    }
+
+    if (bytes >= KB) {
+      return (bytes / KB) + "KB";
+    }
+
+    return bytes + "b";
   }
 }

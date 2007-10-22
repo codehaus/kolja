@@ -1,4 +1,4 @@
-package com.baulsupp.kolja.log.viewer.http;
+package com.baulsupp.kolja.widefinder.format;
 
 import junit.framework.TestCase;
 

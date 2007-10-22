@@ -15,44 +15,29 @@
  * along with this library; if not, write to the Free Software Foundation, Inc.,
  * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
-package com.baulsupp.kolja.log.viewer.http;
+package com.baulsupp.kolja.widefinder.format;
 
-import com.baulsupp.kolja.log.viewer.format.OutputFormat;
+import com.baulsupp.kolja.log.line.Line;
+import com.baulsupp.kolja.log.viewer.event.Event;
+import com.baulsupp.kolja.log.viewer.event.EventMatcher;
 
-/**
- * User Agent Format
- * 
- * @author Yuri Schimke
- */
-public class BytesFormat implements OutputFormat {
-  private static final long serialVersionUID = -2166842740967293740L;
+public class HttpStatusEvents implements EventMatcher {
+  public Event match(Line l) {
+    String status = (String) l.getValue("status");
+    String url = (String) l.getValue("url");
 
-  public static final long KB = 1024;
-  public static final long MB = KB * KB;
-  public static final long GB = KB * KB * KB;
-
-  public BytesFormat() {
-  }
-
-  public String format(Object value) {
-    if (value == null) {
+    if (status == null) {
       return null;
     }
 
-    long bytes = (Long) value;
-
-    if (bytes >= GB) {
-      return (bytes / GB) + "GB";
+    if (status.startsWith("4")) {
+      return new Event(l, status + " " + url);
     }
 
-    if (bytes >= MB) {
-      return (bytes / MB) + "MB";
+    if (status.startsWith("5")) {
+      return new Event(l, status + " " + url);
     }
 
-    if (bytes >= KB) {
-      return (bytes / KB) + "KB";
-    }
-
-    return bytes + "b";
+    return null;
   }
 }

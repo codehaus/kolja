@@ -15,29 +15,31 @@
  * along with this library; if not, write to the Free Software Foundation, Inc.,
  * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
-package com.baulsupp.kolja.log.viewer.http;
+package com.baulsupp.kolja.widefinder.format;
 
-import com.baulsupp.kolja.log.line.Line;
-import com.baulsupp.kolja.log.viewer.event.Event;
-import com.baulsupp.kolja.log.viewer.event.EventMatcher;
+import com.baulsupp.kolja.log.line.type.Type;
 
-public class HttpStatusEvents implements EventMatcher {
-  public Event match(Line l) {
-    String status = (String) l.getValue("status");
-    String url = (String) l.getValue("url");
+/**
+ * Bytes type that parse the access log bytes into a long.
+ * 
+ * @author Yuri Schimke
+ */
+public class BytesType extends Type {
+  private static final long serialVersionUID = -469580635494842870L;
 
-    if (status == null) {
+  public BytesType() {
+  }
+
+  public BytesType(String string) {
+    super(string);
+  }
+
+  @Override
+  public Object parse(String string) {
+    if (string.equals("-")) {
       return null;
     }
 
-    if (status.startsWith("4")) {
-      return new Event(l, status + " " + url);
-    }
-
-    if (status.startsWith("5")) {
-      return new Event(l, status + " " + url);
-    }
-
-    return null;
+    return Long.parseLong(string);
   }
 }
