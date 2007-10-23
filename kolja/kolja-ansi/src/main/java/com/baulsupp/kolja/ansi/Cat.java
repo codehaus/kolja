@@ -1,3 +1,20 @@
+/**
+ * Copyright (c) 2002-2007 Yuri Schimke. All Rights Reserved.
+ * 
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ * 
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this library; if not, write to the Free Software Foundation, Inc.,
+ * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ */
 package com.baulsupp.kolja.ansi;
 
 import java.io.IOException;
@@ -28,9 +45,9 @@ public class Cat {
   protected volatile boolean isPaused = false;
 
   protected TailRenderer renderer;
-  
+
   protected CommandList commands = new CommandList();
-  
+
   public Cat() {
     createDefaultCommands();
   }
@@ -71,7 +88,7 @@ public class Cat {
     while (!isQuit()) {
       String c = readCommand();
 
-      commands.run(c, this);      
+      commands.run(c, this);
     }
   }
 
@@ -105,11 +122,11 @@ public class Cat {
     Line l = i.next();
     renderer.show(l);
   }
-  
+
   public void setI(Iterator<Line> i) {
     this.i = i;
   }
-  
+
   public void setGrid(Renderer<Line> grid) {
     this.grid = grid;
     grid.setWidth(Terminal.getTerminal().getTerminalWidth());
@@ -135,12 +152,12 @@ public class Cat {
   public void setFixedWidth(boolean b) {
     renderer.setFixedWidth(b);
   }
-  
+
   protected void createDefaultCommands() {
     commands.add("h", new HelpCommand());
     commands.add(" ", new PauseCommand());
     commands.add("q", new QuitCommand());
-  } 
+  }
 
   public CommandList getCommands() {
     return commands;

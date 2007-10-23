@@ -17,31 +17,25 @@
  */
 package com.baulsupp.kolja.widefinder.format;
 
-import com.baulsupp.kolja.log.line.Line;
-import com.baulsupp.kolja.log.viewer.highlight.Highlight;
-import com.baulsupp.kolja.log.viewer.highlight.HighlightResult;
-import com.baulsupp.kolja.util.colours.ColourPair;
-import com.baulsupp.kolja.widefinder.WideFinderConstants;
+import com.baulsupp.kolja.log.line.type.Type;
 
-public class HttpStatusHighlight implements Highlight<Line> {
+/**
+ * Status type that parses Http Status objects i.e. 200.
+ * 
+ * @author Yuri Schimke
+ */
+public class StatusType extends Type {
+  private static final long serialVersionUID = -469580635494842870L;
 
-  public HighlightResult getHighlights(Line viewRow) {
-    HttpStatus status = (HttpStatus) viewRow.getValue(WideFinderConstants.STATUS);
-
-    if (status == null) {
-      return null;
-    }
-
-    if (status.equals(HttpStatus.SUCCESS_OK)) {
-      return null;
-    }
-
-    if (status.isServerError()) {
-      return HighlightResult.row(ColourPair.RED_ON_BLACK);
-
-    }
-
-    return HighlightResult.column(WideFinderConstants.STATUS, ColourPair.CYAN_ON_BLACK);
+  public StatusType() {
   }
 
+  public StatusType(String string) {
+    super(string);
+  }
+
+  @Override
+  public Object parse(String string) {
+    return new HttpStatus(string);
+  }
 }

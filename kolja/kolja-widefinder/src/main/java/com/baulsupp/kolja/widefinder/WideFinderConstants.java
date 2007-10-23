@@ -15,30 +15,19 @@
  * along with this library; if not, write to the Free Software Foundation, Inc.,
  * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
-package com.baulsupp.kolja.widefinder.format;
+package com.baulsupp.kolja.widefinder;
 
-import com.baulsupp.kolja.log.line.Line;
-import com.baulsupp.kolja.log.viewer.event.Event;
-import com.baulsupp.kolja.log.viewer.event.EventMatcher;
-import com.baulsupp.kolja.widefinder.WideFinderConstants;
-
-public class HttpStatusEvents implements EventMatcher {
-  public Event match(Line l) {
-    HttpStatus status = (HttpStatus) l.getValue(WideFinderConstants.STATUS);
-    String url = (String) l.getValue(WideFinderConstants.URL);
-
-    if (status == null) {
-      return null;
-    }
-
-    if (status.isClientError()) {
-      return new Event(l, status + " " + url);
-    }
-
-    if (status.isServerError()) {
-      return new Event(l, status + " " + url);
-    }
-
-    return null;
-  }
+/**
+ * Field Name Constants
+ * 
+ * @author Yuri Schimke
+ */
+public class WideFinderConstants {
+  public static final String STATUS = "status";
+  public static final String URL = "url";
+  public static final String IPADDRESS = "ipaddress";
+  public static final String DATE = "date";
+  public static final String ACTION = "action";
+  public static final String SIZE = "size";
+  public static final String USER_AGENT = "useragent";
 }

@@ -15,33 +15,21 @@
  * along with this library; if not, write to the Free Software Foundation, Inc.,
  * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
-package com.baulsupp.kolja.widefinder.format;
+package com.baulsupp.kolja.ansi.reports;
 
 import com.baulsupp.kolja.log.line.Line;
-import com.baulsupp.kolja.log.viewer.highlight.Highlight;
-import com.baulsupp.kolja.log.viewer.highlight.HighlightResult;
-import com.baulsupp.kolja.util.colours.ColourPair;
-import com.baulsupp.kolja.widefinder.WideFinderConstants;
 
-public class HttpStatusHighlight implements Highlight<Line> {
+/**
+ * Text Report for running a calculation.
+ * 
+ * @author Yuri Schimke
+ */
+public interface TextReport {
+  void initialise(ReportRunner reportRunner);
 
-  public HighlightResult getHighlights(Line viewRow) {
-    HttpStatus status = (HttpStatus) viewRow.getValue(WideFinderConstants.STATUS);
+  void processLine(Line line);
 
-    if (status == null) {
-      return null;
-    }
+  void completed();
 
-    if (status.equals(HttpStatus.SUCCESS_OK)) {
-      return null;
-    }
-
-    if (status.isServerError()) {
-      return HighlightResult.row(ColourPair.RED_ON_BLACK);
-
-    }
-
-    return HighlightResult.column(WideFinderConstants.STATUS, ColourPair.CYAN_ON_BLACK);
-  }
-
+  void display();
 }

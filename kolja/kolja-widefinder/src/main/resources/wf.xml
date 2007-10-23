@@ -17,7 +17,7 @@ http://baulsupp.com/schema/kolja http://baulsupp.com/schema/kolja.xsd">
         </date-type>
         <name-type name="action" />
         <name-type name="url" />
-        <name-type name="status" />
+        <custom-type name="status" class="com.baulsupp.kolja.widefinder.format.StatusType" />
         <custom-type name="size" class="com.baulsupp.kolja.widefinder.format.BytesType" />
         <name-type name="useragent" />
       </types>
