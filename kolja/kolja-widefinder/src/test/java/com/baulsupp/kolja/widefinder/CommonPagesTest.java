@@ -28,7 +28,7 @@ import org.junit.Test;
 import com.baulsupp.kolja.ansi.reports.SimpleReportRunner;
 import com.baulsupp.kolja.log.line.BasicLine;
 import com.baulsupp.kolja.log.line.Line;
-import com.baulsupp.kolja.widefinder.StringFrequencies.Count;
+import com.baulsupp.kolja.widefinder.Frequencies.Count;
 
 public class CommonPagesTest {
   private CommonPages pages;
@@ -47,7 +47,7 @@ public class CommonPagesTest {
   public void testWorksWithoutAnyLines() {
     pages.completed();
 
-    StringFrequencies freq = pages.getUrlFrequencies();
+    Frequencies<String> freq = pages.getUrlFrequencies();
 
     assertNotNull(freq);
     assertEquals(0, freq.size());
@@ -64,7 +64,7 @@ public class CommonPagesTest {
 
     pages.completed();
 
-    StringFrequencies freq = pages.getUrlFrequencies();
+    Frequencies<String> freq = pages.getUrlFrequencies();
 
     assertNotNull(freq);
     assertEquals(3, freq.size());
@@ -90,7 +90,7 @@ public class CommonPagesTest {
 
     pages.completed();
 
-    List<Count> mostFreq = pages.getMostFrequentUrls(3);
+    List<Count<String>> mostFreq = pages.getMostFrequentUrls(3);
 
     assertNotNull(mostFreq);
     assertEquals(3, mostFreq.size());
@@ -107,7 +107,7 @@ public class CommonPagesTest {
 
     pages.completed();
 
-    pages.display();
+    pages.display(false);
 
     List<String> lines = reportRunner.getLines();
     assertEquals(2, lines.size());

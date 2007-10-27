@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <beans:beans xmlns="http://baulsupp.com/schema/kolja" xmlns:beans="http://www.springframework.org/schema/beans"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:r="http://baulsupp.com/schema/kolja-reports" 
   xsi:schemaLocation="
 http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
-http://baulsupp.com/schema/kolja http://baulsupp.com/schema/kolja.xsd">
+http://baulsupp.com/schema/kolja http://baulsupp.com/schema/kolja.xsd
+http://baulsupp.com/schema/kolja-reports http://baulsupp.com/schema/kolja-reports.xsd">
 
   <format id="logFormat">
     <line-format>
@@ -41,4 +42,9 @@ http://baulsupp.com/schema/kolja http://baulsupp.com/schema/kolja.xsd">
       <custom-events class="com.baulsupp.kolja.widefinder.format.HttpStatusEvents" />
     </events>
   </format>
+  
+  <r:report id="pages" class="com.baulsupp.kolja.widefinder.CommonPages"/>
+  
+  <r:report id="status" class="com.baulsupp.kolja.widefinder.CommonStatus"/>
+  
 </beans:beans>

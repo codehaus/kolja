@@ -17,11 +17,12 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.PosixParser;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.BeanFactory;
 
 import com.baulsupp.kolja.log.line.Line;
 import com.baulsupp.kolja.log.viewer.importing.LogFormat;
-import com.baulsupp.kolja.log.viewer.importing.PlainTextLogFormat;
 import com.baulsupp.kolja.log.viewer.importing.SavedLogFormatLoader;
+import com.baulsupp.kolja.log.viewer.importing.SpringBeanLogFormatLoader;
 import com.baulsupp.kolja.log.viewer.io.IoUtil;
 import com.baulsupp.kolja.log.viewer.renderer.PrintfRenderer;
 import com.baulsupp.kolja.log.viewer.renderer.Renderer;
@@ -64,12 +65,17 @@ public class ReportRunnerMain {
     log.error(type, pe);
   }
 
-  private static void run(CommandLine cmd) throws Exception, IOException, InterruptedException {
+  private static void run(CommandLine cmd) throws Exception {
     final AnsiReportRunner reportRunner = new AnsiReportRunner();
 
-    LogFormat format = loadFormat(cmd);
+    String configName = cmd.getOptionValue("x");
+    BeanFactory appCtxt = SavedLogFormatLoader.loadAppContext(configName);
+
+    LogFormat format = SpringBeanLogFormatLoader.getLogFormat(appCtxt);
 
     reportRunner.setAnsi(!cmd.hasOption("a"));
+
+    reportRunner.setReports(createReports(appCtxt, cmd.getOptionValue("r")));
 
     Iterator<Line> bli = loadLineIterator(cmd, format);
     reportRunner.setI(bli);
@@ -86,6 +92,18 @@ public class ReportRunnerMain {
     }
 
     reportRunner.run();
+  }
+
+  private static List<TextReport> createReports(BeanFactory appCtxt, String option) throws Exception {
+    List<TextReport> reports = new ArrayList<TextReport>();
+
+    String[] strings = option.split(",");
+
+    for (String string : strings) {
+      reports.add((TextReport) appCtxt.getBean(string));
+    }
+
+    return reports;
   }
 
   public static Iterator<Line> loadLineIterator(CommandLine cmd, LogFormat format) throws IOException {
@@ -114,19 +132,6 @@ public class ReportRunnerMain {
     return files;
   }
 
-  public static LogFormat loadFormat(CommandLine cmd) throws Exception {
-    LogFormat format;
-    if (cmd.hasOption("c")) {
-      format = (LogFormat) Class.forName(cmd.getOptionValue("c")).newInstance();
-    } else if (cmd.hasOption("x")) {
-      String configName = cmd.getOptionValue("x");
-      format = SavedLogFormatLoader.load(configName);
-    } else {
-      format = new PlainTextLogFormat();
-    }
-    return format;
-  }
-
   private static void printHelp(Options options) {
     HelpFormatter formatter = new HelpFormatter();
     formatter.printHelp("report", options);
@@ -142,14 +147,13 @@ public class ReportRunnerMain {
 
     options.addOption(OptionBuilder.hasArg(false).withDescription("Read from STDIN").withLongOpt("stdin").create('i'));
 
-    options.addOption(OptionBuilder.withArgName("formatClass").hasArg().withDescription("An implementation of LogFormat to use")
-        .withLongOpt("formatClass").create('c'));
-
     options.addOption(OptionBuilder.withArgName("formatConfig").hasArg().withDescription("Log format definition").withLongOpt(
         "formatConfig").create('x'));
 
     options.addOption(OptionBuilder.withArgName("outputFormat").hasArg().withDescription("printf output format").withLongOpt(
         "printf").create('o'));
+
+    options.addOption(OptionBuilder.withArgName("report").hasArg().withDescription("report").withLongOpt("report").create('r'));
 
     options.addOption(OptionBuilder.hasArg(false).withDescription("Fixed Screen Width").withLongOpt("fixed-width").create('f'));
 

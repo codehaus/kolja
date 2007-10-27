@@ -32,11 +32,11 @@ import org.apache.commons.collections.ComparatorUtils;
  * 
  * @author Yuri Schimke
  */
-public class StringFrequencies implements Iterable<StringFrequencies.Count> {
-  private SortedMap<String, Count> counts = new TreeMap<String, Count>();
+public class Frequencies<T> implements Iterable<Frequencies.Count<T>> {
+  private SortedMap<T, Count<T>> counts = new TreeMap<T, Count<T>>();
 
-  public static final Comparator<Count> COUNT_COMPARATOR = new Comparator<Count>() {
-    public int compare(Count c1, Count c2) {
+  public static final Comparator<Count<?>> COUNT_COMPARATOR = new Comparator<Count<?>>() {
+    public int compare(Count<?> c1, Count<?> c2) {
       if (c1.getCount() < c2.getCount()) {
         return -1;
       } else if (c1.getCount() == c2.getCount()) {
@@ -47,21 +47,21 @@ public class StringFrequencies implements Iterable<StringFrequencies.Count> {
     }
   };
 
-  public void increment(String url) {
-    Count count = counts.get(url);
+  public void increment(T url) {
+    Count<T> count = counts.get(url);
 
     if (count == null) {
-      counts.put(url, new Count(url, 1));
+      counts.put(url, new Count<T>(url, 1));
     } else {
       count.increment();
     }
   }
 
-  public class Count {
-    private String url;
+  public static class Count<S> {
+    private S url;
     private int i;
 
-    public Count(String url, int i) {
+    public Count(S url, int i) {
       this.url = url;
       this.i = i;
     }
@@ -81,8 +81,8 @@ public class StringFrequencies implements Iterable<StringFrequencies.Count> {
   }
 
   @SuppressWarnings("unchecked")
-  public List<Count> getMostFrequent(int top) {
-    List<Count> results = new ArrayList<Count>();
+  public List<Count<T>> getMostFrequent(int top) {
+    List<Count<T>> results = new ArrayList<Count<T>>();
 
     results.addAll(counts.values());
 
@@ -95,7 +95,7 @@ public class StringFrequencies implements Iterable<StringFrequencies.Count> {
     return results;
   }
 
-  public Iterator<Count> iterator() {
+  public Iterator<Count<T>> iterator() {
     return counts.values().iterator();
   }
 
@@ -104,7 +104,7 @@ public class StringFrequencies implements Iterable<StringFrequencies.Count> {
   }
 
   public int get(String string) {
-    Count c = counts.get(string);
+    Count<T> c = counts.get(string);
     return c != null ? c.getCount() : 0;
   }
 }

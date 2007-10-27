@@ -15,21 +15,27 @@
  * along with this library; if not, write to the Free Software Foundation, Inc.,
  * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
-package com.baulsupp.kolja.ansi.reports;
+package com.baulsupp.kolja.ansi.reports.spring;
 
-import com.baulsupp.kolja.log.line.Line;
+import org.springframework.beans.factory.xml.AbstractSingleBeanDefinitionParser;
+import org.springframework.util.ClassUtils;
+import org.w3c.dom.Element;
 
 /**
- * Text Report for running a calculation.
+ * Report configuration.
  * 
  * @author Yuri Schimke
  */
-public interface TextReport {
-  void initialise(ReportRunner reportRunner);
-
-  void processLine(Line line);
-
-  void completed();
-
-  void display(boolean showHeader);
+public class ReportParser extends AbstractSingleBeanDefinitionParser {
+  @Override
+  protected Class<?> getBeanClass(Element element) {
+    try {
+      String className = element.getAttribute("class");
+      return ClassUtils.forName(className);
+    } catch (RuntimeException ex) {
+      throw ex;
+    } catch (Exception ex) {
+      throw new RuntimeException(ex);
+    }
+  }
 }

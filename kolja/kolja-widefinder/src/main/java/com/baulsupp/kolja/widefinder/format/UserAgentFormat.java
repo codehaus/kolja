@@ -30,43 +30,13 @@ public class UserAgentFormat implements OutputFormat {
   public UserAgentFormat() {
   }
 
-  // TODO optimise
   public String format(Object value) {
     if (value == null) {
       return null;
     }
 
-    String s = (String) value;
+    UserAgent s = (UserAgent) value;
 
-    if (s.matches(".*MSIE 5.*")) {
-      return "MSIE 5.5";
-    }
-
-    if (s.matches(".*Mozilla/4.*")) {
-      return "Netscape 5.5";
-    }
-
-    if (s.matches(".*Mozilla/5.*")) {
-      return "Firefox 1.x";
-    }
-
-    if (s.matches(".*Opera/7.*")) {
-      return "Opera 7.x";
-    }
-
-    if (s.matches(".*Mac.*Safari.*")) {
-      return "Safari 5.x";
-    }
-
-    if (s.matches(".*MSIE 6.*")) {
-      return "MSIE 6.0";
-    }
-
-    if (s.matches("NetNewsWire.*")) {
-      return "NetNewsWire";
-    }
-
-    return s;
+    return s.getShortName();
   }
-
 }

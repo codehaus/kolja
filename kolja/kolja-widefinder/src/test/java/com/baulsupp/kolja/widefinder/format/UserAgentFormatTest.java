@@ -5,8 +5,6 @@ import static junit.framework.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.baulsupp.kolja.widefinder.format.UserAgentFormat;
-
 public class UserAgentFormatTest {
   private UserAgentFormat format;
 
@@ -17,13 +15,13 @@ public class UserAgentFormatTest {
 
   @Test
   public void testFirefox() {
-    assertEquals("Firefox 1.x", format
-        .format("Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.0.7) Gecko/20060909 Firefox/1.5.0.7"));
+    assertEquals("Firefox 1.x", format.format(new UserAgent(
+        "Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.0.7) Gecko/20060909 Firefox/1.5.0.7")));
   }
 
   @Test
   public void testUnknown() {
-    assertEquals("1234567890", format.format("1234567890"));
+    assertEquals("1234567890", format.format(new UserAgent("1234567890")));
   }
 
   @Test

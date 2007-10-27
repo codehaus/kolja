@@ -19,6 +19,7 @@ package com.baulsupp.kolja.ansi.reports;
 
 import java.io.IOException;
 import java.util.Iterator;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import jline.ANSIBuffer;
 import jline.Terminal;
@@ -38,31 +39,65 @@ public class AnsiReportRunner implements ReportRunner {
 
   protected TailRenderer renderer;
 
-  protected TextReport report;
+  protected java.util.List<TextReport> reports;
 
   public AnsiReportRunner() {
-  }
-
-  public boolean isAnsi() {
-    return ansi;
   }
 
   public void setAnsi(boolean ansi) {
     this.ansi = ansi;
   }
 
+  public void setReports(java.util.List<TextReport> reports) {
+    this.reports = reports;
+  }
+
   public void run() throws InterruptedException, IOException {
-    report.initialise(this);
+    initialise();
 
     while (i.hasNext()) {
       Line l = i.next();
 
-      renderer.show(l);
+      processLine(l);
     }
 
-    report.completed();
+    completed();
 
-    report.display();
+    display();
+  }
+
+  private void initialise() {
+    for (TextReport r : reports) {
+      r.initialise(this);
+    }
+  }
+
+  private void completed() {
+    for (TextReport r : reports) {
+      r.completed();
+    }
+  }
+
+  private void display() {
+    boolean hasMultiple = reports.size() > 1;
+
+    boolean first = true;
+
+    for (TextReport r : reports) {
+      if (first) {
+        first = false;
+      } else {
+        println(new MultiColourString());
+      }
+
+      r.display(hasMultiple);
+    }
+  }
+
+  private void processLine(Line line) {
+    for (TextReport r : reports) {
+      r.processLine(line);
+    }
   }
 
   public void setI(Iterator<Line> i) {
@@ -91,6 +126,7 @@ public class AnsiReportRunner implements ReportRunner {
     ANSIBuffer buffy = new ANSIBuffer();
 
     AnsiUtils.append(buffy, string);
+    buffy.append("\n");
 
     if (ansi) {
       System.out.print(buffy.getAnsiBuffer());

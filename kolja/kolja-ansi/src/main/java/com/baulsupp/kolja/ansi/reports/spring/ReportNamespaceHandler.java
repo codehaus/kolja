@@ -15,21 +15,17 @@
  * along with this library; if not, write to the Free Software Foundation, Inc.,
  * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
-package com.baulsupp.kolja.ansi.reports;
+package com.baulsupp.kolja.ansi.reports.spring;
 
-import com.baulsupp.kolja.log.line.Line;
+import org.springframework.beans.factory.xml.NamespaceHandlerSupport;
 
 /**
- * Text Report for running a calculation.
+ * Namespace Handler for Registering Reports.
  * 
  * @author Yuri Schimke
  */
-public interface TextReport {
-  void initialise(ReportRunner reportRunner);
-
-  void processLine(Line line);
-
-  void completed();
-
-  void display(boolean showHeader);
+public class ReportNamespaceHandler extends NamespaceHandlerSupport {
+  public void init() {
+    registerBeanDefinitionParser("report", new ReportParser());
+  }
 }

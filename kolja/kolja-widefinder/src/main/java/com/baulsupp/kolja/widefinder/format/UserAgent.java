@@ -24,51 +24,59 @@ import org.springframework.util.Assert;
  * 
  * @author Yuri Schimke
  */
-public class HttpStatus implements Comparable<HttpStatus> {
-  public static final HttpStatus SUCCESS_OK = new HttpStatus("200");
-  public static final HttpStatus CLIENT_ERROR_NOT_FOUND = new HttpStatus("404");
-  public static final HttpStatus SERVER_ERROR_INTERNAL = new HttpStatus("500");
+public class UserAgent {
+  private String fullId = null;
 
-  private String code = null;
+  public UserAgent(String fullId) {
+    Assert.notNull(fullId);
 
-  public HttpStatus(String code) {
-    Assert.notNull(code);
-
-    this.code = code;
+    this.fullId = fullId;
   }
 
-  public String getCode() {
-    return code;
+  public String getFullId() {
+    return fullId;
   }
 
-  public boolean isInformational() {
-    return code.startsWith("1");
-  }
+  public String getShortName() {
+    if (fullId.matches(".*MSIE 5.*")) {
+      return "MSIE 5.5";
+    }
 
-  public boolean isSuccess() {
-    return code.startsWith("2");
-  }
+    if (fullId.matches(".*Mozilla/4.*")) {
+      return "Netscape 5.5";
+    }
 
-  public boolean isRedirect() {
-    return code.startsWith("3");
-  }
+    if (fullId.matches(".*Mozilla/5.*")) {
+      return "Firefox 1.x";
+    }
 
-  public boolean isClientError() {
-    return code.startsWith("4");
-  }
+    if (fullId.matches(".*Opera/7.*")) {
+      return "Opera 7.x";
+    }
 
-  public boolean isServerError() {
-    return code.startsWith("5");
+    if (fullId.matches(".*Mac.*Safari.*")) {
+      return "Safari 5.x";
+    }
+
+    if (fullId.matches(".*MSIE 6.*")) {
+      return "MSIE 6.0";
+    }
+
+    if (fullId.matches("NetNewsWire.*")) {
+      return "NetNewsWire";
+    }
+
+    return fullId;
   }
 
   @Override
   public String toString() {
-    return code;
+    return fullId;
   }
 
   @Override
   public int hashCode() {
-    return code.hashCode();
+    return fullId.hashCode();
   }
 
   @Override
@@ -77,16 +85,12 @@ public class HttpStatus implements Comparable<HttpStatus> {
       return true;
     }
 
-    if (!(obj instanceof HttpStatus)) {
+    if (!(obj instanceof UserAgent)) {
       return false;
     }
 
-    HttpStatus s = (HttpStatus) obj;
+    UserAgent s = (UserAgent) obj;
 
-    return code.equals(s.code);
-  }
-
-  public int compareTo(HttpStatus o) {
-    return code.compareTo(o.code);
+    return fullId.equals(s.fullId);
   }
 }

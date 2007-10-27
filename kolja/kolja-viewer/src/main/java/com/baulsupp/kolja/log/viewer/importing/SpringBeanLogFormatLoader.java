@@ -34,6 +34,10 @@ public class SpringBeanLogFormatLoader {
   public static final LogFormat load(Resource r) throws Exception {
     BeanFactory beanFactory = loadBeanFactory(r);
 
+    return getLogFormat(beanFactory);
+  }
+
+  public static LogFormat getLogFormat(BeanFactory beanFactory) {
     return (LogFormat) beanFactory.getBean("logFormat");
   }
 

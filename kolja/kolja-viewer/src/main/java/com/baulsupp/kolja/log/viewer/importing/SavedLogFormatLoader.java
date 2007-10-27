@@ -3,6 +3,7 @@ package com.baulsupp.kolja.log.viewer.importing;
 import java.io.File;
 import java.io.IOException;
 
+import org.springframework.beans.factory.BeanFactory;
 import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
@@ -11,6 +12,16 @@ import org.springframework.core.io.ResourceLoader;
 import com.baulsupp.kolja.util.SerializationUtil;
 
 public class SavedLogFormatLoader {
+  public static final BeanFactory loadAppContext(String name) throws Exception {
+    if (!isShortName(name)) {
+      return SpringBeanLogFormatLoader.loadBeanFactory(new FileSystemResource(name));
+    } else {
+      Resource xmlFile = getConfigFile(name, "xml");
+
+      return SpringBeanLogFormatLoader.loadBeanFactory(xmlFile);
+    }
+  }
+
   public static final LogFormat load(String name) throws Exception {
     if (!isShortName(name)) {
       return SpringBeanLogFormatLoader.load(new FileSystemResource(name));

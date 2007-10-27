@@ -9,7 +9,6 @@ import org.junit.Test;
 
 import com.baulsupp.kolja.log.line.BasicLine;
 import com.baulsupp.kolja.log.viewer.event.Event;
-import com.baulsupp.kolja.widefinder.format.HttpStatusEvents;
 
 public class HttpStatusEventsTest {
   private HttpStatusEvents events;
@@ -25,14 +24,14 @@ public class HttpStatusEventsTest {
 
   @Test
   public void testNonEvent() {
-    l.setValue("status", "200");
+    l.setValue("status", new HttpStatus("200"));
 
     assertNull(events.match(l));
   }
 
   @Test
   public void test500() {
-    l.setValue("status", "500");
+    l.setValue("status", new HttpStatus("500"));
 
     Event event = events.match(l);
 
@@ -42,7 +41,7 @@ public class HttpStatusEventsTest {
 
   @Test
   public void test404() {
-    l.setValue("status", "404");
+    l.setValue("status", new HttpStatus("404"));
 
     Event event = events.match(l);
 

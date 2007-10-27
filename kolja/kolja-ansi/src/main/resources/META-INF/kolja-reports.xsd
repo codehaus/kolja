@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns="http://baulsupp.com/schema/kolja-reports" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+  xmlns:beans="http://www.springframework.org/schema/beans" attributeFormDefault="unqualified" elementFormDefault="qualified"
+  targetNamespace="http://baulsupp.com/schema/kolja-reports">
+
+  <xsd:import namespace="http://www.springframework.org/schema/beans"
+    schemaLocation="http://www.springframework.org/schema/beans/spring-beans-2.0.xsd" />
+
+  <xsd:element name="report" type="TextReport">
+    <xsd:annotation>
+      <xsd:documentation source="java:com.baulsupp.kolja.ansi.reports.TextReport">Text Based Report</xsd:documentation>
+    </xsd:annotation>
+  </xsd:element>
+
+  <xsd:complexType name="TextReport">
+    <xsd:complexContent>
+      <xsd:extension base="beans:identifiedType">
+      <xsd:attribute use="required" name="class" />
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+
+
+</xsd:schema>

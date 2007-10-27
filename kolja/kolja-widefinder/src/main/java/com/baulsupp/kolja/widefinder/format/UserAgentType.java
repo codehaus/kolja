@@ -15,40 +15,27 @@
  * along with this library; if not, write to the Free Software Foundation, Inc.,
  * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
-package com.baulsupp.kolja.ansi.reports;
+package com.baulsupp.kolja.widefinder.format;
 
-import org.springframework.util.Assert;
+import com.baulsupp.kolja.log.line.type.Type;
 
-import com.baulsupp.kolja.log.line.Line;
-import com.baulsupp.kolja.util.colours.MultiColourString;
+/**
+ * HTTP Status Code.
+ * 
+ * @author Yuri Schimke
+ */
+public class UserAgentType extends Type {
+  private static final long serialVersionUID = 1L;
 
-public abstract class AbstractTextReport implements TextReport {
-  private ReportRunner reportRunner;
-
-  public void initialise(ReportRunner reportRunner) {
-    Assert.notNull(reportRunner);
-
-    this.reportRunner = reportRunner;
+  public UserAgentType() {
   }
 
-  public void processLine(Line line) {
+  public UserAgentType(String string) {
+    super(string);
   }
 
-  public void completed() {
-  }
-
-  public void display(boolean showHeader) {
-  }
-
-  public void println(MultiColourString string) {
-    reportRunner.println(string);
-  }
-
-  public void println(Line line) {
-    reportRunner.println(line);
-  }
-
-  public void println(String string) {
-    reportRunner.println(new MultiColourString(string));
+  @Override
+  public Object parse(String string) {
+    return new UserAgent(string);
   }
 }

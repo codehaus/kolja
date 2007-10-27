@@ -22,36 +22,37 @@ import java.util.List;
 import com.baulsupp.kolja.ansi.reports.AbstractTextReport;
 import com.baulsupp.kolja.log.line.Line;
 import com.baulsupp.kolja.widefinder.Frequencies.Count;
+import com.baulsupp.kolja.widefinder.format.HttpStatus;
 
 /**
  * Most Frequently Accessed Pages.
  * 
  * @author Yuri Schimke
  */
-public class CommonPages extends AbstractTextReport {
-  private Frequencies<String> counts = new Frequencies<String>();
+public class CommonStatus extends AbstractTextReport {
+  private Frequencies<HttpStatus> counts = new Frequencies<HttpStatus>();
 
   @Override
   public void processLine(Line line) {
-    String url = (String) line.getValue(WideFinderConstants.URL);
+    HttpStatus status = (HttpStatus) line.getValue(WideFinderConstants.STATUS);
 
-    counts.increment(url);
+    counts.increment(status);
   }
 
-  public Frequencies<String> getUrlFrequencies() {
+  public Frequencies<HttpStatus> getStatusFrequencies() {
     return counts;
   }
 
-  public List<Count<String>> getMostFrequentUrls(int urlCount) {
+  public List<Count<HttpStatus>> getMostFrequentStatus(int urlCount) {
     return counts.getMostFrequent(urlCount);
   }
 
   public void display(boolean showHeader) {
     if (showHeader) {
-      println("Page Frequencies");
+      println("Http Status Frequencies");
     }
 
-    for (Count<String> c : getMostFrequentUrls(10)) {
+    for (Count<HttpStatus> c : getStatusFrequencies()) {
       println(c.toString());
     }
   }
