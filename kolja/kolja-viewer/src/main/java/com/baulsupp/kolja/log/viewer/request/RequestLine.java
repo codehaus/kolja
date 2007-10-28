@@ -1,3 +1,20 @@
+/**
+ * Copyright (c) 2002-2007 Yuri Schimke. All Rights Reserved.
+ * 
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ * 
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this library; if not, write to the Free Software Foundation, Inc.,
+ * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ */
 package com.baulsupp.kolja.log.viewer.request;
 
 import java.util.HashMap;
@@ -16,13 +33,6 @@ public class RequestLine implements Line {
 
   private boolean foundEnd = false;
 
-//  private static final Comparator<Line> LINE_COMPARATOR = new Comparator<Line>() {
-//    public int compare(Line arg0, Line arg1) {
-//      return arg0.getOffset() - arg1.getOffset();
-//    }
-//  };
-
-//  private SortedSet<Line> lines = new TreeSet<Line>(LINE_COMPARATOR);
   private IntList lineOffsets = new FastIntList(50);
 
   private HashMap<String, Object> values = new HashMap<String, Object>();
@@ -35,9 +45,9 @@ public class RequestLine implements Line {
   }
 
   public void addLine(Line line) {
-//    lineJoiner = null;
+    // lineJoiner = null;
 
-//    lines.add(line);
+    // lines.add(line);
     lineOffsets.add(line.getOffset());
   }
 
@@ -82,32 +92,21 @@ public class RequestLine implements Line {
   }
 
   public int length() {
-//    return getWholeLine().length();
     return statusField.length();
   }
 
   public char charAt(int arg0) {
-//    return getWholeLine().charAt(arg0);
     return statusField.charAt(arg0);
   }
 
   public CharSequence subSequence(int arg0, int arg1) {
-//    return getWholeLine().subSequence(arg0, arg1);
     return statusField.subSequence(arg0, arg1);
   }
 
   @Override
   public String toString() {
-//    return getWholeLine().toString();
     return statusField;
   }
-
-//  private CharSequence getWholeLine() {
-//    if (lineJoiner == null) {
-//      lineJoiner = new LineJoiner(lines);
-//    }
-//    return lineJoiner;
-//  }
 
   public boolean isComplete() {
     return isStartFound() && isEndFound();
@@ -135,12 +134,12 @@ public class RequestLine implements Line {
 
   public int getMinimumKnownOffset() {
     int minimum = lineOffsets.get(0);
-    
+
     IntIterator i = lineOffsets.iterator();
     while (i.hasNext()) {
       minimum = Math.min(minimum, i.next());
     }
-    
+
     return minimum;
   }
 

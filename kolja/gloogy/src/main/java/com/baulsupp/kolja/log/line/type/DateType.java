@@ -17,9 +17,8 @@
  */
 package com.baulsupp.kolja.log.line.type;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 import com.baulsupp.kolja.log.LogConstants;
 
@@ -31,7 +30,7 @@ import com.baulsupp.kolja.log.LogConstants;
 public class DateType extends Type {
   private static final long serialVersionUID = 5057545504316883709L;
 
-  private DateFormat dateFormat;
+  private DateTimeFormatter dateFormat;
 
   public DateType() {
     super(LogConstants.DATE);
@@ -40,21 +39,21 @@ public class DateType extends Type {
   public DateType(String name, String dateFormat) {
     super(name);
 
-    this.dateFormat = new SimpleDateFormat(dateFormat);
+    this.dateFormat = DateTimeFormat.forPattern(dateFormat);
   }
 
-  public DateFormat getDateFormat() {
+  public DateTimeFormatter getDateFormat() {
     return dateFormat;
   }
 
-  public void setDateFormat(DateFormat dateFormat) {
+  public void setDateFormat(DateTimeFormatter dateFormat) {
     this.dateFormat = dateFormat;
   }
 
   public Object parse(String string) {
     try {
-      return dateFormat.parse(string);
-    } catch (ParseException e) {
+      return dateFormat.parseDateTime(string);
+    } catch (IllegalArgumentException e) {
       // TODO debug
       return "INVALID";
     }

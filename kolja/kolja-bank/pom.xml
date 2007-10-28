@@ -19,6 +19,11 @@
       <artifactId>junit</artifactId>
     </dependency>
     <dependency>
+      <groupId>joda-time</groupId>
+      <artifactId>joda-time</artifactId>
+      <version>1.4</version>
+    </dependency>
+    <dependency>
       <groupId>com.baulsupp.kolja</groupId>
       <artifactId>kolja-ansi</artifactId>
       <version>1.0-SNAPSHOT</version>

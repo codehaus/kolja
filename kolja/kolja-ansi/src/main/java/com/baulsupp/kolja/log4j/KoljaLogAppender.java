@@ -1,6 +1,5 @@
 package com.baulsupp.kolja.log4j;
 
-import java.util.Date;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -9,6 +8,7 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.apache.log4j.MDC;
 import org.apache.log4j.spi.LoggingEvent;
+import org.joda.time.DateTime;
 
 import com.baulsupp.kolja.ansi.ConsoleRenderer;
 import com.baulsupp.kolja.ansi.TailRenderer;
@@ -39,7 +39,7 @@ public class KoljaLogAppender extends AppenderSkeleton {
       System.err.println(e);
       gridRenderer = Log4JRenderer.create();
     }
-    
+
     renderer = new TailRenderer(gridRenderer, !PlatformUtil.isWindows());
   }
 
@@ -56,19 +56,18 @@ public class KoljaLogAppender extends AppenderSkeleton {
   private Line buildLine(LoggingEvent arg0) {
     Line line = new BasicLine(arg0.toString());
 
-    line.setValue(LogConstants.DATE, new Date(arg0.timeStamp));
+    line.setValue(LogConstants.DATE, new DateTime(arg0.timeStamp));
     line.setValue(LogConstants.CONTENT, arg0.getMessage());
 
     line.setValue(LogConstants.EXCEPTION, join(arg0.getThrowableStrRep()));
     line.setValue(LogConstants.PRIORITY, Priority.getByName(arg0.getLevel().toString()));
     line.setValue(LogConstants.LOGGER, arg0.getLoggerName());
     line.setValue(LogConstants.THREAD, arg0.getThreadName());
-    
+
     for (Object e : MDC.getContext().entrySet()) {
       Entry entry = (Map.Entry) e;
       line.setValue((String) entry.getKey(), entry.getValue());
     }
-    
 
     return line;
   }

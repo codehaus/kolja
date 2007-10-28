@@ -1,13 +1,13 @@
 package com.baulsupp.kolja.log.viewer.spring;
 
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
 import junit.framework.TestCase;
 
+import org.joda.time.DateTime;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -22,7 +22,6 @@ import com.baulsupp.kolja.log.viewer.PrintfLineFormatter;
 import com.baulsupp.kolja.log.viewer.event.EventMatcher;
 import com.baulsupp.kolja.log.viewer.event.WarnEventMatcher;
 import com.baulsupp.kolja.log.viewer.format.CompressedPackageFormat;
-import com.baulsupp.kolja.log.viewer.format.FormatFormat;
 import com.baulsupp.kolja.log.viewer.format.OutputFormat;
 import com.baulsupp.kolja.log.viewer.format.ToStringFormat;
 import com.baulsupp.kolja.log.viewer.highlight.HighlightList;
@@ -40,7 +39,7 @@ import com.baulsupp.kolja.util.colours.Colour;
 
 @SuppressWarnings("deprecation")
 public class KoljaNamespaceHandlerTest extends TestCase {
-  private static final Date DATE = new Date(107, 9, 12);
+  private static final DateTime DATE = new DateTime(2007, 10, 12, 0, 0, 0, 0);
 
   public void testLoadsXml() {
     ApplicationContext ac = new ClassPathXmlApplicationContext("sample.xml");
@@ -121,7 +120,7 @@ public class KoljaNamespaceHandlerTest extends TestCase {
     assertNotNull(names);
     assertEquals(5, names.size());
 
-    FormatFormat time = (FormatFormat) formats.get(0);
+    JodaFormat time = (JodaFormat) formats.get(0);
     assertEquals("date", names.get(0));
     assertEquals("00:00.00", time.format(DATE));
 

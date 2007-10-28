@@ -17,13 +17,32 @@
  */
 package com.baulsupp.kolja.ansi.reports;
 
+import java.util.Arrays;
+import java.util.HashSet;
+
 import org.springframework.util.Assert;
 
 import com.baulsupp.kolja.log.line.Line;
+import com.baulsupp.kolja.log.viewer.event.Event;
+import com.baulsupp.kolja.log.viewer.request.RequestLine;
 import com.baulsupp.kolja.util.colours.MultiColourString;
 
+/**
+ * Base class for reports.
+ * 
+ * @author Yuri Schimke
+ */
 public abstract class AbstractTextReport implements TextReport {
   private ReportRunner reportRunner;
+  private HashSet<Detail> details;
+
+  public AbstractTextReport() {
+    this(Detail.LINES);
+  }
+
+  public AbstractTextReport(Detail... selected) {
+    this.details = new HashSet<Detail>(Arrays.asList(selected));
+  }
 
   public void initialise(ReportRunner reportRunner) {
     Assert.notNull(reportRunner);
@@ -31,7 +50,17 @@ public abstract class AbstractTextReport implements TextReport {
     this.reportRunner = reportRunner;
   }
 
+  public boolean isInterested(Detail detail) {
+    return details.contains(detail);
+  }
+
   public void processLine(Line line) {
+  }
+
+  public void processRequest(RequestLine line) {
+  }
+
+  public void processEvent(Event event) {
   }
 
   public void completed() {

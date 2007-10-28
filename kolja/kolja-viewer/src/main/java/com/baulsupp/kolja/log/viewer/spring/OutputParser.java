@@ -17,10 +17,10 @@
  */
 package com.baulsupp.kolja.log.viewer.spring;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.joda.time.format.DateTimeFormat;
 import org.springframework.util.ClassUtils;
 import org.w3c.dom.Element;
 
@@ -151,8 +151,8 @@ public class OutputParser {
     throw new IllegalArgumentException("unknown type '" + e.getNodeName() + "'");
   }
 
-  private FormatFormat parseTimeFormat(Element e) {
-    return new FormatFormat(new SimpleDateFormat(FormatFormat.SHORT_TIME));
+  private JodaFormat parseTimeFormat(Element e) {
+    return new JodaFormat(DateTimeFormat.forPattern(FormatFormat.SHORT_TIME));
   }
 
   private ToStringFormat parseStringFormat(Element e) {

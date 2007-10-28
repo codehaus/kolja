@@ -15,33 +15,24 @@
  * along with this library; if not, write to the Free Software Foundation, Inc.,
  * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
-package com.baulsupp.kolja.ansi.reports;
+package com.baulsupp.kolja.log.viewer.spring;
 
-import com.baulsupp.kolja.log.line.Line;
-import com.baulsupp.kolja.log.viewer.event.Event;
-import com.baulsupp.kolja.log.viewer.request.RequestLine;
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormatter;
 
-/**
- * Text Report for running a calculation.
- * 
- * @author Yuri Schimke
- */
-public interface TextReport {
-  enum Detail {
-    LINES, REQUESTS, EVENTS;
+import com.baulsupp.kolja.log.viewer.format.OutputFormat;
+
+public class JodaFormat implements OutputFormat {
+  private static final long serialVersionUID = 3985384107578154763L;
+
+  private DateTimeFormatter formatter;
+
+  public JodaFormat(DateTimeFormatter formatter) {
+    this.formatter = formatter;
   }
 
-  void initialise(ReportRunner reportRunner);
+  public String format(Object value) {
+    return formatter.print((DateTime) value);
 
-  boolean isInterested(Detail detail);
-
-  void processLine(Line line);
-
-  void processRequest(RequestLine line);
-
-  void processEvent(Event event);
-
-  void completed();
-
-  void display(boolean showHeader);
+  }
 }

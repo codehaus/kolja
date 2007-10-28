@@ -15,33 +15,25 @@
  * along with this library; if not, write to the Free Software Foundation, Inc.,
  * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
-package com.baulsupp.kolja.ansi.reports;
+package com.baulsupp.kolja.bank;
 
-import com.baulsupp.kolja.log.line.Line;
-import com.baulsupp.kolja.log.viewer.event.Event;
-import com.baulsupp.kolja.log.viewer.request.RequestLine;
+import org.joda.time.DateTime;
+import org.joda.time.LocalTime;
 
-/**
- * Text Report for running a calculation.
- * 
- * @author Yuri Schimke
- */
-public interface TextReport {
-  enum Detail {
-    LINES, REQUESTS, EVENTS;
+public class TimeUtil {
+  public static boolean spansTime(DateTime start, DateTime end, LocalTime time) {
+    if (start != null && start.toLocalTime().isAfter(time)) {
+      return false;
+    }
+
+    if (end != null && end.toLocalTime().isBefore(time)) {
+      return false;
+    }
+
+    if (end == null && start == null) {
+      return false;
+    }
+
+    return true;
   }
-
-  void initialise(ReportRunner reportRunner);
-
-  boolean isInterested(Detail detail);
-
-  void processLine(Line line);
-
-  void processRequest(RequestLine line);
-
-  void processEvent(Event event);
-
-  void completed();
-
-  void display(boolean showHeader);
 }
