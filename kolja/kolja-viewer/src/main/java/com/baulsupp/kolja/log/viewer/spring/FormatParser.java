@@ -46,6 +46,8 @@ public class FormatParser extends AbstractSingleBeanDefinitionParser {
 
     bean.addPropertyValue("outputFormat", parseOutputFormat(element));
 
+    bean.addPropertyValue("requestOutputFormat", parseRequestOutputFormat(element));
+
     ConfigurableRequestFormat requestFormat = parseRequestFormat(element);
     if (requestFormat != null) {
       bean.addPropertyValue("requestFormat", requestFormat);
@@ -63,6 +65,11 @@ public class FormatParser extends AbstractSingleBeanDefinitionParser {
 
   private ConfigurableOutputFormat parseOutputFormat(Element element) {
     return new OutputParser(getSingleElement(element, "output-format")).parse();
+  }
+
+  private ConfigurableOutputFormat parseRequestOutputFormat(Element element) {
+    Element singleElement = getSingleElement(element, "request-output-format");
+    return singleElement != null ? new OutputParser(singleElement).parse() : null;
   }
 
   private ConfigurableEventFormat parseEventFormat(Element element) {

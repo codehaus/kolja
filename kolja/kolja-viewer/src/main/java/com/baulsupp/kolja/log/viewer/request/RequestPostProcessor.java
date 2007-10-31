@@ -15,25 +15,8 @@
  * along with this library; if not, write to the Free Software Foundation, Inc.,
  * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
-package com.baulsupp.kolja.bank;
+package com.baulsupp.kolja.log.viewer.request;
 
-import org.joda.time.DateTime;
-import org.joda.time.LocalTime;
-
-public class TimeUtil {
-  public static boolean spansTime(DateTime start, DateTime end, LocalTime time) {
-    if (start != null && start.toLocalTime().isAfter(time)) {
-      return false;
-    }
-
-    if (end != null && end.toLocalTime().isBefore(time)) {
-      return false;
-    }
-
-    if (end == null && start == null) {
-      return false;
-    }
-
-    return true;
-  }
+public interface RequestPostProcessor {
+  void process(RequestLine request);
 }

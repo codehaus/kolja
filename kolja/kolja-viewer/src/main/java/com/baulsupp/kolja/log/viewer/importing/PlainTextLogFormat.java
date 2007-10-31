@@ -40,7 +40,11 @@ public class PlainTextLogFormat implements LogFormat {
     return highlight;
   }
 
-  public Renderer<Line> getRenderer() {
+  public Renderer<Line> getLineRenderer() {
+    return new PlainTextRenderer();
+  }
+
+  public Renderer<Line> getRequestRenderer() {
     return new PlainTextRenderer();
   }
 

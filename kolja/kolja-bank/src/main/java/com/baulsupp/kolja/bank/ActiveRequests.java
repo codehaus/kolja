@@ -17,10 +17,12 @@
  */
 package com.baulsupp.kolja.bank;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.joda.time.DateTime;
+import org.joda.time.Interval;
 import org.joda.time.LocalTime;
 
 import com.baulsupp.kolja.ansi.reports.AbstractTextReport;
@@ -28,16 +30,30 @@ import com.baulsupp.kolja.log.LogConstants;
 import com.baulsupp.kolja.log.viewer.request.RequestLine;
 
 public class ActiveRequests extends AbstractTextReport {
-  private LocalTime time;
+  private LocalTime from;
+
+  private LocalTime to;
+
+  private boolean full;
 
   private List<RequestLine> activeRequests = new ArrayList<RequestLine>();
+
+  private Interval interval;
 
   public ActiveRequests() {
     super(Detail.REQUESTS);
   }
 
-  public void setTime(LocalTime time) {
-    this.time = time;
+  public void setFrom(LocalTime from) {
+    this.from = from;
+  }
+
+  public void setTo(LocalTime to) {
+    this.to = to;
+  }
+
+  public void setFull(boolean full) {
+    this.full = full;
   }
 
   @Override
@@ -48,20 +64,37 @@ public class ActiveRequests extends AbstractTextReport {
   }
 
   public boolean isActive(RequestLine line) {
-    DateTime start = (DateTime) line.getValue(LogConstants.DATE);
-    DateTime end = (DateTime) line.getValue(LogConstants.DATE + "-end");
+    if (interval == null) {
+      interval = calculateInterval(line);
+    }
 
-    return TimeUtil.spansTime(start, end, time);
+    Interval requestInterval = (Interval) line.getValue(LogConstants.INTERVAL);
+
+    if (requestInterval == null) {
+      return false;
+    }
+
+    return requestInterval.overlaps(interval) || requestInterval.abuts(interval);
+  }
+
+  private Interval calculateInterval(RequestLine line) {
+    DateTime t = (DateTime) line.getValue(LogConstants.DATE);
+
+    return new Interval(from.toDateTime(t), to.toDateTime(t));
   }
 
   @Override
-  public void display(boolean showHeader) {
-    if (showHeader) {
-      println("Requests at " + time);
-    }
+  public void afterFile(File file) {
+    println(file.getName());
 
     for (RequestLine l : activeRequests) {
-      println(l);
+      printRequestLine(l);
+
+      if (full) {
+        printLinesForRequests(l);
+
+        println("");
+      }
     }
   }
 

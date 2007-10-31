@@ -17,43 +17,71 @@
  */
 package com.baulsupp.kolja.ansi.reports;
 
+import java.io.File;
 import java.io.IOException;
-import java.util.Iterator;
-import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.Collection;
 
 import jline.ANSIBuffer;
-import jline.Terminal;
 
 import com.baulsupp.kolja.ansi.AnsiUtils;
-import com.baulsupp.kolja.ansi.TailRenderer;
+import com.baulsupp.kolja.ansi.ConsoleRenderer;
+import com.baulsupp.kolja.ansi.reports.TextReport.Detail;
+import com.baulsupp.kolja.log.line.BasicLineIterator;
 import com.baulsupp.kolja.log.line.Line;
-import com.baulsupp.kolja.log.viewer.renderer.Renderer;
+import com.baulsupp.kolja.log.viewer.event.Event;
+import com.baulsupp.kolja.log.viewer.event.EventList;
+import com.baulsupp.kolja.log.viewer.request.RequestIndex;
+import com.baulsupp.kolja.log.viewer.request.RequestLine;
 import com.baulsupp.kolja.util.colours.MultiColourString;
 
 public class AnsiReportRunner implements ReportRunner {
   protected boolean ansi;
 
-  protected Renderer<Line> grid;
+  protected BasicLineIterator i;
 
-  protected Iterator<Line> i;
+  protected ConsoleRenderer<Line> lineRenderer;
 
-  protected TailRenderer renderer;
+  protected ConsoleRenderer<Line> requestRenderer;
 
   protected java.util.List<TextReport> reports;
 
-  public AnsiReportRunner() {
-  }
+  private RequestIndex requestIndex;
 
-  public void setAnsi(boolean ansi) {
-    this.ansi = ansi;
+  private boolean showEvents;
+
+  private EventList eventList;
+
+  private boolean showRequests;
+
+  public AnsiReportRunner() {
   }
 
   public void setReports(java.util.List<TextReport> reports) {
     this.reports = reports;
   }
 
-  public void run() throws InterruptedException, IOException {
-    initialise();
+  public void setRequestIndex(RequestIndex requestIndex) {
+    this.requestIndex = requestIndex;
+  }
+
+  public void setLineRenderer(ConsoleRenderer<Line> lineRenderer) {
+    this.lineRenderer = lineRenderer;
+  }
+
+  public void setRequestRenderer(ConsoleRenderer<Line> requestRenderer) {
+    this.requestRenderer = requestRenderer;
+  }
+
+  public void setEventList(EventList eventList) {
+    this.eventList = eventList;
+  }
+
+  public void run(File file, BasicLineIterator i) throws InterruptedException, IOException {
+    this.i = i;
+
+    for (TextReport r : reports) {
+      r.beforeFile(file);
+    }
 
     while (i.hasNext()) {
       Line l = i.next();
@@ -61,36 +89,50 @@ public class AnsiReportRunner implements ReportRunner {
       processLine(l);
     }
 
-    completed();
+    processRequests();
 
-    display();
+    for (TextReport r : reports) {
+      r.afterFile(file);
+    }
+
+    this.i = null;
   }
 
-  private void initialise() {
+  private void processRequests() {
+    if (showRequests) {
+      Collection<RequestLine> requests = requestIndex.getKnown();
+
+      for (RequestLine requestLine : requests) {
+        for (TextReport r : reports) {
+          r.processRequest(requestLine);
+        }
+      }
+    }
+  }
+
+  public void initialise() {
+    showRequests = show(Detail.REQUESTS);
+
+    showEvents = show(Detail.EVENTS);
+
     for (TextReport r : reports) {
       r.initialise(this);
     }
   }
 
-  private void completed() {
+  private boolean show(Detail detail) {
     for (TextReport r : reports) {
-      r.completed();
+      if (r.isInterested(detail)) {
+        return true;
+      }
     }
+
+    return false;
   }
 
-  private void display() {
-    boolean hasMultiple = reports.size() > 1;
-
-    boolean first = true;
-
+  public void completed() {
     for (TextReport r : reports) {
-      if (first) {
-        first = false;
-      } else {
-        println(new MultiColourString());
-      }
-
-      r.display(hasMultiple);
+      r.completed();
     }
   }
 
@@ -98,28 +140,20 @@ public class AnsiReportRunner implements ReportRunner {
     for (TextReport r : reports) {
       r.processLine(line);
     }
-  }
 
-  public void setI(Iterator<Line> i) {
-    this.i = i;
-  }
+    if (showEvents) {
+      Event event = eventList.readEvent(line);
 
-  public void setGrid(Renderer<Line> grid) {
-    this.grid = grid;
-    grid.setWidth(Terminal.getTerminal().getTerminalWidth());
-    renderer = new TailRenderer(grid, ansi);
-  }
+      if (event != null) {
+        for (TextReport r : reports) {
+          r.processEvent(event);
+        }
+      }
+    }
 
-  public void setRenderer(Renderer<Line> renderer) {
-    this.grid = renderer;
-
-    grid.setWidth(Terminal.getTerminal().getTerminalWidth());
-
-    this.renderer = new TailRenderer(grid, ansi);
-  }
-
-  public void setFixedWidth(boolean b) {
-    renderer.setFixedWidth(b);
+    if (showRequests) {
+      requestIndex.processLine(null, line);
+    }
   }
 
   public void println(MultiColourString string) {
@@ -135,7 +169,17 @@ public class AnsiReportRunner implements ReportRunner {
     }
   }
 
-  public void println(Line line) {
-    renderer.show(line);
+  public Line readLine(int pos) {
+    i.moveTo(pos);
+
+    return i.next();
+  }
+
+  public void printLine(Line line) {
+    lineRenderer.show(line);
+  }
+
+  public void printRequest(RequestLine request) {
+    requestRenderer.show(request);
   }
 }

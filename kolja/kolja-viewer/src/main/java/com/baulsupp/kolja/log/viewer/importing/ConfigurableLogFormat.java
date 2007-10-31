@@ -12,12 +12,13 @@ import com.baulsupp.kolja.log.viewer.request.StandardRequestIndex;
 
 public class ConfigurableLogFormat implements LogFormat, Serializable {
   private static final long serialVersionUID = 6264504331354771149L;
-  
+
   private ConfigurableLineFormat lineFormat;
   private ConfigurableRequestFormat requestFormat;
   private ConfigurableOutputFormat outputFormat;
+  private ConfigurableOutputFormat requestOutputFormat;
   private ConfigurableEventFormat eventFormat;
-  
+
   public ConfigurableEventFormat getEventFormat() {
     return eventFormat;
   }
@@ -42,6 +43,10 @@ public class ConfigurableLogFormat implements LogFormat, Serializable {
     this.outputFormat = outputFormat;
   }
 
+  public void setRequestOutputFormat(ConfigurableOutputFormat requestOutputFormat) {
+    this.requestOutputFormat = requestOutputFormat;
+  }
+
   public ConfigurableRequestFormat getRequestFormat() {
     return requestFormat;
   }
@@ -54,8 +59,16 @@ public class ConfigurableLogFormat implements LogFormat, Serializable {
     return lineFormat.buildLineIndex(buffer);
   }
 
-  public Renderer<Line> getRenderer() {
+  public Renderer<Line> getLineRenderer() {
     return outputFormat.getRenderer(lineFormat);
+  }
+
+  public Renderer<Line> getRequestRenderer() {
+    if (requestOutputFormat == null) {
+      return getLineRenderer();
+    } else {
+      return requestOutputFormat.getRenderer(lineFormat);
+    }
   }
 
   public StandardRequestIndex getRequestIndex(LineIndex lineIndex) {
@@ -67,7 +80,7 @@ public class ConfigurableLogFormat implements LogFormat, Serializable {
   }
 
   public EventList getEventList(LineIndex li) {
-    return supportsEvents() ? eventFormat.getEventList(li): null;
+    return supportsEvents() ? eventFormat.getEventList(li) : null;
   }
 
   public boolean supportsEvents() {

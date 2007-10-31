@@ -18,10 +18,15 @@
 package com.baulsupp.kolja.ansi.reports;
 
 import com.baulsupp.kolja.log.line.Line;
+import com.baulsupp.kolja.log.viewer.request.RequestLine;
 import com.baulsupp.kolja.util.colours.MultiColourString;
 
 public interface ReportRunner {
   void println(MultiColourString string);
 
-  void println(Line line);
+  void printLine(Line line);
+
+  void printRequest(RequestLine request);
+
+  Line readLine(int i);
 }

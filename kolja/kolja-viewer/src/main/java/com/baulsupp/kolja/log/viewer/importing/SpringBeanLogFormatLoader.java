@@ -18,8 +18,8 @@
 package com.baulsupp.kolja.log.viewer.importing;
 
 import org.springframework.beans.factory.BeanFactory;
+import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.beans.factory.xml.XmlBeanFactory;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.GenericApplicationContext;
 import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.Resource;
@@ -41,13 +41,13 @@ public class SpringBeanLogFormatLoader {
     return (LogFormat) beanFactory.getBean("logFormat");
   }
 
-  public static BeanFactory loadBeanFactory(Resource r) throws Exception {
+  public static ConfigurableListableBeanFactory loadBeanFactory(Resource r) throws Exception {
     XmlBeanFactory beanFactory = new XmlBeanFactory(r);
     beanFactory.addPropertyEditorRegistrar(new KoljaPropertyEditorRegistrar());
 
-    ApplicationContext appContext = new GenericApplicationContext(beanFactory);
+    GenericApplicationContext appContext = new GenericApplicationContext(beanFactory);
 
-    return appContext;
+    return beanFactory;
   }
 
   public static BeanFactory loadBeanFactory(String string) throws Exception {

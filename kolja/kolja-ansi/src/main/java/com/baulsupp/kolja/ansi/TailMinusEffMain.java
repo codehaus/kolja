@@ -79,7 +79,7 @@ public class TailMinusEffMain {
     } else if (cmd.hasOption("d")) {
       tail.setRenderer(new DebugRenderer());
     } else {
-      Renderer<Line> renderer = format.getRenderer();
+      Renderer<Line> renderer = format.getLineRenderer();
       if (files.size() > 1 && renderer instanceof FieldRenderer) {
         FieldRenderer fieldRenderer = (FieldRenderer) renderer;
         fieldRenderer.prependColumn(LogConstants.FILE_NAME, IoUtil.getMaxFilenameWidth(files));

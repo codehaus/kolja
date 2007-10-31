@@ -26,7 +26,6 @@ public class EventList extends ValueIndexer {
     }
   });
 
-
   public EventList(LineIndex lineIndex) {
     super(lineIndex);
   }
@@ -36,7 +35,6 @@ public class EventList extends ValueIndexer {
     this.matchers = eventMatchers;
   }
 
-
   public void addEventMatcher(EventMatcher eventMatcher) {
     matchers.add(eventMatcher);
   }
@@ -44,19 +42,21 @@ public class EventList extends ValueIndexer {
   protected void processLines(IntRange range, List<Line> regionLines) {
     indexed.add(new MemoryIntField(range, new ArrayIntList(0)));
 
-    for (Line l: regionLines) {
+    for (Line l : regionLines) {
       processLine(l);
     }
   }
 
-  private void processLine(Line l) {
+  public Event processLine(Line l) {
     Event event = null;
-    
+
     event = readEvent(l);
-    
+
     if (event != null) {
       events.add(event);
     }
+
+    return event;
   }
 
   public Event readEvent(Line l) {
@@ -67,7 +67,7 @@ public class EventList extends ValueIndexer {
         return event;
       }
     }
-    
+
     return null;
   }
 
@@ -78,7 +78,7 @@ public class EventList extends ValueIndexer {
   public SortedSet<Event> getEvents(IntRange intRange) {
     SortedSet<Event> subEvents = new TreeSet<Event>();
 
-    for (Event e: events) {
+    for (Event e : events) {
       if (intRange.contains(e.getOffset())) {
         subEvents.add(e);
       }

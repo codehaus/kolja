@@ -1,3 +1,20 @@
+/**
+ * Copyright (c) 2002-2007 Yuri Schimke. All Rights Reserved.
+ * 
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ * 
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this library; if not, write to the Free Software Foundation, Inc.,
+ * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ */
 package com.baulsupp.kolja.log.viewer.request;
 
 import java.util.ArrayList;
@@ -46,19 +63,23 @@ public class RequestIndex extends ValueIndexer {
     IntList values = new ArrayIntList();
 
     for (Line line : regionLines) {
-      Object requestId = line.getValue(requestField);
-
-      RequestLine requestLine = requestsById.get(requestId);
-
-      if (requestLine == null) {
-        requestLine = createInitialLine(line, values);
-      }
-
-      updateLine(line, requestLine, values);
+      processLine(values, line);
     }
 
     MemoryIntField lineOffsets = new MemoryIntField(region, values);
     indexed.add(lineOffsets);
+  }
+
+  public void processLine(IntList values, Line line) {
+    Object requestId = line.getValue(requestField);
+
+    RequestLine requestLine = requestsById.get(requestId);
+
+    if (requestLine == null) {
+      requestLine = createInitialLine(line, values);
+    }
+
+    updateLine(line, requestLine, values);
   }
 
   protected void updateLine(Line line, RequestLine requestLine, IntList values) {
@@ -68,7 +89,7 @@ public class RequestIndex extends ValueIndexer {
   }
 
   protected void updateMatchers(Line line, RequestLine requestLine) {
-    for (FieldCopier copier: matchers) {
+    for (FieldCopier copier : matchers) {
       copier.copy(line, requestLine);
     }
   }
@@ -86,7 +107,9 @@ public class RequestIndex extends ValueIndexer {
 
     requestsById.put(identifier, requestLine);
     requests.put(line.getOffset(), requestLine);
-    values.add(line.getOffset());
+    if (values != null) {
+      values.add(line.getOffset());
+    }
 
     return requestLine;
   }
@@ -105,8 +128,7 @@ public class RequestIndex extends ValueIndexer {
     IntList offsets = indexed.get(region);
 
     if (offsets == null) {
-      throw new NullPointerException(region.toString() + " " + li.length() + " "
-          + Arrays.asList(indexed.listUnknownRanges(region)));
+      throw new NullPointerException(region.toString() + " " + li.length() + " " + Arrays.asList(indexed.listUnknownRanges(region)));
     }
 
     List<Line> result = offsetToLineList(offsets);

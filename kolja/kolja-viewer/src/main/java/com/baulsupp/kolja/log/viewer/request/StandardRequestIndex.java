@@ -23,7 +23,7 @@ import java.util.Set;
 
 import org.apache.commons.collections.primitives.IntList;
 import org.joda.time.DateTime;
-import org.joda.time.Duration;
+import org.joda.time.Interval;
 
 import com.baulsupp.kolja.log.LogConstants;
 import com.baulsupp.kolja.log.line.Line;
@@ -102,7 +102,9 @@ public class StandardRequestIndex extends RequestIndex {
 
         if (offsetIsEnd) {
           requests.put(line.getOffset(), requestLine);
-          values.add(line.getOffset());
+          if (values != null) {
+            values.add(line.getOffset());
+          }
         }
       }
 
@@ -110,9 +112,11 @@ public class StandardRequestIndex extends RequestIndex {
         DateTime start = (DateTime) requestLine.getValue(dateField);
         DateTime end = (DateTime) requestLine.getValue(dateField + "-end");
 
-        Duration duration = new Duration(end, start);
+        if (start != null && end != null) {
+          Interval interval = new Interval(start, end);
+          requestLine.setValue(LogConstants.INTERVAL, interval);
+        }
 
-        requestLine.setValue(LogConstants.DURATION, duration);
         requestLine.setValue(messageField, statusFormatter.format(requestLine));
       }
     }

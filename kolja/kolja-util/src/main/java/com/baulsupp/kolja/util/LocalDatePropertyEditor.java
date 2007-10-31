@@ -15,35 +15,14 @@
  * along with this library; if not, write to the Free Software Foundation, Inc.,
  * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
-package com.baulsupp.kolja.log.viewer.importing;
+package com.baulsupp.kolja.util;
 
-import java.util.regex.Pattern;
+import java.beans.PropertyEditorSupport;
 
-import com.baulsupp.kolja.log.line.Line;
-import com.baulsupp.kolja.log.line.LineIndex;
-import com.baulsupp.kolja.log.line.LineParser;
-import com.baulsupp.kolja.log.viewer.event.EventList;
-import com.baulsupp.kolja.log.viewer.renderer.Renderer;
-import com.baulsupp.kolja.log.viewer.request.StandardRequestIndex;
+import org.joda.time.LocalDate;
 
-public interface LogFormat {
-  EventList getEventList(LineIndex li);
-
-  boolean supportsEvents();
-
-  LineIndex getLineIndex(CharSequence buffer);
-
-  Renderer<Line> getLineRenderer();
-
-  Renderer<Line> getRequestRenderer();
-
-  StandardRequestIndex getRequestIndex(LineIndex lineIndex);
-
-  boolean supportsRequests();
-
-  String getRequestField();
-
-  Pattern getEntryPattern();
-
-  LineParser getLineParser();
+public class LocalDatePropertyEditor extends PropertyEditorSupport {
+  public void setAsText(String text) throws IllegalArgumentException {
+    setValue(new LocalDate(text));
+  }
 }

@@ -55,6 +55,10 @@ public class RequestLine implements Line {
     return identifier;
   }
 
+  public int[] getLineOffsets() {
+    return lineOffsets.toArray(new int[lineOffsets.size()]);
+  }
+
   public String getStatus() {
     Object value = statusField != null ? getValue(statusField) : identifier;
 

@@ -32,6 +32,13 @@
               </xsd:documentation>
             </xsd:annotation>
           </xsd:element>
+          <xsd:element name="request-output-format" type="OutputFormat" maxOccurs=" 1" minOccurs="0">
+            <xsd:annotation>
+              <xsd:documentation source="java:com.baulsupp.kolja.log.viewer.importing.ConfigurableOutputFormat">
+                The output format of the log viewer for requests.
+              </xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
           <xsd:element name="events" type="Events" maxOccurs=" 1" minOccurs="0">
             <xsd:annotation>
               <xsd:documentation source="java:com.baulsupp.kolja.log.viewer.importing.ConfigurableEventFormat">

@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.baulsupp.kolja.log.line.Line;
+import com.baulsupp.kolja.log.viewer.request.RequestLine;
 import com.baulsupp.kolja.util.colours.MultiColourString;
 
 public class SimpleReportRunner implements ReportRunner {
@@ -30,11 +31,19 @@ public class SimpleReportRunner implements ReportRunner {
     lines.add(string.toString());
   }
 
-  public void println(Line line) {
+  public void printLine(Line line) {
     lines.add(line.toString());
   }
 
   public List<String> getLines() {
     return lines;
+  }
+
+  public void printRequest(RequestLine request) {
+    lines.add(request.toString());
+  }
+
+  public Line readLine(int i) {
+    return null;
   }
 }

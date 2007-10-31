@@ -1,10 +1,25 @@
+/**
+ * Copyright (c) 2002-2007 Yuri Schimke. All Rights Reserved.
+ * 
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ * 
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this library; if not, write to the Free Software Foundation, Inc.,
+ * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ */
 package com.baulsupp.kolja.ansi.reports;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import jline.Terminal;
@@ -17,15 +32,20 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.PosixParser;
 import org.apache.log4j.Logger;
-import org.springframework.beans.factory.BeanFactory;
+import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 
+import com.baulsupp.kolja.ansi.ConsoleRenderer;
+import com.baulsupp.kolja.ansi.TailRenderer;
+import com.baulsupp.kolja.log.line.BasicLineIterator;
 import com.baulsupp.kolja.log.line.Line;
+import com.baulsupp.kolja.log.line.LineIndex;
+import com.baulsupp.kolja.log.util.WrappedCharBuffer;
+import com.baulsupp.kolja.log.viewer.event.EventList;
 import com.baulsupp.kolja.log.viewer.importing.LogFormat;
 import com.baulsupp.kolja.log.viewer.importing.SavedLogFormatLoader;
 import com.baulsupp.kolja.log.viewer.importing.SpringBeanLogFormatLoader;
-import com.baulsupp.kolja.log.viewer.io.IoUtil;
-import com.baulsupp.kolja.log.viewer.renderer.PrintfRenderer;
 import com.baulsupp.kolja.log.viewer.renderer.Renderer;
+import com.baulsupp.kolja.log.viewer.request.RequestIndex;
 import com.baulsupp.kolja.util.LogConfig;
 
 public class ReportRunnerMain {
@@ -69,55 +89,64 @@ public class ReportRunnerMain {
     final AnsiReportRunner reportRunner = new AnsiReportRunner();
 
     String configName = cmd.getOptionValue("x");
-    BeanFactory appCtxt = SavedLogFormatLoader.loadAppContext(configName);
+    ConfigurableListableBeanFactory appCtxt = SavedLogFormatLoader.loadAppContext(configName);
 
     LogFormat format = SpringBeanLogFormatLoader.getLogFormat(appCtxt);
 
-    reportRunner.setAnsi(!cmd.hasOption("a"));
+    boolean ansi = !cmd.hasOption("a");
 
-    reportRunner.setReports(createReports(appCtxt, cmd.getOptionValue("r")));
+    reportRunner.setReports(createReports(new ReportBuilder(appCtxt), cmd.getOptionValue("r")));
 
-    Iterator<Line> bli = loadLineIterator(cmd, format);
-    reportRunner.setI(bli);
+    boolean fixedWidth = cmd.hasOption("f");
 
-    if (cmd.hasOption("o")) {
-      reportRunner.setRenderer(PrintfRenderer.parse(cmd.getOptionValue("o")));
-    } else {
-      Renderer<Line> renderer = format.getRenderer();
-      reportRunner.setGrid(renderer);
+    Renderer<Line> renderer = format.getLineRenderer();
+    ConsoleRenderer<Line> lineRenderer = createRenderer(renderer, ansi, fixedWidth);
+    reportRunner.setLineRenderer(lineRenderer);
+
+    renderer = format.getRequestRenderer();
+    ConsoleRenderer<Line> requestRenderer = createRenderer(renderer, ansi, fixedWidth);
+    reportRunner.setRequestRenderer(requestRenderer);
+
+    List<File> commandFiles = commandFiles(cmd);
+
+    reportRunner.initialise();
+
+    for (File file : commandFiles) {
+      if (commandFiles.size() == 1) {
+        WrappedCharBuffer buffer = WrappedCharBuffer.fromFile(file);
+
+        LineIndex li = format.getLineIndex(buffer);
+
+        RequestIndex requestIndex = format.getRequestIndex(li);
+        reportRunner.setRequestIndex(requestIndex);
+
+        EventList eventList = format.getEventList(li);
+        reportRunner.setEventList(eventList);
+
+        reportRunner.run(file, new BasicLineIterator(li));
+      }
     }
 
-    if (cmd.hasOption("f")) {
-      reportRunner.setFixedWidth(true);
-    }
-
-    reportRunner.run();
+    reportRunner.completed();
   }
 
-  private static List<TextReport> createReports(BeanFactory appCtxt, String option) throws Exception {
+  private static ConsoleRenderer<Line> createRenderer(Renderer<Line> renderer, boolean ansi, boolean fixedWidth) {
+    renderer.setWidth(Terminal.getTerminal().getTerminalWidth());
+    TailRenderer tr = new TailRenderer(renderer, ansi);
+    tr.setFixedWidth(fixedWidth);
+    return tr;
+  }
+
+  private static List<TextReport> createReports(ReportBuilder builder, String option) throws Exception {
     List<TextReport> reports = new ArrayList<TextReport>();
 
     String[] strings = option.split(",");
 
     for (String string : strings) {
-      reports.add((TextReport) appCtxt.getBean(string));
+      reports.add(builder.buildReport(string));
     }
 
     return reports;
-  }
-
-  public static Iterator<Line> loadLineIterator(CommandLine cmd, LogFormat format) throws IOException {
-    Iterator<Line> bli;
-
-    if (cmd.hasOption("i")) {
-      bli = IoUtil.loadFromStdin(format);
-    } else if (cmd.getArgs().length == 0) {
-      throw new RuntimeException("at least one filename expected");
-    } else {
-      bli = IoUtil.loadFiles(format, commandFiles(cmd), false);
-    }
-
-    return bli;
   }
 
   @SuppressWarnings("unchecked")
@@ -144,8 +173,6 @@ public class ReportRunnerMain {
     options.addOption(OptionBuilder.hasArg(false).withDescription("usage information").withLongOpt("help").create('h'));
 
     options.addOption(OptionBuilder.hasArg(false).withDescription("B&W Coloring").create('a'));
-
-    options.addOption(OptionBuilder.hasArg(false).withDescription("Read from STDIN").withLongOpt("stdin").create('i'));
 
     options.addOption(OptionBuilder.withArgName("formatConfig").hasArg().withDescription("Log format definition").withLongOpt(
         "formatConfig").create('x'));

@@ -30,6 +30,11 @@ import com.baulsupp.kolja.widefinder.Frequencies.Count;
  */
 public class CommonPages extends AbstractTextReport {
   private Frequencies<String> counts = new Frequencies<String>();
+  private int count = 10;
+
+  public void setCount(int count) {
+    this.count = count;
+  }
 
   @Override
   public void processLine(Line line) {
@@ -51,7 +56,7 @@ public class CommonPages extends AbstractTextReport {
       println("Page Frequencies");
     }
 
-    for (Count<String> c : getMostFrequentUrls(10)) {
+    for (Count<String> c : getMostFrequentUrls(count)) {
       println(c.toString());
     }
   }

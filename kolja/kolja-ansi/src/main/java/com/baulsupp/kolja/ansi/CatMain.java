@@ -80,7 +80,7 @@ public class CatMain {
     } else if (cmd.hasOption("d")) {
       cat.setRenderer(new DebugRenderer());
     } else {
-      Renderer<Line> renderer = format.getRenderer();
+      Renderer<Line> renderer = format.getLineRenderer();
       cat.setGrid(renderer);
     }
 

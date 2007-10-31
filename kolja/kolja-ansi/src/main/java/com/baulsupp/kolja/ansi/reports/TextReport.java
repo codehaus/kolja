@@ -17,6 +17,8 @@
  */
 package com.baulsupp.kolja.ansi.reports;
 
+import java.io.File;
+
 import com.baulsupp.kolja.log.line.Line;
 import com.baulsupp.kolja.log.viewer.event.Event;
 import com.baulsupp.kolja.log.viewer.request.RequestLine;
@@ -35,13 +37,15 @@ public interface TextReport {
 
   boolean isInterested(Detail detail);
 
+  void beforeFile(File file);
+
   void processLine(Line line);
 
   void processRequest(RequestLine line);
 
   void processEvent(Event event);
 
-  void completed();
+  void afterFile(File file);
 
-  void display(boolean showHeader);
+  void completed();
 }

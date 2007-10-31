@@ -17,6 +17,7 @@
  */
 package com.baulsupp.kolja.ansi.reports;
 
+import java.io.File;
 import java.util.Arrays;
 import java.util.HashSet;
 
@@ -54,6 +55,9 @@ public abstract class AbstractTextReport implements TextReport {
     return details.contains(detail);
   }
 
+  public void beforeFile(File file) {
+  }
+
   public void processLine(Line line) {
   }
 
@@ -63,18 +67,34 @@ public abstract class AbstractTextReport implements TextReport {
   public void processEvent(Event event) {
   }
 
-  public void completed() {
+  public void afterFile(File file) {
   }
 
-  public void display(boolean showHeader) {
+  public void completed() {
   }
 
   public void println(MultiColourString string) {
     reportRunner.println(string);
   }
 
-  public void println(Line line) {
-    reportRunner.println(line);
+  public void printLine(Line line) {
+    reportRunner.printLine(line);
+  }
+
+  public void printRequestLine(RequestLine line) {
+    reportRunner.printRequest(line);
+  }
+
+  protected void printLinesForRequests(RequestLine l) {
+    int[] offsets = l.getLineOffsets();
+
+    for (int i : offsets) {
+      printLine(readLine(i));
+    }
+  }
+
+  protected Line readLine(int i) {
+    return reportRunner.readLine(i);
   }
 
   public void println(String string) {

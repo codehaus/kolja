@@ -27,7 +27,7 @@ public class RendererCommand implements Command<Less> {
 
     renderers = new ArrayList<CursesListRenderer<Line>>();
 
-    Renderer<Line> gridNonWrapped = format.getRenderer();
+    Renderer<Line> gridNonWrapped = format.getLineRenderer();
     gridNonWrapped.setWidth(Toolkit.getScreenWidth());
 
     ViewRowRenderer viewRenderer = new ViewRowRenderer(gridNonWrapped);
@@ -36,7 +36,7 @@ public class RendererCommand implements Command<Less> {
     if (gridNonWrapped instanceof FieldRenderer) {
       ((FieldRenderer) gridNonWrapped).setWrappingMode(Wrap.NONE);
 
-      Renderer<Line> gridWrapped = format.getRenderer();
+      Renderer<Line> gridWrapped = format.getLineRenderer();
       gridWrapped.setWidth(Toolkit.getScreenWidth());
       ((FieldRenderer) gridWrapped).setWrappingMode(Wrap.LAST_COLUMN);
 

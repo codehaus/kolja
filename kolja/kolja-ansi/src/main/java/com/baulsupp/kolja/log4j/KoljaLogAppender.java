@@ -34,7 +34,7 @@ public class KoljaLogAppender extends AppenderSkeleton {
     Renderer<Line> gridRenderer;
     try {
       LogFormat logFormat = SavedLogFormatLoader.load(name);
-      gridRenderer = logFormat.getRenderer();
+      gridRenderer = logFormat.getLineRenderer();
     } catch (Exception e) {
       System.err.println(e);
       gridRenderer = Log4JRenderer.create();

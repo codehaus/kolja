@@ -20,12 +20,16 @@ package com.baulsupp.kolja.log.viewer.importing;
 import java.text.DateFormat;
 import java.util.regex.Pattern;
 
+import org.joda.time.LocalDate;
+import org.joda.time.LocalTime;
 import org.springframework.beans.PropertyEditorRegistrar;
 import org.springframework.beans.PropertyEditorRegistry;
 
 import com.baulsupp.kolja.log.viewer.columns.ColumnWidths;
 import com.baulsupp.kolja.log.viewer.columns.ColumnWidthsPropertyEditor;
 import com.baulsupp.kolja.util.DateFormatPropertyEditor;
+import com.baulsupp.kolja.util.LocalDatePropertyEditor;
+import com.baulsupp.kolja.util.LocalTimePropertyEditor;
 import com.baulsupp.kolja.util.PatternPropertyEditor;
 
 /**
@@ -38,5 +42,7 @@ public class KoljaPropertyEditorRegistrar implements PropertyEditorRegistrar {
     registry.registerCustomEditor(Pattern.class, new PatternPropertyEditor());
     registry.registerCustomEditor(DateFormat.class, new DateFormatPropertyEditor());
     registry.registerCustomEditor(ColumnWidths.class, new ColumnWidthsPropertyEditor());
+    registry.registerCustomEditor(LocalDate.class, new LocalDatePropertyEditor());
+    registry.registerCustomEditor(LocalTime.class, new LocalTimePropertyEditor());
   }
 }
