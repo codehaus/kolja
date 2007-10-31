@@ -107,8 +107,6 @@ public class CommonPagesTest {
 
     pages.completed();
 
-    pages.display(false);
-
     List<String> lines = reportRunner.getLines();
     assertEquals(2, lines.size());
     assertEquals("2 /url/1", lines.get(0));

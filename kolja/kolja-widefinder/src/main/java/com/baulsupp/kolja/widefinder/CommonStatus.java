@@ -47,11 +47,8 @@ public class CommonStatus extends AbstractTextReport {
     return counts.getMostFrequent(urlCount);
   }
 
-  public void display(boolean showHeader) {
-    if (showHeader) {
-      println("Http Status Frequencies");
-    }
-
+  @Override
+  public void completed() {
     for (Count<HttpStatus> c : getStatusFrequencies()) {
       println(c.toString());
     }

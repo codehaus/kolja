@@ -51,11 +51,8 @@ public class CommonPages extends AbstractTextReport {
     return counts.getMostFrequent(urlCount);
   }
 
-  public void display(boolean showHeader) {
-    if (showHeader) {
-      println("Page Frequencies");
-    }
-
+  @Override
+  public void completed() {
     for (Count<String> c : getMostFrequentUrls(count)) {
       println(c.toString());
     }
