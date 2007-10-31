@@ -117,11 +117,15 @@ public class ReportRunnerMain {
 
         LineIndex li = format.getLineIndex(buffer);
 
-        RequestIndex requestIndex = format.getRequestIndex(li);
-        reportRunner.setRequestIndex(requestIndex);
+        if (format.supportsRequests()) {
+          RequestIndex requestIndex = format.getRequestIndex(li);
+          reportRunner.setRequestIndex(requestIndex);
+        }
 
-        EventList eventList = format.getEventList(li);
-        reportRunner.setEventList(eventList);
+        if (format.supportsEvents()) {
+          EventList eventList = format.getEventList(li);
+          reportRunner.setEventList(eventList);
+        }
 
         reportRunner.run(file, new BasicLineIterator(li));
       }

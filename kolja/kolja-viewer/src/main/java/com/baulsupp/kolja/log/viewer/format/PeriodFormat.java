@@ -29,7 +29,7 @@ public class PeriodFormat implements OutputFormat {
   private PeriodFormatter format;
 
   public PeriodFormat() {
-    format = new PeriodFormatterBuilder().printZeroNever().appendDays().appendSuffix("d").appendHours().appendSuffix("h")
+    format = new PeriodFormatterBuilder().printZeroRarelyLast().appendDays().appendSuffix("d").appendHours().appendSuffix("h")
         .appendMinutes().appendSuffix("m").appendSecondsWithOptionalMillis().appendSuffix("s").toFormatter();
   }
 
