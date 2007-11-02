@@ -1,4 +1,4 @@
-package launch;
+package wf;
 
 import com.baulsupp.kolja.ansi.reports.ReportRunnerMain;
 
