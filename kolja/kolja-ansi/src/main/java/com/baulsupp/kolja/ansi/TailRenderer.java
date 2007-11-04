@@ -25,6 +25,7 @@ import jline.Terminal;
 import com.baulsupp.kolja.log.line.Line;
 import com.baulsupp.kolja.log.viewer.renderer.Renderer;
 import com.baulsupp.kolja.log.viewer.renderer.TextDisplayRow;
+import com.baulsupp.kolja.util.TextUtil;
 import com.baulsupp.kolja.util.colours.MultiColourString;
 
 public class TailRenderer implements ConsoleRenderer<Line> {
@@ -55,7 +56,7 @@ public class TailRenderer implements ConsoleRenderer<Line> {
       }
 
       AnsiUtils.append(buffy, string);
-      buffy.append("\n");
+      buffy.append(TextUtil.LINE_SEPERATOR);
     }
 
     if (ansi) {

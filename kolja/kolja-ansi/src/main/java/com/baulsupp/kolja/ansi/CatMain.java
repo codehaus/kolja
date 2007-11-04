@@ -1,3 +1,20 @@
+/**
+ * Copyright (c) 2002-2007 Yuri Schimke. All Rights Reserved.
+ * 
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ * 
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this library; if not, write to the Free Software Foundation, Inc.,
+ * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ */
 package com.baulsupp.kolja.ansi;
 
 import java.io.File;
@@ -31,9 +48,9 @@ import com.baulsupp.kolja.util.LogConfig;
 public class CatMain {
   private static final Logger log = Logger.getLogger(CatMain.class);
 
-  public static void main(String[] args) {
+  public static void main(String... args) {
     LogConfig.config("cat");
-    
+
     Terminal.setupTerminal();
 
     CommandLineParser parser = new PosixParser();
@@ -74,7 +91,7 @@ public class CatMain {
 
     Iterator<Line> bli = loadLineIterator(cmd, format);
     cat.setI(bli);
-    
+
     if (cmd.hasOption("o")) {
       cat.setRenderer(PrintfRenderer.parse(cmd.getOptionValue("o")));
     } else if (cmd.hasOption("d")) {
@@ -89,7 +106,7 @@ public class CatMain {
       highlightTerm = cmd.getOptionValue("s");
       cat.addHighlightTerm(highlightTerm);
     }
-    
+
     if (cmd.hasOption("f")) {
       cat.setFixedWidth(true);
     }
@@ -113,7 +130,7 @@ public class CatMain {
 
   public static Iterator<Line> loadLineIterator(CommandLine cmd, LogFormat format) throws IOException {
     Iterator<Line> bli;
-    
+
     if (cmd.hasOption("i")) {
       bli = IoUtil.loadFromStdin(format);
     } else if (cmd.getArgs().length == 0) {
@@ -121,18 +138,18 @@ public class CatMain {
     } else {
       bli = IoUtil.loadFiles(format, commandFiles(cmd), false);
     }
-    
+
     return bli;
   }
 
   private static List<File> commandFiles(CommandLine cmd) {
     List args = cmd.getArgList();
     List<File> files = new ArrayList<File>();
-    
+
     for (Object a : args) {
       files.add(new File((String) a));
     }
-    
+
     return files;
   }
 
@@ -166,20 +183,18 @@ public class CatMain {
     options.addOption(OptionBuilder.withArgName("highlightTerm").hasArg().withDescription("An expression to highlight")
         .withLongOpt("highlightTerm").create('s'));
 
-    options.addOption(OptionBuilder.withArgName("formatClass").hasArg().withDescription(
-        "An implementation of LogFormat to use").withLongOpt("formatClass").create('c'));
+    options.addOption(OptionBuilder.withArgName("formatClass").hasArg().withDescription("An implementation of LogFormat to use")
+        .withLongOpt("formatClass").create('c'));
 
-    options.addOption(OptionBuilder.withArgName("formatConfig").hasArg().withDescription("Log format definition")
-        .withLongOpt("formatConfig").create('x'));
-    
-    options.addOption(OptionBuilder.withArgName("outputFormat").hasArg().withDescription("printf output format")
-        .withLongOpt("printf").create('o'));
-    
-    options.addOption(OptionBuilder.hasArg(false).withDescription("Debug Output").withLongOpt("debug").create(
-        'd'));
-    
-    options.addOption(OptionBuilder.hasArg(false).withDescription("Fixed Screen Width").withLongOpt("fixed-width").create(
-        'f'));
+    options.addOption(OptionBuilder.withArgName("formatConfig").hasArg().withDescription("Log format definition").withLongOpt(
+        "formatConfig").create('x'));
+
+    options.addOption(OptionBuilder.withArgName("outputFormat").hasArg().withDescription("printf output format").withLongOpt(
+        "printf").create('o'));
+
+    options.addOption(OptionBuilder.hasArg(false).withDescription("Debug Output").withLongOpt("debug").create('d'));
+
+    options.addOption(OptionBuilder.hasArg(false).withDescription("Fixed Screen Width").withLongOpt("fixed-width").create('f'));
 
     return options;
   }

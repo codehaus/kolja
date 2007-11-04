@@ -48,7 +48,7 @@ import com.baulsupp.kolja.util.LogConfig;
 public class LessMain {
   private static final Logger log = Logger.getLogger(LessMain.class);
 
-  public static void main(String[] args) {
+  public static void main(String... args) {
     LogConfig.config("less");
 
     CommandLineParser parser = new PosixParser();
@@ -119,6 +119,7 @@ public class LessMain {
     formatter.printHelp("less", options);
   }
 
+  @SuppressWarnings("static-access")
   private static synchronized Options buildOptions() {
     Options options = new Options();
 

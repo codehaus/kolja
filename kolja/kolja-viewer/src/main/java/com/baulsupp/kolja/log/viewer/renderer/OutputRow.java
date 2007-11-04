@@ -1,3 +1,20 @@
+/**
+ * Copyright (c) 2002-2007 Yuri Schimke. All Rights Reserved.
+ * 
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ * 
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this library; if not, write to the Free Software Foundation, Inc.,
+ * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ */
 package com.baulsupp.kolja.log.viewer.renderer;
 
 import java.util.ArrayList;
@@ -17,11 +34,11 @@ public class OutputRow implements TextDisplayRow {
     this.line = viewRow;
     text.add(new MultiColourString());
   }
-  
+
   public void newLine() {
     text.add(new MultiColourString());
   }
-  
+
   public void append(ColouredString string) {
     MultiColourString s = text.get(text.size() - 1);
     s.append(string);
@@ -45,7 +62,7 @@ public class OutputRow implements TextDisplayRow {
 
   public void appendLines(List<String> lines) {
     for (int i = 0; i < lines.size(); i++) {
-      if (i > 0) {
+      if (i > 0 || !text.isEmpty()) {
         newLine();
       }
 
@@ -60,8 +77,8 @@ public class OutputRow implements TextDisplayRow {
   public void append(ColourPair columnColour, String string) {
     append(new ColouredString(columnColour, string));
   }
-  
-  public void append(MultiColourString string) {    
+
+  public void append(MultiColourString string) {
     MultiColourString s = text.get(text.size() - 1);
     s.append(string);
   }

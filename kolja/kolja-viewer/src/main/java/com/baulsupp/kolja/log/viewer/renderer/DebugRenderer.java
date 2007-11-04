@@ -1,3 +1,20 @@
+/**
+ * Copyright (c) 2002-2007 Yuri Schimke. All Rights Reserved.
+ * 
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ * 
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this library; if not, write to the Free Software Foundation, Inc.,
+ * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ */
 package com.baulsupp.kolja.log.viewer.renderer;
 
 import java.util.Arrays;
@@ -5,12 +22,14 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map.Entry;
 
+import org.springframework.util.Assert;
+
 import com.baulsupp.kolja.log.line.Line;
 import com.baulsupp.kolja.util.TextUtil;
 
 public class DebugRenderer implements Renderer<Line> {
   private int width;
-  
+
   public DebugRenderer() {
   }
 
@@ -25,10 +44,12 @@ public class DebugRenderer implements Renderer<Line> {
   }
 
   private String format(int i, Entry<String, Object> e) {
-    return String.format("%10d %s: '%s'", i, e.getKey(), e.getValue());
+    return String.format("%s: '%s'", e.getKey(), e.getValue());
   }
 
   public void setWidth(int terminalWidth) {
+    Assert.isTrue(terminalWidth > 0, "width not allowed " + terminalWidth);
+
     this.width = terminalWidth;
   }
 

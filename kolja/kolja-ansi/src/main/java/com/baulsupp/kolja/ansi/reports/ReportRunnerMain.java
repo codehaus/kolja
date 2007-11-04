@@ -51,7 +51,7 @@ import com.baulsupp.kolja.util.LogConfig;
 public class ReportRunnerMain {
   private static final Logger log = Logger.getLogger(ReportRunnerMain.class);
 
-  public static void main(String[] args) {
+  public static void main(String... args) {
     LogConfig.config("report");
 
     Terminal.setupTerminal();
