@@ -95,7 +95,13 @@ public class ReportRunnerMain {
 
     boolean ansi = !cmd.hasOption("a");
 
-    reportRunner.setReports(createReports(new ReportBuilder(appCtxt), cmd.getOptionValue("r")));
+    String optionValue = cmd.getOptionValue("r");
+
+    if (optionValue == null) {
+      throw new RuntimeException("no report specified");
+    }
+
+    reportRunner.setReports(createReports(new ReportBuilder(appCtxt), optionValue));
 
     boolean fixedWidth = cmd.hasOption("f");
 
