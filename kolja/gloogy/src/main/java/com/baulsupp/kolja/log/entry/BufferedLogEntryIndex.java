@@ -1,7 +1,8 @@
 package com.baulsupp.kolja.log.entry;
 
 import org.apache.commons.collections.primitives.IntList;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.baulsupp.kolja.log.field.MemoryIntField;
 import com.baulsupp.kolja.log.field.MemorySparseIntField;
@@ -9,7 +10,7 @@ import com.baulsupp.kolja.log.field.SparseIntField;
 import com.baulsupp.kolja.log.util.IntRange;
 
 public class BufferedLogEntryIndex implements LogEntryIndex {
-  private static final Logger log = Logger.getLogger(BufferedLogEntryIndex.class);
+  private static final Logger log = LoggerFactory.getLogger(BufferedLogEntryIndex.class);
 
   private LogEntryIndex index;
 

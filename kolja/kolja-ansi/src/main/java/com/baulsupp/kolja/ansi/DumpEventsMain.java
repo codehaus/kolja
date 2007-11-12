@@ -11,7 +11,8 @@ import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.PosixParser;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.baulsupp.kolja.log.line.BasicLineIterator;
 import com.baulsupp.kolja.log.line.Line;
@@ -26,11 +27,11 @@ import com.baulsupp.kolja.util.LogConfig;
 
 public class DumpEventsMain {
   @SuppressWarnings("unused")
-  private static final Logger logger = Logger.getLogger(DumpEventsMain.class);
+  private static final Logger logger = LoggerFactory.getLogger(DumpEventsMain.class);
 
-  public static void main(String[] args) throws Exception  {
+  public static void main(String[] args) throws Exception {
     LogConfig.config("dumpevents");
-    
+
     Terminal.setupTerminal();
 
     CommandLineParser parser = new PosixParser();
@@ -56,20 +57,20 @@ public class DumpEventsMain {
       } else {
         format = new PlainTextLogFormat();
       }
-      
+
       File f = new File(cmd.getArgs()[0]);
       ReloadableCharBuffer buffer = ReloadableCharBuffer.fromFileReloadable(f);
-      
+
       LineIndex lineIndex = format.getLineIndex(buffer);
 
       BasicLineIterator i = new BasicLineIterator(lineIndex);
-      
+
       EventList eventIndex = format.getEventList(lineIndex);
-      
+
       while (i.hasNext()) {
         Line line = i.next();
         Event event = eventIndex.readEvent(line);
-        
+
         if (event != null) {
           System.out.println(event.toString());
         }
@@ -82,16 +83,17 @@ public class DumpEventsMain {
     formatter.printHelp("dumpevents", options);
   }
 
+  @SuppressWarnings("static-access")
   private static synchronized Options buildOptions() {
     Options options = new Options();
 
     options.addOption(OptionBuilder.hasArg(false).withDescription("usage information").withLongOpt("help").create('h'));
 
-    options.addOption(OptionBuilder.withArgName("formatClass").hasArg().withDescription(
-        "An implementation of LogFormat to use").withLongOpt("formatClass").create('c'));
+    options.addOption(OptionBuilder.withArgName("formatClass").hasArg().withDescription("An implementation of LogFormat to use")
+        .withLongOpt("formatClass").create('c'));
 
-    options.addOption(OptionBuilder.withArgName("formatConfig").hasArg().withDescription("Log format definition")
-        .withLongOpt("formatConfig").create('x'));
+    options.addOption(OptionBuilder.withArgName("formatConfig").hasArg().withDescription("Log format definition").withLongOpt(
+        "formatConfig").create('x'));
 
     return options;
   }

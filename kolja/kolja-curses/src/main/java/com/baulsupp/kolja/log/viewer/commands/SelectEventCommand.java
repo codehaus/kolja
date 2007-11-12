@@ -7,7 +7,8 @@ import java.util.Collections;
 
 import jcurses.system.InputChar;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.baulsupp.curses.application.Command;
 import com.baulsupp.curses.application.KeyBinding;
@@ -19,7 +20,7 @@ import com.baulsupp.less.EventDialog;
 import com.baulsupp.less.Less;
 
 public class SelectEventCommand implements Command<Less>, PropertyChangeListener {
-  private static final Logger log = Logger.getLogger(SelectEventCommand.class);
+  private static final Logger log = LoggerFactory.getLogger(SelectEventCommand.class);
 
   private EventList eventList;
 

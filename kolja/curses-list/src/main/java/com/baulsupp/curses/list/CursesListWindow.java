@@ -26,7 +26,8 @@ import jcurses.util.Message;
 import jcurses.widgets.BorderLayoutManager;
 import jcurses.widgets.WidgetsConstants;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.baulsupp.curses.application.Command;
 import com.baulsupp.curses.application.CommandList;
@@ -37,7 +38,7 @@ import com.baulsupp.curses.application.util.ResponsiveLock;
 import com.baulsupp.kolja.util.event.PropertyChangeListenerList;
 
 public class CursesListWindow<T, S extends CursesListWindow<T, S>> implements InputHandler {
-  private static final Logger log = Logger.getLogger("com.baulsupp.list.CursesListWindow");
+  private static final Logger log = LoggerFactory.getLogger("com.baulsupp.list.CursesListWindow");
 
   // TODO reduce visibility
   public CursesList<T> list = new CursesList<T>();

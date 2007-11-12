@@ -62,7 +62,7 @@ public class OutputRow implements TextDisplayRow {
 
   public void appendLines(List<String> lines) {
     for (int i = 0; i < lines.size(); i++) {
-      if (i > 0 || !text.isEmpty()) {
+      if (i > 0) {
         newLine();
       }
 

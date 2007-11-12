@@ -5,13 +5,14 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.NoSuchElementException;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.baulsupp.kolja.log.util.IntRange;
 
 // TODO optimise for paging up and down. i.e. don't stick to boundaries!
 public class BasicLineIterator implements LineIterator {
-  private static final Logger log = Logger.getLogger(BasicLineIterator.class);
+  private static final Logger log = LoggerFactory.getLogger(BasicLineIterator.class);
 
   private LineIndex index;
 

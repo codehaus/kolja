@@ -11,7 +11,8 @@ import jcurses.widgets.Dialog;
 import jcurses.widgets.List;
 import jcurses.widgets.WidgetsConstants;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.baulsupp.curses.list.Util;
 import com.baulsupp.kolja.log.viewer.event.Event;
@@ -21,7 +22,7 @@ public class EventDialog extends Dialog {
   private static final long serialVersionUID = -2438075837387252360L;
 
   @SuppressWarnings("unused")
-  private static final Logger logger = Logger.getLogger(Less.class);
+  private static final Logger logger = LoggerFactory.getLogger(Less.class);
 
   private List list;
   private EventList eventList;

@@ -2,7 +2,8 @@ package com.baulsupp.kolja.log.viewer.event;
 
 import java.io.Serializable;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.baulsupp.kolja.log.LogConstants;
 import com.baulsupp.kolja.log.line.Line;
@@ -12,7 +13,7 @@ public class WarnEventMatcher implements EventMatcher, Serializable {
   private static final long serialVersionUID = -7577509944590961680L;
 
   @SuppressWarnings("unused")
-  private static final Logger logger = Logger.getLogger(WarnEventMatcher.class);
+  private static final Logger logger = LoggerFactory.getLogger(WarnEventMatcher.class);
 
   private String priorityField = LogConstants.PRIORITY;
   private String messageField = LogConstants.CONTENT;

@@ -2,7 +2,8 @@ package com.baulsupp.less;
 
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.baulsupp.curses.list.DisplayRow;
 import com.baulsupp.curses.list.TextPanel;
@@ -11,7 +12,7 @@ import com.baulsupp.kolja.util.colours.ColouredString;
 import com.baulsupp.kolja.util.colours.MultiColourString;
 
 public class LessRow implements DisplayRow {
-  public static final Logger logger = Logger.getLogger(LessRow.class);
+  public static final Logger logger = LoggerFactory.getLogger(LessRow.class);
 
   private TextDisplayRow row;
 

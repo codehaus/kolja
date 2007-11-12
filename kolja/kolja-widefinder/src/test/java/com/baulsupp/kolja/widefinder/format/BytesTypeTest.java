@@ -6,8 +6,6 @@ import static junit.framework.Assert.assertNull;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.baulsupp.kolja.widefinder.format.BytesType;
-
 public class BytesTypeTest {
   private BytesType type;
 

@@ -1,9 +1,9 @@
 package com.baulsupp.kolja.util;
 
+import junit.framework.TestCase;
+
 import com.baulsupp.kolja.util.colours.ColourPair;
 import com.baulsupp.kolja.util.colours.ColourRotator;
-
-import junit.framework.TestCase;
 
 public class ColourRotatorTest extends TestCase {
   public void testNext() {

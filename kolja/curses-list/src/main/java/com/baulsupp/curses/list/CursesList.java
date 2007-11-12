@@ -8,10 +8,11 @@ import jcurses.system.Toolkit;
 import jcurses.util.Rectangle;
 import jcurses.widgets.Widget;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class CursesList<T extends Object> extends Widget implements ItemModelListener {
-  private final static Logger logger = Logger.getLogger(CursesList.class);
+  private final static Logger logger = LoggerFactory.getLogger(CursesList.class);
 
   private Rectangle preferredSize = new Rectangle(1000, 1000);
 

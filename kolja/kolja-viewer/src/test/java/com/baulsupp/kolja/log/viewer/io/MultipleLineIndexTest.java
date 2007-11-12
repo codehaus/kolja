@@ -7,7 +7,6 @@ import junit.framework.TestCase;
 import com.baulsupp.kolja.log.LogConstants;
 import com.baulsupp.kolja.log.line.BasicLine;
 import com.baulsupp.kolja.log.line.Line;
-import com.baulsupp.kolja.log.viewer.io.MultipleLineIterator;
 
 public class MultipleLineIndexTest extends TestCase {
   public void testRemove() {

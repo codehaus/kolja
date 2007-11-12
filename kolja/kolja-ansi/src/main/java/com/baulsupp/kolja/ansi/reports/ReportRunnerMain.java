@@ -31,7 +31,8 @@ import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.PosixParser;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 
 import com.baulsupp.kolja.ansi.ConsoleRenderer;
@@ -49,7 +50,7 @@ import com.baulsupp.kolja.log.viewer.request.RequestIndex;
 import com.baulsupp.kolja.util.LogConfig;
 
 public class ReportRunnerMain {
-  private static final Logger log = Logger.getLogger(ReportRunnerMain.class);
+  private static final Logger log = LoggerFactory.getLogger(ReportRunnerMain.class);
 
   public static void main(String... args) {
     LogConfig.config("report");

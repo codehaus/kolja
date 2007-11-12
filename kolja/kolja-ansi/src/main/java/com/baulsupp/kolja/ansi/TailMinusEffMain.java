@@ -16,7 +16,8 @@ import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.PosixParser;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.baulsupp.kolja.log.LogConstants;
 import com.baulsupp.kolja.log.line.Line;
@@ -31,11 +32,11 @@ import com.baulsupp.kolja.log.viewer.renderer.Renderer;
 import com.baulsupp.kolja.util.LogConfig;
 
 public class TailMinusEffMain {
-  private static final Logger log = Logger.getLogger(TailMinusEffMain.class);
+  private static final Logger log = LoggerFactory.getLogger(TailMinusEffMain.class);
 
   public static void main(String[] args) {
     LogConfig.config("tail");
-    
+
     Terminal.setupTerminal();
 
     CommandLineParser parser = new PosixParser();
@@ -71,9 +72,9 @@ public class TailMinusEffMain {
 
     List<File> files = commandFiles(cmd);
     Iterator<Line> bli = IoUtil.loadFiles(format, files, true);
-    
+
     tail.setI(bli);
-    
+
     if (cmd.hasOption("o")) {
       tail.setRenderer(PrintfRenderer.parse(cmd.getOptionValue("o")));
     } else if (cmd.hasOption("d")) {
@@ -87,7 +88,7 @@ public class TailMinusEffMain {
       }
       tail.setGrid(renderer);
     }
-    
+
     if (cmd.hasOption("f")) {
       tail.setFixedWidth(true);
     }
@@ -128,11 +129,11 @@ public class TailMinusEffMain {
   private static List<File> commandFiles(CommandLine cmd) {
     List args = cmd.getArgList();
     List<File> files = new ArrayList<File>();
-    
+
     for (Object a : args) {
       files.add(new File((String) a));
     }
-    
+
     return files;
   }
 
@@ -141,6 +142,7 @@ public class TailMinusEffMain {
     formatter.printHelp("tail", options);
   }
 
+  @SuppressWarnings("static-access")
   private static synchronized Options buildOptions() {
     Options options = new Options();
 
@@ -153,20 +155,18 @@ public class TailMinusEffMain {
     options.addOption(OptionBuilder.withArgName("highlightTerm").hasArg().withDescription("An expression to highlight")
         .withLongOpt("highlightTerm").create('s'));
 
-    options.addOption(OptionBuilder.withArgName("formatClass").hasArg().withDescription(
-        "An implementation of LogFormat to use").withLongOpt("formatClass").create('c'));
+    options.addOption(OptionBuilder.withArgName("formatClass").hasArg().withDescription("An implementation of LogFormat to use")
+        .withLongOpt("formatClass").create('c'));
 
-    options.addOption(OptionBuilder.withArgName("formatConfig").hasArg().withDescription("Log format definition")
-        .withLongOpt("formatConfig").create('x'));
-    
-    options.addOption(OptionBuilder.withArgName("outputFormat").hasArg().withDescription("printf output format")
-        .withLongOpt("printf").create('o'));
-    
-    options.addOption(OptionBuilder.hasArg(false).withDescription("Debug Output").withLongOpt("debug").create(
-        'd'));
-    
-    options.addOption(OptionBuilder.hasArg(false).withDescription("Fixed Screen Width").withLongOpt("fixed-width").create(
-        'f'));
+    options.addOption(OptionBuilder.withArgName("formatConfig").hasArg().withDescription("Log format definition").withLongOpt(
+        "formatConfig").create('x'));
+
+    options.addOption(OptionBuilder.withArgName("outputFormat").hasArg().withDescription("printf output format").withLongOpt(
+        "printf").create('o'));
+
+    options.addOption(OptionBuilder.hasArg(false).withDescription("Debug Output").withLongOpt("debug").create('d'));
+
+    options.addOption(OptionBuilder.hasArg(false).withDescription("Fixed Screen Width").withLongOpt("fixed-width").create('f'));
 
     return options;
   }

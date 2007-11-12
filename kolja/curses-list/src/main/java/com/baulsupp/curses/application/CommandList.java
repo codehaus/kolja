@@ -6,12 +6,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
-
 import jcurses.system.InputChar;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class CommandList<T> {
-  private static final Logger logger = Logger.getLogger(CommandList.class);
+  private static final Logger logger = LoggerFactory.getLogger(CommandList.class);
   
   private List<Command<? super T>> commands = new ArrayList<Command<? super T>>();
 

@@ -33,7 +33,8 @@ import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.PosixParser;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.baulsupp.kolja.log.line.Line;
 import com.baulsupp.kolja.log.viewer.importing.LogFormat;
@@ -46,7 +47,7 @@ import com.baulsupp.kolja.log.viewer.renderer.Renderer;
 import com.baulsupp.kolja.util.LogConfig;
 
 public class CatMain {
-  private static final Logger log = Logger.getLogger(CatMain.class);
+  private static final Logger log = LoggerFactory.getLogger(CatMain.class);
 
   public static void main(String... args) {
     LogConfig.config("cat");
@@ -171,6 +172,7 @@ public class CatMain {
     formatter.printHelp("cat", options);
   }
 
+  @SuppressWarnings("static-access")
   private static synchronized Options buildOptions() {
     Options options = new Options();
 

@@ -6,7 +6,8 @@ import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.baulsupp.kolja.log.line.Line;
 import com.baulsupp.kolja.log.viewer.columns.Column;
@@ -22,7 +23,7 @@ import com.baulsupp.kolja.util.colours.ColouredString;
 import com.baulsupp.kolja.util.colours.MultiColourString;
 
 public class FieldRenderer implements Renderer<Line> {
-  public static final Logger logger = Logger.getLogger(FieldRenderer.class);
+  public static final Logger logger = LoggerFactory.getLogger(FieldRenderer.class);
 
   public static ColouredString DEFAULT_SEPERATOR = new ColouredString(null, " ");
 

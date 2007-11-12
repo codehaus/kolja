@@ -19,13 +19,14 @@ package com.baulsupp.curses.list;
 
 import jcurses.system.CharColor;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.baulsupp.kolja.util.colours.Colour;
 import com.baulsupp.kolja.util.colours.ColourPair;
 
 public class ColorList {
-  public static final Logger logger = Logger.getLogger(ColorList.class);
+  public static final Logger logger = LoggerFactory.getLogger(ColorList.class);
 
   public static final CharColor blackOnWhite = new CharColor(CharColor.WHITE, CharColor.BLACK);
 

@@ -24,7 +24,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.baulsupp.kolja.log.line.BasicLineIterator;
 import com.baulsupp.kolja.log.line.Line;
@@ -34,7 +35,7 @@ import com.baulsupp.kolja.log.util.SystemInCharSequence;
 import com.baulsupp.kolja.log.viewer.importing.LogFormat;
 
 public class IoUtil {
-  private static final Logger log = Logger.getLogger(IoUtil.class);
+  private static final Logger log = LoggerFactory.getLogger(IoUtil.class);
 
   @Deprecated
   public static CharSequence fromStdin() {

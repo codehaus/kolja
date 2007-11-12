@@ -1,5 +1,7 @@
 package com.baulsupp.kolja.log.util;
 
+import java.util.Collections;
+
 import org.apache.commons.collections.primitives.IntList;
 
 public class CollectionSearch {

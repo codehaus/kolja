@@ -26,7 +26,8 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.collections.primitives.IntList;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.baulsupp.kolja.log.GloogyConstants;
 import com.baulsupp.kolja.log.entry.LogEntryIndex;
@@ -35,7 +36,7 @@ import com.baulsupp.kolja.log.util.ReloadableCharBuffer;
 
 public class LogEntryLineIndex implements LineIndex, Reloadable {
   @SuppressWarnings("unused")
-  private static final Logger logger = Logger.getLogger(LogEntryLineIndex.class);
+  private static final Logger logger = LoggerFactory.getLogger(LogEntryLineIndex.class);
 
   protected LogEntryIndex index;
 

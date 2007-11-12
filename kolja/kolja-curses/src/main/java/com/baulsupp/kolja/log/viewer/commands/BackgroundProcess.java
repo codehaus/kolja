@@ -2,14 +2,15 @@ package com.baulsupp.kolja.log.viewer.commands;
 
 import java.util.concurrent.Callable;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.baulsupp.kolja.log.util.IntRange;
 import com.baulsupp.kolja.log.viewer.event.EventList;
 import com.baulsupp.less.Less;
 
 public class BackgroundProcess {
-  private static final Logger log = Logger.getLogger(BackgroundProcess.class);
+  private static final Logger log = LoggerFactory.getLogger(BackgroundProcess.class);
 
   private static final int BACKGROUND_READAHEAD = 25000;
 

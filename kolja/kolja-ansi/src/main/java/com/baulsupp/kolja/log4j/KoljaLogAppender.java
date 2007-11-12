@@ -1,14 +1,11 @@
 package com.baulsupp.kolja.log4j;
 
 import java.util.Map;
-import java.util.Map.Entry;
 
-import org.apache.log4j.AppenderSkeleton;
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
-import org.apache.log4j.MDC;
-import org.apache.log4j.spi.LoggingEvent;
 import org.joda.time.DateTime;
+
+import ch.qos.logback.classic.spi.LoggingEvent;
+import ch.qos.logback.core.AppenderBase;
 
 import com.baulsupp.kolja.ansi.ConsoleRenderer;
 import com.baulsupp.kolja.ansi.TailRenderer;
@@ -21,15 +18,12 @@ import com.baulsupp.kolja.log.viewer.importing.SavedLogFormatLoader;
 import com.baulsupp.kolja.log.viewer.renderer.Renderer;
 import com.baulsupp.kolja.util.PlatformUtil;
 
-public class KoljaLogAppender extends AppenderSkeleton {
+public class KoljaLogAppender extends AppenderBase<LoggingEvent> {
   private ConsoleRenderer<Line> renderer = null;
 
   @Override
-  public void activateOptions() {
-    // TODO am I just being paranoid
-    Logger.getLogger("com.baulsupp.kolja").setLevel(Level.OFF);
-
-    super.activateOptions();
+  public void start() {
+    super.start();
 
     Renderer<Line> gridRenderer;
     try {
@@ -53,20 +47,19 @@ public class KoljaLogAppender extends AppenderSkeleton {
     }
   }
 
-  private Line buildLine(LoggingEvent arg0) {
-    Line line = new BasicLine(arg0.toString());
+  private Line buildLine(LoggingEvent le) {
+    Line line = new BasicLine(le.toString());
 
-    line.setValue(LogConstants.DATE, new DateTime(arg0.timeStamp));
-    line.setValue(LogConstants.CONTENT, arg0.getMessage());
+    line.setValue(LogConstants.DATE, new DateTime(le.getTimeStamp()));
+    line.setValue(LogConstants.CONTENT, le.getMessage());
 
-    line.setValue(LogConstants.EXCEPTION, join(arg0.getThrowableStrRep()));
-    line.setValue(LogConstants.PRIORITY, Priority.getByName(arg0.getLevel().toString()));
-    line.setValue(LogConstants.LOGGER, arg0.getLoggerName());
-    line.setValue(LogConstants.THREAD, arg0.getThreadName());
+    line.setValue(LogConstants.EXCEPTION, join(le.getThrowableInformation().getThrowableStrRep()));
+    line.setValue(LogConstants.PRIORITY, Priority.getByName(le.getLevel().toString()));
+    line.setValue(LogConstants.LOGGER, le.getLoggerRemoteView().getName());
+    line.setValue(LogConstants.THREAD, le.getThreadName());
 
-    for (Object e : MDC.getContext().entrySet()) {
-      Entry entry = (Map.Entry) e;
-      line.setValue((String) entry.getKey(), entry.getValue());
+    for (Map.Entry<String, String> e : le.getMDCPropertyMap().entrySet()) {
+      line.setValue(e.getKey(), e.getValue());
     }
 
     return line;
@@ -88,14 +81,5 @@ public class KoljaLogAppender extends AppenderSkeleton {
     }
 
     return buffer.toString();
-  }
-
-  @Override
-  public void close() {
-  }
-
-  @Override
-  public boolean requiresLayout() {
-    return false;
   }
 }

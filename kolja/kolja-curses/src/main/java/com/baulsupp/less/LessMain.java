@@ -27,7 +27,8 @@ import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.PosixParser;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.baulsupp.kolja.log.util.WrappedCharBuffer;
 import com.baulsupp.kolja.log.viewer.commands.BackgroundProcess;
@@ -46,7 +47,7 @@ import com.baulsupp.kolja.util.LogConfig;
  * Launcher for Less Tool
  */
 public class LessMain {
-  private static final Logger log = Logger.getLogger(LessMain.class);
+  private static final Logger log = LoggerFactory.getLogger(LessMain.class);
 
   public static void main(String... args) {
     LogConfig.config("less");
