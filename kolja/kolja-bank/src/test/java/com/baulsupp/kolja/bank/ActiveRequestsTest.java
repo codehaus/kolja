@@ -15,7 +15,7 @@ import com.baulsupp.kolja.log.LogConstants;
 import com.baulsupp.kolja.log.viewer.request.RequestLine;
 
 public class ActiveRequestsTest {
-  private ActiveRequests activeRequests;
+  private BankActiveRequests activeRequests;
   private DateTime noonDate;
   private DateTime beforeDate;
   private DateTime afterDate;
@@ -30,7 +30,7 @@ public class ActiveRequestsTest {
     beforeDate = date.toDateTime(before);
     afterDate = date.toDateTime(after);
 
-    activeRequests = new ActiveRequests();
+    activeRequests = new BankActiveRequests();
     activeRequests.setFrom(noon);
     activeRequests.setTo(after.minusSeconds(1));
   }

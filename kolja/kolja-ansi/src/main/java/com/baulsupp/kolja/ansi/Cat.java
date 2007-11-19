@@ -129,7 +129,7 @@ public class Cat {
 
   public void setGrid(Renderer<Line> grid) {
     this.grid = grid;
-    grid.setWidth(getWidth());
+    grid.setWidth(AnsiUtils.getWidth());
     renderer = new TailRenderer(grid, ansi);
   }
 
@@ -144,19 +144,9 @@ public class Cat {
   public void setRenderer(Renderer<Line> renderer) {
     this.grid = renderer;
 
-    grid.setWidth(getWidth());
+    grid.setWidth(AnsiUtils.getWidth());
 
     this.renderer = new TailRenderer(grid, ansi);
-  }
-
-  private int getWidth() {
-    int terminalWidth = Terminal.getTerminal().getTerminalWidth();
-
-    if (terminalWidth < 0) {
-      terminalWidth = 80;
-    }
-
-    return terminalWidth;
   }
 
   public void setFixedWidth(boolean b) {

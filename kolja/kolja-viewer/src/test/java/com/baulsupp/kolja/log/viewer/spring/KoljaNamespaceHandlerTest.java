@@ -22,6 +22,7 @@ import com.baulsupp.kolja.log.viewer.PrintfLineFormatter;
 import com.baulsupp.kolja.log.viewer.event.EventMatcher;
 import com.baulsupp.kolja.log.viewer.event.WarnEventMatcher;
 import com.baulsupp.kolja.log.viewer.format.CompressedPackageFormat;
+import com.baulsupp.kolja.log.viewer.format.JodaFormat;
 import com.baulsupp.kolja.log.viewer.format.OutputFormat;
 import com.baulsupp.kolja.log.viewer.format.ToStringFormat;
 import com.baulsupp.kolja.log.viewer.highlight.HighlightList;

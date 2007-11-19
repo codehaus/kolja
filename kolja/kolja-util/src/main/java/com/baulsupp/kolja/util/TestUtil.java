@@ -15,29 +15,25 @@
  * along with this library; if not, write to the Free Software Foundation, Inc.,
  * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
-package com.baulsupp.kolja.widefinder;
+package com.baulsupp.kolja.util;
 
-import com.baulsupp.kolja.ansi.reports.AbstractFrequencyReport;
-import com.baulsupp.kolja.ansi.reports.Frequencies.Count;
-import com.baulsupp.kolja.log.line.Line;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 
-/**
- * Most Frequently Accessed Pages.
- * 
- * @author Yuri Schimke
- */
-public class CommonPages extends AbstractFrequencyReport<String> {
-  @Override
-  public void processLine(Line line) {
-    String url = (String) line.getValue(WideFinderConstants.URL);
+public class TestUtil {
 
-    increment(url);
+  @SuppressWarnings("unchecked")
+  public static <T> T serialiseAndDeserialize(T f) throws Exception {
+    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+    ObjectOutputStream oos = new ObjectOutputStream(baos);
+
+    oos.writeObject(f);
+
+    ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(baos.toByteArray()));
+
+    return (T) ois.readObject();
   }
 
-  @Override
-  public void completed() {
-    for (Count<String> c : getMostFrequent(count)) {
-      println(c.toString());
-    }
-  }
 }

@@ -17,11 +17,9 @@
  */
 package com.baulsupp.kolja.widefinder;
 
-import java.util.List;
-
-import com.baulsupp.kolja.ansi.reports.AbstractTextReport;
+import com.baulsupp.kolja.ansi.reports.AbstractFrequencyReport;
+import com.baulsupp.kolja.ansi.reports.Frequencies.Count;
 import com.baulsupp.kolja.log.line.Line;
-import com.baulsupp.kolja.widefinder.Frequencies.Count;
 import com.baulsupp.kolja.widefinder.format.HttpStatus;
 
 /**
@@ -29,27 +27,17 @@ import com.baulsupp.kolja.widefinder.format.HttpStatus;
  * 
  * @author Yuri Schimke
  */
-public class CommonStatus extends AbstractTextReport {
-  private Frequencies<HttpStatus> counts = new Frequencies<HttpStatus>();
-
+public class CommonStatus extends AbstractFrequencyReport<HttpStatus> {
   @Override
   public void processLine(Line line) {
     HttpStatus status = (HttpStatus) line.getValue(WideFinderConstants.STATUS);
 
-    counts.increment(status);
-  }
-
-  public Frequencies<HttpStatus> getStatusFrequencies() {
-    return counts;
-  }
-
-  public List<Count<HttpStatus>> getMostFrequentStatus(int urlCount) {
-    return counts.getMostFrequent(urlCount);
+    increment(status);
   }
 
   @Override
   public void completed() {
-    for (Count<HttpStatus> c : getStatusFrequencies()) {
+    for (Count<HttpStatus> c : getFrequencies()) {
       println(c.toString());
     }
   }

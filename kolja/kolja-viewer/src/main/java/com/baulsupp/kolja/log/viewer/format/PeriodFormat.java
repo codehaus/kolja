@@ -29,11 +29,14 @@ public class PeriodFormat implements OutputFormat {
   private PeriodFormatter format;
 
   public PeriodFormat() {
-    format = new PeriodFormatterBuilder().printZeroRarelyLast().appendDays().appendSuffix("d").appendHours().appendSuffix("h")
-        .appendMinutes().appendSuffix("m").appendSecondsWithOptionalMillis().appendSuffix("s").toFormatter();
   }
 
   public String format(Object value) {
+    if (format == null) {
+      format = new PeriodFormatterBuilder().printZeroRarelyLast().appendDays().appendSuffix("d").appendHours().appendSuffix("h")
+          .appendMinutes().appendSuffix("m").appendSecondsWithOptionalMillis().appendSuffix("s").toFormatter();
+    }
+
     ReadablePeriod p = null;
 
     if (value instanceof ReadableInterval) {

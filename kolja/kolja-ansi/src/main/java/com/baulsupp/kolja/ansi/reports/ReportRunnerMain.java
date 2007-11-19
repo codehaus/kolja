@@ -63,7 +63,6 @@ public class ReportRunnerMain {
     try {
       cmd = parser.parse(options, args, true);
     } catch (ParseException pe) {
-      System.out.println("error: " + pe.getMessage());
       printHelp(options);
       System.exit(2);
     }
@@ -83,6 +82,7 @@ public class ReportRunnerMain {
 
   private static void handleError(Throwable pe, String type, String string) {
     System.err.println(type + ": " + string);
+    pe.printStackTrace(System.err);
     log.error(type, pe);
   }
 

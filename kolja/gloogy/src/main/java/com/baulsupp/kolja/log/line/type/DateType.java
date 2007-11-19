@@ -17,10 +17,11 @@
  */
 package com.baulsupp.kolja.log.line.type;
 
+import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
-
-import com.baulsupp.kolja.log.LogConstants;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Date Field Type.
@@ -30,32 +31,29 @@ import com.baulsupp.kolja.log.LogConstants;
 public class DateType extends Type {
   private static final long serialVersionUID = 5057545504316883709L;
 
+  private Logger log = LoggerFactory.getLogger(DateType.class);
+
   private DateTimeFormatter dateFormat;
 
-  public DateType() {
-    super(LogConstants.DATE);
-  }
+  private String pattern;
 
-  public DateType(String name, String dateFormat) {
+  public DateType(String name, String pattern) {
     super(name);
 
-    this.dateFormat = DateTimeFormat.forPattern(dateFormat);
+    this.pattern = pattern;
   }
 
-  public DateTimeFormatter getDateFormat() {
-    return dateFormat;
-  }
+  public DateTime parse(String string) {
+    if (dateFormat == null) {
+      this.dateFormat = DateTimeFormat.forPattern(pattern);
+    }
 
-  public void setDateFormat(DateTimeFormatter dateFormat) {
-    this.dateFormat = dateFormat;
-  }
-
-  public Object parse(String string) {
     try {
       return dateFormat.parseDateTime(string);
     } catch (IllegalArgumentException e) {
-      // TODO debug
-      return "INVALID";
+      log.error("error parsing date", e);
+
+      return null;
     }
   }
 }

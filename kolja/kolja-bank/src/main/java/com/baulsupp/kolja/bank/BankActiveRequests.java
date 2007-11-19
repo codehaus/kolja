@@ -15,29 +15,9 @@
  * along with this library; if not, write to the Free Software Foundation, Inc.,
  * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
-package com.baulsupp.kolja.widefinder;
+package com.baulsupp.kolja.bank;
 
-import com.baulsupp.kolja.ansi.reports.AbstractFrequencyReport;
-import com.baulsupp.kolja.ansi.reports.Frequencies.Count;
-import com.baulsupp.kolja.log.line.Line;
+import com.baulsupp.kolja.ansi.reports.ActiveRequests;
 
-/**
- * Most Frequently Accessed Pages.
- * 
- * @author Yuri Schimke
- */
-public class CommonPages extends AbstractFrequencyReport<String> {
-  @Override
-  public void processLine(Line line) {
-    String url = (String) line.getValue(WideFinderConstants.URL);
-
-    increment(url);
-  }
-
-  @Override
-  public void completed() {
-    for (Count<String> c : getMostFrequent(count)) {
-      println(c.toString());
-    }
-  }
+public class BankActiveRequests extends ActiveRequests {
 }

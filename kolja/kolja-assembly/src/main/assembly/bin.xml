@@ -23,7 +23,14 @@
       <fileMode>0755</fileMode>
     </fileSet>
     <fileSet>
-      <directory>../kolja-viewer/src/main/resources</directory>
+      <directory>../kolja-widefinder/src/main/config</directory>
+      <outputDirectory>conf</outputDirectory>
+      <includes>
+        <include>*.xml</include>
+      </includes>
+    </fileSet>
+    <fileSet>
+      <directory>../kolja-bank/src/main/config</directory>
       <outputDirectory>conf</outputDirectory>
       <includes>
         <include>*.xml</include>

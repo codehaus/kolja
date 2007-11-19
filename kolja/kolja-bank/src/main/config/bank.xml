@@ -108,6 +108,6 @@ http://baulsupp.com/schema/kolja-reports http://baulsupp.com/schema/kolja-report
     </requests>
   </format>
 
-  <r:report id="requests" class="com.baulsupp.kolja.bank.ActiveRequests" />
+  <r:report id="requests" class="com.baulsupp.kolja.bank.BankActiveRequests" />
 
 </beans:beans>

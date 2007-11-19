@@ -9,6 +9,8 @@ import org.joda.time.Period;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.baulsupp.kolja.util.TestUtil;
+
 public class PeriodFormatTest {
   private PeriodFormat f;
   private DateTime from;
@@ -20,6 +22,13 @@ public class PeriodFormatTest {
 
     from = new DateTime();
     to = from.plusHours(1).plusMinutes(12);
+  }
+
+  @Test
+  public void testIsSerializable() throws Exception {
+    PeriodFormat f = new PeriodFormat();
+
+    PeriodFormat f2 = TestUtil.serialiseAndDeserialize(f);
   }
 
   @Test

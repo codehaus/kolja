@@ -25,6 +25,7 @@ import jline.ANSIBuffer;
 
 import com.baulsupp.kolja.ansi.AnsiUtils;
 import com.baulsupp.kolja.ansi.ConsoleRenderer;
+import com.baulsupp.kolja.ansi.ProgressBar;
 import com.baulsupp.kolja.ansi.reports.TextReport.Detail;
 import com.baulsupp.kolja.log.line.BasicLineIterator;
 import com.baulsupp.kolja.log.line.Line;
@@ -53,7 +54,10 @@ public class AnsiReportRunner implements ReportRunner {
 
   private boolean showRequests;
 
-  public AnsiReportRunner() {
+  private ProgressBar progress;
+
+  public AnsiReportRunner() throws IOException {
+    progress = new ProgressBar();
   }
 
   public void setReports(java.util.List<TextReport> reports) {
@@ -83,11 +87,17 @@ public class AnsiReportRunner implements ReportRunner {
       r.beforeFile(file);
     }
 
+    long total = file.length();
+
     while (i.hasNext()) {
       Line l = i.next();
 
+      progress.showProgress(l.getOffset(), (int) total);
+
       processLine(l);
     }
+
+    progress.clear();
 
     processRequests();
 
@@ -157,6 +167,8 @@ public class AnsiReportRunner implements ReportRunner {
   }
 
   public void println(MultiColourString string) {
+    progress.clear();
+
     ANSIBuffer buffy = new ANSIBuffer();
 
     AnsiUtils.append(buffy, string);
@@ -176,10 +188,14 @@ public class AnsiReportRunner implements ReportRunner {
   }
 
   public void printLine(Line line) {
+    progress.clear();
+
     lineRenderer.show(line);
   }
 
   public void printRequest(RequestLine request) {
+    progress.clear();
+
     requestRenderer.show(request);
   }
 }

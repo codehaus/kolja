@@ -5,6 +5,8 @@ import static junit.framework.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.baulsupp.kolja.log.viewer.format.BytesFormat;
+
 public class BytesFormatTest {
   private BytesFormat format;
 

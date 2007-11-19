@@ -20,7 +20,6 @@ package com.baulsupp.kolja.log.viewer.spring;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.joda.time.format.DateTimeFormat;
 import org.springframework.util.ClassUtils;
 import org.w3c.dom.Element;
 
@@ -28,6 +27,7 @@ import com.baulsupp.kolja.log.line.Line;
 import com.baulsupp.kolja.log.viewer.columns.ColumnWidths;
 import com.baulsupp.kolja.log.viewer.format.CompressedPackageFormat;
 import com.baulsupp.kolja.log.viewer.format.FormatFormat;
+import com.baulsupp.kolja.log.viewer.format.JodaFormat;
 import com.baulsupp.kolja.log.viewer.format.OutputFormat;
 import com.baulsupp.kolja.log.viewer.format.ToStringFormat;
 import com.baulsupp.kolja.log.viewer.highlight.Highlight;
@@ -152,7 +152,7 @@ public class OutputParser {
   }
 
   private JodaFormat parseTimeFormat(Element e) {
-    return new JodaFormat(DateTimeFormat.forPattern(FormatFormat.SHORT_TIME));
+    return new JodaFormat(FormatFormat.SHORT_TIME);
   }
 
   private ToStringFormat parseStringFormat(Element e) {

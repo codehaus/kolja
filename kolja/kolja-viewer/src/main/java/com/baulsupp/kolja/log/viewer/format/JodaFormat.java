@@ -15,44 +15,28 @@
  * along with this library; if not, write to the Free Software Foundation, Inc.,
  * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
-package com.baulsupp.kolja.widefinder.format;
+package com.baulsupp.kolja.log.viewer.format;
 
-import com.baulsupp.kolja.log.viewer.format.OutputFormat;
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
-/**
- * User Agent Format
- * 
- * @author Yuri Schimke
- */
-public class BytesFormat implements OutputFormat {
-  private static final long serialVersionUID = -2166842740967293740L;
+public class JodaFormat implements OutputFormat {
+  private static final long serialVersionUID = 3985384107578154763L;
 
-  public static final long KB = 1024;
-  public static final long MB = KB * KB;
-  public static final long GB = KB * KB * KB;
+  private transient DateTimeFormatter formatter;
 
-  public BytesFormat() {
+  private String pattern;
+
+  public JodaFormat(String pattern) {
+    this.pattern = pattern;
   }
 
   public String format(Object value) {
-    if (value == null) {
-      return null;
+    if (formatter == null) {
+      formatter = DateTimeFormat.forPattern(pattern);
     }
 
-    long bytes = (Long) value;
-
-    if (bytes >= GB) {
-      return (bytes / GB) + "GB";
-    }
-
-    if (bytes >= MB) {
-      return (bytes / MB) + "MB";
-    }
-
-    if (bytes >= KB) {
-      return (bytes / KB) + "KB";
-    }
-
-    return bytes + "b";
+    return formatter.print((DateTime) value);
   }
 }

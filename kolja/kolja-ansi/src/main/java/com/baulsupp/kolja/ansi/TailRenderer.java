@@ -20,7 +20,6 @@ package com.baulsupp.kolja.ansi;
 import java.util.List;
 
 import jline.ANSIBuffer;
-import jline.Terminal;
 
 import com.baulsupp.kolja.log.line.Line;
 import com.baulsupp.kolja.log.viewer.renderer.Renderer;
@@ -68,7 +67,7 @@ public class TailRenderer implements ConsoleRenderer<Line> {
 
   public void setFixedWidth(boolean b) {
     if (b) {
-      this.fixedWidth = Terminal.getTerminal().getTerminalWidth();
+      this.fixedWidth = AnsiUtils.getWidth();
     } else {
       this.fixedWidth = 0;
     }

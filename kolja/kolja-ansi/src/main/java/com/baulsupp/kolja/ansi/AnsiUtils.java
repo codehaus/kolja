@@ -18,6 +18,7 @@
 package com.baulsupp.kolja.ansi;
 
 import jline.ANSIBuffer;
+import jline.Terminal;
 
 import com.baulsupp.kolja.util.colours.Colour;
 import com.baulsupp.kolja.util.colours.ColouredString;
@@ -48,5 +49,15 @@ public class AnsiUtils {
     } else {
       buffy.append(string.toString());
     }
+  }
+
+  public static int getWidth() {
+    int terminalWidth = Terminal.getTerminal().getTerminalWidth();
+
+    if (terminalWidth < 0) {
+      terminalWidth = 80;
+    }
+
+    return terminalWidth;
   }
 }

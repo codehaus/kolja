@@ -70,6 +70,7 @@ public class CatMain {
     } else {
       try {
         run(cmd);
+        LogConfig.shutdown();
       } catch (FileNotFoundException e) {
         handleError(e, "file not found", e.getMessage());
       } catch (Exception e) {

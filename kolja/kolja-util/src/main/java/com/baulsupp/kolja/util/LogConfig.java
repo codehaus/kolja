@@ -28,6 +28,7 @@ import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
 import ch.qos.logback.classic.LoggerContext;
 import ch.qos.logback.classic.PatternLayout;
+import ch.qos.logback.classic.filter.ThresholdFilter;
 import ch.qos.logback.classic.spi.LoggingEvent;
 import ch.qos.logback.core.WriterAppender;
 
@@ -47,7 +48,6 @@ public class LogConfig {
     WriterAppender<LoggingEvent> writerAppender = createAppender(string, lc);
 
     rootLogger.addAppender(writerAppender);
-    rootLogger.setLevel(Level.INFO);
   }
 
   private static WriterAppender<LoggingEvent> createAppender(String string, LoggerContext lc) {
@@ -63,6 +63,9 @@ public class LogConfig {
       e.printStackTrace();
       throw new RuntimeException(e);
     }
+    ThresholdFilter levelFilter = new ThresholdFilter();
+    levelFilter.setLevel(Level.INFO.toString());
+    writerAppender.addFilter(levelFilter);
     writerAppender.setWriter(new OutputStreamWriter(os));
     writerAppender.setImmediateFlush(false);
     writerAppender.start();
@@ -75,5 +78,11 @@ public class LogConfig {
     pl.setPattern("%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n");
     pl.start();
     return pl;
+  }
+
+  public static void shutdown() {
+    LoggerContext lc = (LoggerContext) LoggerFactory.getILoggerFactory();
+
+    lc.stop();
   }
 }
