@@ -29,8 +29,7 @@
               <descriptors>
                 <descriptor>src/main/assembly/bin.xml</descriptor>
               </descriptors>
-              <finalName>${pom.artifactId}-${pom.version}</finalName>
-              <appendAssemblyId>false</appendAssemblyId>
+              <finalName>kolja-${pom.version}</finalName>
             </configuration>
           </execution>
         </executions>
