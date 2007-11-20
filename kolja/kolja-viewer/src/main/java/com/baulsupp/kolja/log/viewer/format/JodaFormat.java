@@ -33,6 +33,10 @@ public class JodaFormat implements OutputFormat {
   }
 
   public String format(Object value) {
+    if (value == null) {
+      return "";
+    }
+
     if (formatter == null) {
       formatter = DateTimeFormat.forPattern(pattern);
     }

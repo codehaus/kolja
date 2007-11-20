@@ -32,6 +32,10 @@ public class PeriodFormat implements OutputFormat {
   }
 
   public String format(Object value) {
+    if (value == null) {
+      return "";
+    }
+
     if (format == null) {
       format = new PeriodFormatterBuilder().printZeroRarelyLast().appendDays().appendSuffix("d").appendHours().appendSuffix("h")
           .appendMinutes().appendSuffix("m").appendSecondsWithOptionalMillis().appendSuffix("s").toFormatter();

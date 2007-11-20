@@ -32,7 +32,7 @@ public class UserAgentFormat implements OutputFormat {
 
   public String format(Object value) {
     if (value == null) {
-      return null;
+      return "";
     }
 
     UserAgent s = (UserAgent) value;

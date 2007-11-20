@@ -34,7 +34,7 @@ public class BytesFormat implements OutputFormat {
 
   public String format(Object value) {
     if (value == null) {
-      return null;
+      return "";
     }
 
     long bytes = ((Number) value).longValue();
