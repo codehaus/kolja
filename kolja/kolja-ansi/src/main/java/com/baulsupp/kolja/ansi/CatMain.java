@@ -144,12 +144,13 @@ public class CatMain {
     return bli;
   }
 
+  @SuppressWarnings("unchecked")
   private static List<File> commandFiles(CommandLine cmd) {
-    List args = cmd.getArgList();
+    List<String> args = cmd.getArgList();
     List<File> files = new ArrayList<File>();
 
-    for (Object a : args) {
-      files.add(new File((String) a));
+    for (String a : args) {
+      files.add(new File(a));
     }
 
     return files;

@@ -45,12 +45,10 @@ public class SpringBeanLogFormatLoader {
     XmlBeanFactory beanFactory = new XmlBeanFactory(r);
     beanFactory.addPropertyEditorRegistrar(new KoljaPropertyEditorRegistrar());
 
-    GenericApplicationContext appContext = new GenericApplicationContext(beanFactory);
-
-    return beanFactory;
+    return new GenericApplicationContext(beanFactory).getBeanFactory();
   }
 
-  public static BeanFactory loadBeanFactory(String string) throws Exception {
+  public static ConfigurableListableBeanFactory loadBeanFactory(String string) throws Exception {
     ResourceLoader r = new DefaultResourceLoader();
 
     return loadBeanFactory(r.getResource(string));
