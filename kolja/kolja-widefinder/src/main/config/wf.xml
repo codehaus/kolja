@@ -47,4 +47,6 @@ http://baulsupp.com/schema/kolja-reports http://baulsupp.com/schema/kolja-report
   
   <r:report id="status" class="com.baulsupp.kolja.widefinder.CommonStatus"/>
   
+  <r:report id="events" class="com.baulsupp.kolja.ansi.reports.DumpEvents"/>
+  
 </beans:beans>
