@@ -63,7 +63,7 @@ public class LessMain {
       System.exit(2);
     }
 
-    if (cmd.hasOption("h")) {
+    if (cmd.hasOption("h") || cmd.getArgs().length == 0) {
       printHelp(options);
     } else {
       File f = new File(cmd.getArgs()[0]);
