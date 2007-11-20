@@ -44,14 +44,11 @@ import com.baulsupp.kolja.log.viewer.io.IoUtil;
 import com.baulsupp.kolja.log.viewer.renderer.DebugRenderer;
 import com.baulsupp.kolja.log.viewer.renderer.PrintfRenderer;
 import com.baulsupp.kolja.log.viewer.renderer.Renderer;
-import com.baulsupp.kolja.util.LogConfig;
 
 public class CatMain {
   private static final Logger log = LoggerFactory.getLogger(CatMain.class);
 
   public static void main(String... args) {
-    LogConfig.config("cat");
-
     Terminal.setupTerminal();
 
     CommandLineParser parser = new PosixParser();
@@ -70,7 +67,6 @@ public class CatMain {
     } else {
       try {
         run(cmd);
-        LogConfig.shutdown();
       } catch (FileNotFoundException e) {
         handleError(e, "file not found", e.getMessage());
       } catch (Exception e) {

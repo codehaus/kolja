@@ -41,7 +41,6 @@ import com.baulsupp.kolja.log.viewer.importing.LogFormat;
 import com.baulsupp.kolja.log.viewer.importing.PlainTextLogFormat;
 import com.baulsupp.kolja.log.viewer.importing.SavedLogFormatLoader;
 import com.baulsupp.kolja.log.viewer.linenumbers.BasicLineNumberIndex;
-import com.baulsupp.kolja.util.LogConfig;
 
 /**
  * Launcher for Less Tool
@@ -50,8 +49,6 @@ public class LessMain {
   private static final Logger log = LoggerFactory.getLogger(LessMain.class);
 
   public static void main(String... args) {
-    LogConfig.config("less");
-
     CommandLineParser parser = new PosixParser();
     Options options = buildOptions();
     CommandLine cmd = null;

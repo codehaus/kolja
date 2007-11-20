@@ -29,14 +29,11 @@ import com.baulsupp.kolja.log.viewer.renderer.DebugRenderer;
 import com.baulsupp.kolja.log.viewer.renderer.FieldRenderer;
 import com.baulsupp.kolja.log.viewer.renderer.PrintfRenderer;
 import com.baulsupp.kolja.log.viewer.renderer.Renderer;
-import com.baulsupp.kolja.util.LogConfig;
 
 public class TailMinusEffMain {
   private static final Logger log = LoggerFactory.getLogger(TailMinusEffMain.class);
 
   public static void main(String[] args) {
-    LogConfig.config("tail");
-
     Terminal.setupTerminal();
 
     CommandLineParser parser = new PosixParser();

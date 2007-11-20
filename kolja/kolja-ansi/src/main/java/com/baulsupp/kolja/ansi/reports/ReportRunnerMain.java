@@ -47,14 +47,11 @@ import com.baulsupp.kolja.log.viewer.importing.SavedLogFormatLoader;
 import com.baulsupp.kolja.log.viewer.importing.SpringBeanLogFormatLoader;
 import com.baulsupp.kolja.log.viewer.renderer.Renderer;
 import com.baulsupp.kolja.log.viewer.request.RequestIndex;
-import com.baulsupp.kolja.util.LogConfig;
 
 public class ReportRunnerMain {
   private static final Logger log = LoggerFactory.getLogger(ReportRunnerMain.class);
 
   public static void main(String... args) {
-    LogConfig.config("report");
-
     Terminal.setupTerminal();
 
     CommandLineParser parser = new PosixParser();
