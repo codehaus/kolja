@@ -23,6 +23,8 @@ import com.baulsupp.kolja.log.viewer.event.EventMatcher;
 import com.baulsupp.kolja.widefinder.WideFinderConstants;
 
 public class HttpStatusEvents implements EventMatcher {
+  private static final long serialVersionUID = -4980191336834570588L;
+
   public Event match(Line l) {
     HttpStatus status = (HttpStatus) l.getValue(WideFinderConstants.STATUS);
     String url = (String) l.getValue(WideFinderConstants.URL);

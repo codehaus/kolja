@@ -24,6 +24,7 @@ import com.baulsupp.kolja.util.colours.ColourPair;
 import com.baulsupp.kolja.widefinder.WideFinderConstants;
 
 public class HttpStatusHighlight implements Highlight<Line> {
+  private static final long serialVersionUID = 8370773590289244147L;
 
   public HighlightResult getHighlights(Line viewRow) {
     HttpStatus status = (HttpStatus) viewRow.getValue(WideFinderConstants.STATUS);

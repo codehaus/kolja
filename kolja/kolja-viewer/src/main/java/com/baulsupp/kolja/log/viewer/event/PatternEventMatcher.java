@@ -1,24 +1,40 @@
+/**
+ * Copyright (c) 2002-2007 Yuri Schimke. All Rights Reserved.
+ * 
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ * 
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this library; if not, write to the Free Software Foundation, Inc.,
+ * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ */
 package com.baulsupp.kolja.log.viewer.event;
 
-import java.io.Serializable;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.baulsupp.kolja.log.LogConstants;
 import com.baulsupp.kolja.log.line.Line;
 
-public class PatternEventMatcher implements EventMatcher, Serializable {
+public class PatternEventMatcher implements EventMatcher {
   private static final long serialVersionUID = 8950666564334952873L;
 
   private String contentField = LogConstants.CONTENT;
   private Pattern pattern;
   private String message;
-  
+
   private transient Matcher matcher;
 
   public PatternEventMatcher() {
   }
-  
+
   public PatternEventMatcher(String contentField, Pattern pattern, String message) {
     this.contentField = contentField;
     this.pattern = pattern;
@@ -54,13 +70,13 @@ public class PatternEventMatcher implements EventMatcher, Serializable {
 
     if (m != null) {
       reset(m);
-      
+
       if (matcher.matches()) {
         String text = format();
         return new Event(l, text);
       }
     }
-    
+
     return null;
   }
 
@@ -72,11 +88,11 @@ public class PatternEventMatcher implements EventMatcher, Serializable {
 
   private String[] extractGroups(Matcher matcher) {
     String[] values = new String[matcher.groupCount()];
-    
+
     for (int i = 0; i < values.length; i++) {
       values[i] = matcher.group(i + 1);
     }
-    
+
     return values;
   }
 
