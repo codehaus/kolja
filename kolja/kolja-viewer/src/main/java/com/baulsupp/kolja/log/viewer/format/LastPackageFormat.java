@@ -33,7 +33,7 @@ public class LastPackageFormat implements OutputFormat {
 
   public String format(Object value) {
     if (value == null) {
-      return "";
+      return null;
     }
 
     if (matcher == null) {

@@ -49,7 +49,7 @@ public class FormatFormat implements OutputFormat {
 
   public String format(Object value) {
     if (value == null) {
-      return "";
+      return null;
     }
 
     try {

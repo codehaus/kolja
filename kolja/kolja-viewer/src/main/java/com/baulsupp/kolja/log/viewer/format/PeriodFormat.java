@@ -33,7 +33,7 @@ public class PeriodFormat implements OutputFormat {
 
   public String format(Object value) {
     if (value == null) {
-      return "";
+      return null;
     }
 
     if (format == null) {

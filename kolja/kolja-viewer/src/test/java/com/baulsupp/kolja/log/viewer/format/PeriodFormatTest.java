@@ -32,8 +32,8 @@ public class PeriodFormatTest {
   }
 
   @Test
-  public void testNullReturnsBlank() {
-    assertEquals("", f.format(null));
+  public void testNullReturnsNull() {
+    assertEquals(null, f.format(null));
   }
 
   @Test

@@ -64,7 +64,7 @@ public class FieldRenderer implements Renderer<Line> {
       row.append(viewRow.toString());
       return row;
     }
-    
+
     int l = widths.getColumnCount();
 
     HighlightResult highlightResults = null;
@@ -103,6 +103,10 @@ public class FieldRenderer implements Renderer<Line> {
 
         Object value = viewRow.getValue(currentColumn);
         String display = formats.get(i).format(value);
+
+        if (display == null) {
+          display = "";
+        }
 
         MultiColourString msc = applyHighlights(display, columnColour, highlightResults);
 
@@ -204,7 +208,7 @@ public class FieldRenderer implements Renderer<Line> {
       if (!(this.highlight instanceof HighlightList)) {
         this.highlight = new HighlightList<Line>(this.highlight);
       }
-  
+
       ((HighlightList<Line>) this.highlight).addHighlight(highlight);
     }
   }
@@ -220,7 +224,7 @@ public class FieldRenderer implements Renderer<Line> {
   public void appendColumn(String name, int width) {
     appendColumn(name, width, new ToStringFormat());
   }
-  
+
   public void prependColumn(String name, int width, OutputFormat of) {
     this.columns.add(0, name);
     this.formats.add(0, of);
