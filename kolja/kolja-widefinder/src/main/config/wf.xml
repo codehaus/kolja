@@ -30,7 +30,7 @@ http://baulsupp.com/schema/kolja-reports http://baulsupp.com/schema/kolja-report
         <time-format field="date" style="short-time" />
         <string-format field="action" />
         <string-format field="status" />
-        <string-format field="size" />
+        <custom-format field="size" class="com.baulsupp.kolja.log.viewer.format.BytesFormat" />
         <custom-format field="useragent" class="com.baulsupp.kolja.widefinder.format.UserAgentFormat" />
         <string-format field="url" />
       </formats>
