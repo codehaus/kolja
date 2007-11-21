@@ -18,12 +18,22 @@
 package com.baulsupp.kolja.ansi.reports;
 
 import java.util.List;
+import java.util.TreeMap;
 
 import com.baulsupp.kolja.ansi.reports.Frequencies.Count;
 
 public class AbstractFrequencyReport<T> extends AbstractTextReport {
-  private Frequencies<T> counts = new Frequencies<T>();
+  private Frequencies<T> counts;
   protected int count = 10;
+
+  public AbstractFrequencyReport() {
+    counts = new Frequencies<T>();
+  }
+
+  public AbstractFrequencyReport(TreeMap<T, Count<T>> map) {
+    counts = new Frequencies<T>(map);
+
+  }
 
   protected void increment(T t) {
     counts.increment(t);

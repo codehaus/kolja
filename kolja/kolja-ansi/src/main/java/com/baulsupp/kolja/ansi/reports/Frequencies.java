@@ -33,7 +33,7 @@ import org.apache.commons.collections.ComparatorUtils;
  * @author Yuri Schimke
  */
 public class Frequencies<T> implements Iterable<Frequencies.Count<T>> {
-  private SortedMap<T, Count<T>> counts = new TreeMap<T, Count<T>>();
+  private SortedMap<T, Count<T>> counts;
 
   public static final Comparator<Count<?>> COUNT_COMPARATOR = new Comparator<Count<?>>() {
     public int compare(Count<?> c1, Count<?> c2) {
@@ -46,6 +46,14 @@ public class Frequencies<T> implements Iterable<Frequencies.Count<T>> {
       }
     }
   };
+
+  public Frequencies() {
+    counts = new TreeMap<T, Count<T>>();
+  }
+
+  public Frequencies(TreeMap<T, Count<T>> map) {
+    counts = map;
+  }
 
   public void increment(T url) {
     Count<T> count = counts.get(url);
@@ -73,6 +81,10 @@ public class Frequencies<T> implements Iterable<Frequencies.Count<T>> {
     @Override
     public String toString() {
       return i + " " + url;
+    }
+
+    public S getItem() {
+      return url;
     }
 
     public int getCount() {
@@ -103,7 +115,7 @@ public class Frequencies<T> implements Iterable<Frequencies.Count<T>> {
     return counts.size();
   }
 
-  public int get(String string) {
+  public int get(T string) {
     Count<T> c = counts.get(string);
     return c != null ? c.getCount() : 0;
   }

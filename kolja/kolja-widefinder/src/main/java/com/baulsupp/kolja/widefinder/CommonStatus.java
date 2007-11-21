@@ -17,6 +17,8 @@
  */
 package com.baulsupp.kolja.widefinder;
 
+import java.util.TreeMap;
+
 import com.baulsupp.kolja.ansi.reports.AbstractFrequencyReport;
 import com.baulsupp.kolja.ansi.reports.Frequencies.Count;
 import com.baulsupp.kolja.log.line.Line;
@@ -28,6 +30,10 @@ import com.baulsupp.kolja.widefinder.format.HttpStatus;
  * @author Yuri Schimke
  */
 public class CommonStatus extends AbstractFrequencyReport<HttpStatus> {
+  public CommonStatus() {
+    super(new TreeMap<HttpStatus, Count<HttpStatus>>());
+  }
+
   @Override
   public void processLine(Line line) {
     HttpStatus status = (HttpStatus) line.getValue(WideFinderConstants.STATUS);
@@ -38,7 +44,7 @@ public class CommonStatus extends AbstractFrequencyReport<HttpStatus> {
   @Override
   public void completed() {
     for (Count<HttpStatus> c : getFrequencies()) {
-      println(c.toString());
+      println(c.getItem() + " " + c.getCount());
     }
   }
 }
