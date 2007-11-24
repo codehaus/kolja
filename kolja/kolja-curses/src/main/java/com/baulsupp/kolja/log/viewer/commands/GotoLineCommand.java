@@ -13,21 +13,21 @@ import com.baulsupp.less.Less;
 
 public class GotoLineCommand implements Command<Less> {
   public boolean handle(Less less, InputChar input) {
-    if (!Util.wasLetter(input, 'h')) {
+    if (!Util.wasLetter(input, 'g')) {
       return false;
     }
-    
+
     String a = TextDialog.getValue("Goto Line");
 
     if (a != null) {
-        if (a.equals("")) {
-          less.end();
-        } else {
-          int line = Integer.parseInt(a);
-          less.moveTo(less.getLineNumbers().offset(line - 1));
-        }
+      if (a.equals("")) {
+        less.end();
+      } else {
+        int line = Integer.parseInt(a);
+        less.moveTo(less.getLineNumbers().offset(line - 1));
+      }
     }
-    
+
     return true;
   }
 

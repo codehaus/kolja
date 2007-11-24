@@ -19,6 +19,7 @@ package com.baulsupp.less;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -65,46 +66,50 @@ public class LessMain {
     } else {
       File f = new File(cmd.getArgs()[0]);
 
-      LogFormat format;
-
       try {
-        if (cmd.hasOption("c")) {
-          format = (LogFormat) Class.forName(cmd.getOptionValue("c")).newInstance();
-        } else if (cmd.hasOption("x")) {
-          String configName = cmd.getOptionValue("x");
-          format = SavedLogFormatLoader.load(configName);
-        } else {
-          format = new PlainTextLogFormat();
-        }
-
-        WrappedCharBuffer buffer = WrappedCharBuffer.fromFile(f);
-
-        Less tool = new Less();
-        tool.createDefaultCommands();
-        tool.addCommand(new RendererCommand(tool, format));
-        tool.addCommand(new ModelsCommand(format, buffer, tool));
-        if (format.supportsEvents()) {
-          tool.addCommand(new SelectEventCommand(format, tool));
-        }
-        if (format.supportsRequests()) {
-          tool.addCommand(new SelectRequestCommand(format, tool));
-        }
-        tool.addCommand(new ScrollbarCommand(tool, buffer));
-
-        tool.setLineNumbers(BasicLineNumberIndex.create(buffer));
-
-        if (cmd.hasOption("b")) {
-          BackgroundProcess process = new BackgroundProcess(tool);
-          process.startBackgroundThread();
-        }
-
-        tool.show();
+        runTool(cmd, f);
       } catch (FileNotFoundException fnfe) {
         handleError(fnfe, "error", "file not found: " + f);
       } catch (Throwable e) {
         handleError(e, "error", e.getMessage());
       }
     }
+  }
+
+  private static void runTool(CommandLine cmd, File f) throws InstantiationException, IllegalAccessException,
+      ClassNotFoundException, Exception, IOException {
+    LogFormat format;
+    if (cmd.hasOption("c")) {
+      format = (LogFormat) Class.forName(cmd.getOptionValue("c")).newInstance();
+    } else if (cmd.hasOption("x")) {
+      String configName = cmd.getOptionValue("x");
+      format = SavedLogFormatLoader.load(configName);
+    } else {
+      format = new PlainTextLogFormat();
+    }
+
+    WrappedCharBuffer buffer = WrappedCharBuffer.fromFile(f);
+
+    Less tool = new Less();
+    tool.createDefaultCommands();
+    tool.addCommand(new RendererCommand(tool, format));
+    tool.addCommand(new ModelsCommand(format, buffer, tool));
+    if (format.supportsEvents()) {
+      tool.addCommand(new SelectEventCommand(format, tool));
+    }
+    if (format.supportsRequests()) {
+      tool.addCommand(new SelectRequestCommand(format, tool));
+    }
+    tool.addCommand(new ScrollbarCommand(tool, buffer));
+
+    tool.setLineNumbers(BasicLineNumberIndex.create(buffer));
+
+    if (cmd.hasOption("b")) {
+      BackgroundProcess process = new BackgroundProcess(tool);
+      process.startBackgroundThread();
+    }
+
+    tool.show();
   }
 
   private static void handleError(Throwable pe, String type, String string) {
