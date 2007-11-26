@@ -24,6 +24,7 @@ import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 import org.springframework.beans.PropertyEditorRegistrar;
 import org.springframework.beans.PropertyEditorRegistry;
+import org.springframework.beans.propertyeditors.StringArrayPropertyEditor;
 
 import com.baulsupp.kolja.log.viewer.columns.ColumnWidths;
 import com.baulsupp.kolja.log.viewer.columns.ColumnWidthsPropertyEditor;
@@ -44,5 +45,6 @@ public class KoljaPropertyEditorRegistrar implements PropertyEditorRegistrar {
     registry.registerCustomEditor(ColumnWidths.class, new ColumnWidthsPropertyEditor());
     registry.registerCustomEditor(LocalDate.class, new LocalDatePropertyEditor());
     registry.registerCustomEditor(LocalTime.class, new LocalTimePropertyEditor());
+    registry.registerCustomEditor(String[].class, new StringArrayPropertyEditor(","));
   }
 }

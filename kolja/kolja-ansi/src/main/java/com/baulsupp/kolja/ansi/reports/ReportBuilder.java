@@ -17,12 +17,16 @@
  */
 package com.baulsupp.kolja.ansi.reports;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 
 import com.baulsupp.kolja.log.viewer.importing.KoljaPropertyEditorRegistrar;
 
 public class ReportBuilder {
+  private Logger log = LoggerFactory.getLogger(ReportBuilder.class);
+
   private ConfigurableListableBeanFactory appCtxt;
 
   public ReportBuilder(ConfigurableListableBeanFactory appCtxt) {
@@ -60,6 +64,8 @@ public class ReportBuilder {
 
     for (String string : parts) {
       String[] split = string.split("=");
+
+      log.info("setting " + split[0] + " to value " + split[1]);
 
       bw.setPropertyValue(split[0], split[1]);
     }
