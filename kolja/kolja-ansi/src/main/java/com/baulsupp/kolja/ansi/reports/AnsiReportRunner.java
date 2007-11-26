@@ -25,7 +25,7 @@ import jline.ANSIBuffer;
 
 import com.baulsupp.kolja.ansi.AnsiUtils;
 import com.baulsupp.kolja.ansi.ConsoleRenderer;
-import com.baulsupp.kolja.ansi.ProgressBar;
+import com.baulsupp.kolja.ansi.progress.ProgressBar;
 import com.baulsupp.kolja.ansi.reports.TextReport.Detail;
 import com.baulsupp.kolja.log.line.BasicLineIterator;
 import com.baulsupp.kolja.log.line.Line;
@@ -56,12 +56,17 @@ public class AnsiReportRunner implements ReportRunner {
 
   private ProgressBar progress;
 
-  public AnsiReportRunner() throws IOException {
-    progress = new ProgressBar();
+  private boolean interactive = true;
+
+  public AnsiReportRunner() {
   }
 
   public void setReports(java.util.List<TextReport> reports) {
     this.reports = reports;
+  }
+
+  public void setInteractive(boolean interactive) {
+    this.interactive = interactive;
   }
 
   public void setRequestIndex(RequestIndex requestIndex) {
@@ -120,7 +125,9 @@ public class AnsiReportRunner implements ReportRunner {
     }
   }
 
-  public void initialise() {
+  public void initialise() throws IOException {
+    progress = AnsiUtils.getProgressBar(interactive);
+
     showRequests = show(Detail.REQUESTS);
 
     showEvents = show(Detail.EVENTS);

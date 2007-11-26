@@ -15,7 +15,7 @@
  * along with this library; if not, write to the Free Software Foundation, Inc.,
  * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
-package com.baulsupp.kolja.ansi;
+package com.baulsupp.kolja.ansi.progress;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -27,7 +27,7 @@ import org.springframework.util.Assert;
 
 import com.baulsupp.kolja.log.viewer.format.BytesFormat;
 
-public class ProgressBar {
+public class StandardProgressBar implements ProgressBar {
   private ConsoleReader cr;
   private int last = Integer.MAX_VALUE;
   private static final int JUMP = 512 * 1024;
@@ -35,11 +35,12 @@ public class ProgressBar {
   private BytesFormat bytesFormat = new BytesFormat();
   private boolean drawn;
   private int barWidth = 20;
-  private int width;
 
-  public ProgressBar() throws IOException {
+  // private int width;
+
+  public StandardProgressBar() throws IOException {
     cr = new ConsoleReader(new ByteArrayInputStream(new byte[0]), new PrintWriter(System.out));
-    width = AnsiUtils.getWidth();
+    // width = AnsiUtils.getWidth();
   }
 
   public void clear() {

@@ -17,9 +17,14 @@
  */
 package com.baulsupp.kolja.ansi;
 
+import java.io.IOException;
+
 import jline.ANSIBuffer;
 import jline.Terminal;
 
+import com.baulsupp.kolja.ansi.progress.NullProgressBar;
+import com.baulsupp.kolja.ansi.progress.ProgressBar;
+import com.baulsupp.kolja.ansi.progress.StandardProgressBar;
 import com.baulsupp.kolja.util.colours.Colour;
 import com.baulsupp.kolja.util.colours.ColouredString;
 import com.baulsupp.kolja.util.colours.MultiColourString;
@@ -59,5 +64,17 @@ public class AnsiUtils {
     }
 
     return terminalWidth;
+  }
+
+  public static ProgressBar getProgressBar(boolean interactive) throws IOException {
+    if (interactive && isTerminal()) {
+      return new StandardProgressBar();
+    } else {
+      return new NullProgressBar();
+    }
+  }
+
+  private static boolean isTerminal() {
+    throw new RuntimeException();
   }
 }

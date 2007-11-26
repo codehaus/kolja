@@ -86,6 +86,9 @@ public class ReportRunnerMain {
   private static void run(CommandLine cmd) throws Exception {
     final AnsiReportRunner reportRunner = new AnsiReportRunner();
 
+    boolean interactive = !cmd.hasOption("n");
+    reportRunner.setInteractive(interactive);
+
     String configName = cmd.getOptionValue("x");
     ConfigurableListableBeanFactory appCtxt = SavedLogFormatLoader.loadAppContext(configName);
 
@@ -148,11 +151,11 @@ public class ReportRunnerMain {
   private static List<TextReport> createReports(ReportBuilder builder, String option) throws Exception {
     List<TextReport> reports = new ArrayList<TextReport>();
 
-    String[] strings = option.split(",");
+    // String[] strings = option.split("");
 
-    for (String string : strings) {
-      reports.add(builder.buildReport(string));
-    }
+    // for (String string : strings) {
+    reports.add(builder.buildReport(option));
+    // }
 
     return reports;
   }
@@ -191,6 +194,8 @@ public class ReportRunnerMain {
     options.addOption(OptionBuilder.withArgName("report").hasArg().withDescription("report").withLongOpt("report").create('r'));
 
     options.addOption(OptionBuilder.hasArg(false).withDescription("Fixed Screen Width").withLongOpt("fixed-width").create('f'));
+
+    options.addOption(OptionBuilder.hasArg(false).withDescription("Non Interactive").withLongOpt("non-interactive").create('n'));
 
     return options;
   }
