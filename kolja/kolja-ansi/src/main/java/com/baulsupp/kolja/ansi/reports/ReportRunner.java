@@ -26,7 +26,13 @@ public interface ReportRunner {
 
   void printLine(Line line);
 
+  void printLine();
+
+  void printTitle(String title);
+
   void printRequest(RequestLine request);
 
   Line readLine(int i);
+
+  boolean hasMultipleReports();
 }

@@ -17,6 +17,8 @@
  */
 package com.baulsupp.kolja.ansi.reports;
 
+import java.util.Arrays;
+
 import com.baulsupp.kolja.log.line.Line;
 
 public class TsvReport extends AbstractTextReport {
@@ -62,5 +64,9 @@ public class TsvReport extends AbstractTextReport {
 
   public void setFields(String... fields) {
     this.fields = fields;
+  }
+
+  public String describe() {
+    return "TSV: " + Arrays.toString(fields);
   }
 }

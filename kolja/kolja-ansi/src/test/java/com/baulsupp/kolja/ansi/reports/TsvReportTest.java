@@ -37,13 +37,13 @@ public class TsvReportTest {
 
     reportRunner = new SimpleReportRunner();
 
+    pages.setFields("url", "status");
+
     pages.initialise(reportRunner);
   }
 
   @Test
   public void testDisplayShowsOutput() {
-    pages.setFields("url", "status");
-
     pages.processLine(buildLine("/url/1", 400));
     pages.processLine(buildLine("/url/2", 500));
 

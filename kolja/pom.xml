@@ -77,38 +77,17 @@
         <artifactId>xom</artifactId>
         <version>1.1</version>
       </dependency>
-      <dependency>
-        <groupId>org.springframework</groupId>
-        <artifactId>spring-beans</artifactId>
-        <version>2.0.7</version>
-        <exclusions>
-          <exclusion>
-            <groupId>log4j</groupId>
-            <artifactId>log4j</artifactId>
-          </exclusion>
-        </exclusions>
-      </dependency>
-      <dependency>
-        <groupId>org.springframework</groupId>
-        <artifactId>spring-context</artifactId>
-        <version>2.0.7</version>
-        <exclusions>
-          <exclusion>
-            <groupId>log4j</groupId>
-            <artifactId>log4j</artifactId>
-          </exclusion>
-        </exclusions>
-      </dependency>
 
       <dependency>
         <groupId>joda-time</groupId>
         <artifactId>joda-time</artifactId>
-        <version>1.5</version>
+        <version>1.5.1</version>
       </dependency>
+
       <dependency>
         <groupId>org.springframework</groupId>
-        <artifactId>spring-core</artifactId>
-        <version>2.0.7</version>
+        <artifactId>spring</artifactId>
+        <version>2.5</version>
         <exclusions>
           <exclusion>
             <groupId>log4j</groupId>

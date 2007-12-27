@@ -91,9 +91,15 @@ public class StandardProgressBar implements ProgressBar {
   }
 
   private String getBar(int completed, int total) {
-    int progress = barWidth * completed / total;
-    String bar = repetition('=', progress) + repetition(' ', barWidth - progress);
-    return bar;
+    double percent = ((double) completed) / total;
+    int progress = (int) (barWidth * percent);
+
+    Assert.isTrue(progress >= 0, "not negative");
+    Assert.isTrue(progress <= barWidth, "not overhanging");
+
+    String bars = repetition('=', progress);
+    String spaces = repetition(' ', barWidth - progress);
+    return bars + spaces;
   }
 
   private String repetition(char string, int count) {

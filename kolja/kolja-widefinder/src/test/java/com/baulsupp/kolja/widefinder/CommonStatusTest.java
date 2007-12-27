@@ -26,6 +26,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.baulsupp.kolja.ansi.reports.Frequencies;
+import com.baulsupp.kolja.ansi.reports.FrequencyReport;
 import com.baulsupp.kolja.ansi.reports.SimpleReportRunner;
 import com.baulsupp.kolja.ansi.reports.Frequencies.Count;
 import com.baulsupp.kolja.log.line.BasicLine;
@@ -37,12 +38,12 @@ public class CommonStatusTest {
   private static final HttpStatus _404 = new HttpStatus("404");
   private static final HttpStatus _500 = new HttpStatus("500");
 
-  private CommonStatus pages;
+  private FrequencyReport<HttpStatus> pages;
   private SimpleReportRunner reportRunner;
 
   @Before
   public void setup() {
-    pages = new CommonStatus();
+    pages = new FrequencyReport<HttpStatus>(WideFinderConstants.STATUS);
 
     reportRunner = new SimpleReportRunner();
 

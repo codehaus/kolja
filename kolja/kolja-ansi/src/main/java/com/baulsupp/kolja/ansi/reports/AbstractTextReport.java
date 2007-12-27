@@ -34,7 +34,7 @@ import com.baulsupp.kolja.util.colours.MultiColourString;
  * @author Yuri Schimke
  */
 public abstract class AbstractTextReport implements TextReport {
-  private ReportRunner reportRunner;
+  protected ReportRunner reportRunner;
   private HashSet<Detail> details;
 
   public AbstractTextReport() {

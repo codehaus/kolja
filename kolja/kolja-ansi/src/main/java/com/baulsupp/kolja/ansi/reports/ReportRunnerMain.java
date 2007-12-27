@@ -20,6 +20,8 @@ package com.baulsupp.kolja.ansi.reports;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
 import jline.Terminal;
@@ -96,13 +98,20 @@ public class ReportRunnerMain {
 
     boolean ansi = !cmd.hasOption("a");
 
-    String optionValue = cmd.getOptionValue("r");
+    String[] reportValues = cmd.getOptionValues("r");
 
-    if (optionValue == null) {
+    if (reportValues == null) {
       throw new RuntimeException("no report specified");
     }
 
-    reportRunner.setReports(createReports(new ReportBuilder(appCtxt), optionValue));
+    List<String> v = new ArrayList<String>(Arrays.asList(reportValues));
+
+    List<String> filenames = unfutzArgs(v);
+
+    log.info("reports " + v);
+    log.info("files " + filenames);
+
+    reportRunner.setReports(createReports(new ReportBuilder(appCtxt), v));
 
     boolean fixedWidth = cmd.hasOption("f");
 
@@ -114,7 +123,7 @@ public class ReportRunnerMain {
     ConsoleRenderer<Line> requestRenderer = createRenderer(renderer, ansi, fixedWidth);
     reportRunner.setRequestRenderer(requestRenderer);
 
-    List<File> commandFiles = commandFiles(cmd);
+    List<File> commandFiles = commandFiles(filenames);
 
     reportRunner.initialise();
 
@@ -141,6 +150,28 @@ public class ReportRunnerMain {
     reportRunner.completed();
   }
 
+  private static List<String> unfutzArgs(List<String> v) {
+    boolean isFiles = false;
+    List<String> files = new ArrayList<String>();
+
+    for (Iterator<String> i = v.iterator(); i.hasNext();) {
+      String string = i.next();
+
+      if (isFiles) {
+        i.remove();
+        files.add(string);
+      }
+
+      if (string.equals("--")) {
+        i.remove();
+        isFiles = true;
+      }
+
+    }
+
+    return files;
+  }
+
   private static ConsoleRenderer<Line> createRenderer(Renderer<Line> renderer, boolean ansi, boolean fixedWidth) {
     renderer.setWidth(Terminal.getTerminal().getTerminalWidth());
     TailRenderer tr = new TailRenderer(renderer, ansi);
@@ -148,24 +179,23 @@ public class ReportRunnerMain {
     return tr;
   }
 
-  private static List<TextReport> createReports(ReportBuilder builder, String option) throws Exception {
+  private static List<TextReport> createReports(ReportBuilder builder, List<String> v) throws Exception {
     List<TextReport> reports = new ArrayList<TextReport>();
 
-    // String[] strings = option.split("");
+    for (String string : v) {
+      reports.add(builder.buildReport(string));
+    }
 
-    // for (String string : strings) {
-    reports.add(builder.buildReport(option));
-    // }
+    log.info("" + reports);
 
     return reports;
   }
 
   @SuppressWarnings("unchecked")
-  private static List<File> commandFiles(CommandLine cmd) {
-    List<String> args = cmd.getArgList();
+  private static List<File> commandFiles(List<String> filenames) {
     List<File> files = new ArrayList<File>();
 
-    for (String a : args) {
+    for (String a : filenames) {
       files.add(new File(a));
     }
 
@@ -191,7 +221,7 @@ public class ReportRunnerMain {
     options.addOption(OptionBuilder.withArgName("outputFormat").hasArg().withDescription("printf output format").withLongOpt(
         "printf").create('o'));
 
-    options.addOption(OptionBuilder.withArgName("report").hasArg().withDescription("report").withLongOpt("report").create('r'));
+    options.addOption(OptionBuilder.withArgName("report").hasArgs().withDescription("report").withLongOpt("report").create('r'));
 
     options.addOption(OptionBuilder.hasArg(false).withDescription("Fixed Screen Width").withLongOpt("fixed-width").create('f'));
 

@@ -28,4 +28,8 @@ public class DumpEvents extends AbstractTextReport {
   public void processEvent(Event event) {
     println(event.toString());
   }
+
+  public String describe() {
+    return "Events";
+  }
 }

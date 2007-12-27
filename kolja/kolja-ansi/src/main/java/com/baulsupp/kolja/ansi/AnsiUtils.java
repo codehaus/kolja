@@ -74,7 +74,8 @@ public class AnsiUtils {
     }
   }
 
-  private static boolean isTerminal() {
-    throw new RuntimeException();
+  // TODO implement this properly
+  public static boolean isTerminal() {
+    return true;
   }
 }

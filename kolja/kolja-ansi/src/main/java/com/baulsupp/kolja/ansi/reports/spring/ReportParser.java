@@ -17,6 +17,8 @@
  */
 package com.baulsupp.kolja.ansi.reports.spring;
 
+import org.springframework.beans.factory.config.BeanDefinition;
+import org.springframework.beans.factory.parsing.BeanComponentDefinition;
 import org.springframework.beans.factory.xml.AbstractSingleBeanDefinitionParser;
 import org.springframework.util.ClassUtils;
 import org.w3c.dom.Element;
@@ -27,6 +29,13 @@ import org.w3c.dom.Element;
  * @author Yuri Schimke
  */
 public class ReportParser extends AbstractSingleBeanDefinitionParser {
+  @Override
+  protected void postProcessComponentDefinition(BeanComponentDefinition componentDefinition) {
+    super.postProcessComponentDefinition(componentDefinition);
+
+    componentDefinition.getBeanDefinition().setScope(BeanDefinition.SCOPE_PROTOTYPE);
+  }
+
   @Override
   protected Class<?> getBeanClass(Element element) {
     try {

@@ -15,10 +15,8 @@
  * along with this library; if not, write to the Free Software Foundation, Inc.,
  * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
-package com.baulsupp.kolja.widefinder;
+package com.baulsupp.kolja.ansi.reports;
 
-import com.baulsupp.kolja.ansi.reports.AbstractFrequencyReport;
-import com.baulsupp.kolja.ansi.reports.Frequencies.Count;
 import com.baulsupp.kolja.log.line.Line;
 
 /**
@@ -26,18 +24,36 @@ import com.baulsupp.kolja.log.line.Line;
  * 
  * @author Yuri Schimke
  */
-public class CommonPages extends AbstractFrequencyReport<String> {
-  @Override
-  public void processLine(Line line) {
-    String url = (String) line.getValue(WideFinderConstants.URL);
+public class FrequencyReport<T> extends AbstractFrequencyReport<T> {
+  private String field;
 
-    increment(url);
+  public FrequencyReport() {
+  }
+
+  public FrequencyReport(String url) {
+    this.field = url;
+  }
+
+  public void setQ(String field) {
+    this.field = field;
+  }
+
+  @SuppressWarnings("unchecked")
+  @Override
+  protected T getValue(Line line) {
+    return (T) line.getValue(field);
   }
 
   @Override
-  public void completed() {
-    for (Count<String> c : getMostFrequent(count)) {
-      println(c.toString());
+  public void initialise(ReportRunner reportRunner) {
+    super.initialise(reportRunner);
+
+    if (field == null) {
+      throw new IllegalStateException("q not set");
     }
+  }
+
+  public String describe() {
+    return "Frequency: " + field;
   }
 }

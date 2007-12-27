@@ -111,4 +111,8 @@ public class ActiveRequests extends AbstractTextReport {
   public List<RequestLine> getRequests() {
     return activeRequests;
   }
+
+  public String describe() {
+    return "Active Requests " + interval;
+  }
 }

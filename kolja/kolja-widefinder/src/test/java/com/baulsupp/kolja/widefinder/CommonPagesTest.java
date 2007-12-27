@@ -26,18 +26,19 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.baulsupp.kolja.ansi.reports.Frequencies;
+import com.baulsupp.kolja.ansi.reports.FrequencyReport;
 import com.baulsupp.kolja.ansi.reports.SimpleReportRunner;
 import com.baulsupp.kolja.ansi.reports.Frequencies.Count;
 import com.baulsupp.kolja.log.line.BasicLine;
 import com.baulsupp.kolja.log.line.Line;
 
 public class CommonPagesTest {
-  private CommonPages pages;
+  private FrequencyReport<String> pages;
   private SimpleReportRunner reportRunner;
 
   @Before
   public void setup() {
-    pages = new CommonPages();
+    pages = new FrequencyReport<String>(WideFinderConstants.URL);
 
     reportRunner = new SimpleReportRunner();
 
@@ -102,6 +103,8 @@ public class CommonPagesTest {
 
   @Test
   public void testDisplayShowsOutput() {
+    pages.setCount(5);
+
     pages.processLine(buildLine("/url/1"));
     pages.processLine(buildLine("/url/1"));
     pages.processLine(buildLine("/url/2"));

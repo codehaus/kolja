@@ -48,4 +48,6 @@ public interface TextReport {
   void afterFile(File file);
 
   void completed();
+
+  String describe();
 }

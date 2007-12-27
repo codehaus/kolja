@@ -148,7 +148,15 @@ public class AnsiReportRunner implements ReportRunner {
   }
 
   public void completed() {
+    boolean first = true;
+
     for (TextReport r : reports) {
+      if (!first) {
+        printLine();
+      } else {
+        first = false;
+      }
+
       r.completed();
     }
   }
@@ -171,6 +179,18 @@ public class AnsiReportRunner implements ReportRunner {
     if (showRequests) {
       requestIndex.processLine(null, line);
     }
+  }
+
+  public void printLine() {
+    progress.clear();
+
+    System.out.println();
+  }
+
+  public void printTitle(String title) {
+    progress.clear();
+
+    System.out.println(title);
   }
 
   public void println(MultiColourString string) {
@@ -204,5 +224,9 @@ public class AnsiReportRunner implements ReportRunner {
     progress.clear();
 
     requestRenderer.show(request);
+  }
+
+  public boolean hasMultipleReports() {
+    return reports.size() > 1;
   }
 }

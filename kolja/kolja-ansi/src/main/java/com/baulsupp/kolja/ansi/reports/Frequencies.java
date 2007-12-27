@@ -48,10 +48,11 @@ public class Frequencies<T> implements Iterable<Frequencies.Count<T>> {
   };
 
   public Frequencies() {
-    counts = new TreeMap<T, Count<T>>();
+    Comparator<T> comp = ComparatorUtils.nullLowComparator(ComparatorUtils.naturalComparator());
+    counts = new TreeMap<T, Count<T>>(comp);
   }
 
-  public Frequencies(TreeMap<T, Count<T>> map) {
+  public Frequencies(SortedMap<T, Count<T>> map) {
     counts = map;
   }
 

@@ -43,9 +43,9 @@ http://baulsupp.com/schema/kolja-reports http://baulsupp.com/schema/kolja-report
     </events>
   </format>
   
-  <r:report id="pages" class="com.baulsupp.kolja.widefinder.CommonPages"/>
+  <r:report id="freq" class="com.baulsupp.kolja.ansi.reports.FrequencyReport"/>
   
-  <r:report id="status" class="com.baulsupp.kolja.widefinder.CommonStatus"/>
+  <r:report id="time" class="com.baulsupp.kolja.widefinder.TimeReport"/>
   
   <r:report id="events" class="com.baulsupp.kolja.ansi.reports.DumpEvents"/>
   

@@ -46,4 +46,16 @@ public class SimpleReportRunner implements ReportRunner {
   public Line readLine(int i) {
     return null;
   }
+
+  public void printLine() {
+    lines.add("");
+  }
+
+  public void printTitle(String title) {
+    lines.add(title);
+  }
+
+  public boolean hasMultipleReports() {
+    return false;
+  }
 }

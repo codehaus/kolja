@@ -18,28 +18,67 @@
 package com.baulsupp.kolja.ansi.reports;
 
 import java.util.List;
-import java.util.TreeMap;
+import java.util.SortedMap;
 
 import com.baulsupp.kolja.ansi.reports.Frequencies.Count;
+import com.baulsupp.kolja.log.line.Line;
 
-public class AbstractFrequencyReport<T> extends AbstractTextReport {
+public abstract class AbstractFrequencyReport<T> extends AbstractTextReport {
   private Frequencies<T> counts;
-  protected int count = 10;
+  protected Integer count = null;
 
   public AbstractFrequencyReport() {
     counts = new Frequencies<T>();
   }
 
-  public AbstractFrequencyReport(TreeMap<T, Count<T>> map) {
+  public AbstractFrequencyReport(SortedMap<T, Count<T>> map) {
     counts = new Frequencies<T>(map);
-
   }
+
+  @Override
+  public void processLine(Line line) {
+    T value = getValue(line);
+
+    increment(value);
+  }
+
+  protected abstract T getValue(Line line);
 
   protected void increment(T t) {
     counts.increment(t);
   }
 
-  public void setCount(int count) {
+  @Override
+  public void completed() {
+    if (this.reportRunner.hasMultipleReports()) {
+      println(describe());
+      println("");
+    }
+
+    if (count != null) {
+      displayMostFrequent();
+    } else {
+      displayFrequencies();
+    }
+  }
+
+  public void displayFrequencies() {
+    for (Count<T> c : getFrequencies()) {
+      println(toString(c.getItem()) + " " + c.getCount());
+    }
+  }
+
+  protected String toString(T item) {
+    return String.valueOf(item);
+  }
+
+  public void displayMostFrequent() {
+    for (Count<T> c : getMostFrequent(count)) {
+      println(c.getCount() + " " + toString(c.getItem()));
+    }
+  }
+
+  public void setCount(Integer count) {
     this.count = count;
   }
 
