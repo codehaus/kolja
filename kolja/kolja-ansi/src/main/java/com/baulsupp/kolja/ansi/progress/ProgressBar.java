@@ -34,5 +34,5 @@ public interface ProgressBar {
    * @param total
    *          the length of the file.
    */
-  void showProgress(int completed, int total);
+  void showProgress(long completed, long total);
 }

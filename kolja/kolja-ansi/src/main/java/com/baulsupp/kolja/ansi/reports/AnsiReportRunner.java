@@ -19,40 +19,23 @@ package com.baulsupp.kolja.ansi.reports;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Collection;
 
 import jline.ANSIBuffer;
 
 import com.baulsupp.kolja.ansi.AnsiUtils;
 import com.baulsupp.kolja.ansi.ConsoleRenderer;
 import com.baulsupp.kolja.ansi.progress.ProgressBar;
-import com.baulsupp.kolja.ansi.reports.TextReport.Detail;
 import com.baulsupp.kolja.log.line.BasicLineIterator;
 import com.baulsupp.kolja.log.line.Line;
-import com.baulsupp.kolja.log.viewer.event.Event;
-import com.baulsupp.kolja.log.viewer.event.EventList;
-import com.baulsupp.kolja.log.viewer.request.RequestIndex;
 import com.baulsupp.kolja.log.viewer.request.RequestLine;
 import com.baulsupp.kolja.util.colours.MultiColourString;
 
-public class AnsiReportRunner implements ReportRunner {
+public class AnsiReportRunner extends BaseReportRunner {
   protected boolean ansi;
-
-  protected BasicLineIterator i;
 
   protected ConsoleRenderer<Line> lineRenderer;
 
   protected ConsoleRenderer<Line> requestRenderer;
-
-  protected java.util.List<TextReport> reports;
-
-  private RequestIndex requestIndex;
-
-  private boolean showEvents;
-
-  private EventList eventList;
-
-  private boolean showRequests;
 
   private ProgressBar progress;
 
@@ -69,10 +52,6 @@ public class AnsiReportRunner implements ReportRunner {
     this.interactive = interactive;
   }
 
-  public void setRequestIndex(RequestIndex requestIndex) {
-    this.requestIndex = requestIndex;
-  }
-
   public void setLineRenderer(ConsoleRenderer<Line> lineRenderer) {
     this.lineRenderer = lineRenderer;
   }
@@ -81,104 +60,25 @@ public class AnsiReportRunner implements ReportRunner {
     this.requestRenderer = requestRenderer;
   }
 
-  public void setEventList(EventList eventList) {
-    this.eventList = eventList;
+  public void initialise() throws IOException {
+    super.initialise();
+
+    progress = AnsiUtils.getProgressBar(interactive);
   }
 
-  public void run(File file, BasicLineIterator i) throws InterruptedException, IOException {
-    this.i = i;
-
-    for (TextReport r : reports) {
-      r.beforeFile(file);
-    }
-
-    long total = file.length();
+  @Override
+  protected void iterateThroughFile(File f, BasicLineIterator i) {
+    long total = f.length();
 
     while (i.hasNext()) {
       Line l = i.next();
 
-      progress.showProgress(l.getOffset(), (int) total);
+      progress.showProgress(l.getOffset(), total);
 
       processLine(l);
     }
 
     progress.clear();
-
-    processRequests();
-
-    for (TextReport r : reports) {
-      r.afterFile(file);
-    }
-
-    this.i = null;
-  }
-
-  private void processRequests() {
-    if (showRequests) {
-      Collection<RequestLine> requests = requestIndex.getKnown();
-
-      for (RequestLine requestLine : requests) {
-        for (TextReport r : reports) {
-          r.processRequest(requestLine);
-        }
-      }
-    }
-  }
-
-  public void initialise() throws IOException {
-    progress = AnsiUtils.getProgressBar(interactive);
-
-    showRequests = show(Detail.REQUESTS);
-
-    showEvents = show(Detail.EVENTS);
-
-    for (TextReport r : reports) {
-      r.initialise(this);
-    }
-  }
-
-  private boolean show(Detail detail) {
-    for (TextReport r : reports) {
-      if (r.isInterested(detail)) {
-        return true;
-      }
-    }
-
-    return false;
-  }
-
-  public void completed() {
-    boolean first = true;
-
-    for (TextReport r : reports) {
-      if (!first) {
-        printLine();
-      } else {
-        first = false;
-      }
-
-      r.completed();
-    }
-  }
-
-  private void processLine(Line line) {
-    for (TextReport r : reports) {
-      r.processLine(line);
-    }
-
-    if (showEvents) {
-      Event event = eventList.readEvent(line);
-
-      if (event != null) {
-        for (TextReport r : reports) {
-          r.processEvent(event);
-        }
-      }
-    }
-
-    if (showRequests) {
-      requestIndex.processLine(null, line);
-    }
   }
 
   public void printLine() {
@@ -208,12 +108,6 @@ public class AnsiReportRunner implements ReportRunner {
     }
   }
 
-  public Line readLine(int pos) {
-    i.moveTo(pos);
-
-    return i.next();
-  }
-
   public void printLine(Line line) {
     progress.clear();
 
@@ -224,9 +118,5 @@ public class AnsiReportRunner implements ReportRunner {
     progress.clear();
 
     requestRenderer.show(request);
-  }
-
-  public boolean hasMultipleReports() {
-    return reports.size() > 1;
   }
 }

@@ -86,17 +86,18 @@ public class ReportRunnerMain {
   }
 
   private static void run(CommandLine cmd) throws Exception {
-    final AnsiReportRunner reportRunner = new AnsiReportRunner();
-
-    boolean interactive = !cmd.hasOption("n");
-    reportRunner.setInteractive(interactive);
-
     String configName = cmd.getOptionValue("x");
     ConfigurableListableBeanFactory appCtxt = SavedLogFormatLoader.loadAppContext(configName);
 
     LogFormat format = SpringBeanLogFormatLoader.getLogFormat(appCtxt);
 
-    boolean ansi = !cmd.hasOption("a");
+    final BaseReportRunner reportRunner;
+
+    if (cmd.hasOption('w')) {
+      reportRunner = createHtmlReportRunner(cmd, format);
+    } else {
+      reportRunner = createAnsiReportRunner(cmd, format);
+    }
 
     String[] reportValues = cmd.getOptionValues("r");
 
@@ -112,16 +113,6 @@ public class ReportRunnerMain {
     log.info("files " + filenames);
 
     reportRunner.setReports(createReports(new ReportBuilder(appCtxt), v));
-
-    boolean fixedWidth = cmd.hasOption("f");
-
-    Renderer<Line> renderer = format.getLineRenderer();
-    ConsoleRenderer<Line> lineRenderer = createRenderer(renderer, ansi, fixedWidth);
-    reportRunner.setLineRenderer(lineRenderer);
-
-    renderer = format.getRequestRenderer();
-    ConsoleRenderer<Line> requestRenderer = createRenderer(renderer, ansi, fixedWidth);
-    reportRunner.setRequestRenderer(requestRenderer);
 
     List<File> commandFiles = commandFiles(filenames);
 
@@ -148,6 +139,34 @@ public class ReportRunnerMain {
     }
 
     reportRunner.completed();
+  }
+
+  private static BaseReportRunner createHtmlReportRunner(CommandLine cmd, LogFormat format) {
+    HtmlReportRunner htmlReportRunner = new HtmlReportRunner();
+
+    htmlReportRunner.setRenderer(format.getLineRenderer());
+    htmlReportRunner.setRequestRenderer(format.getRequestRenderer());
+
+    return htmlReportRunner;
+  }
+
+  private static BaseReportRunner createAnsiReportRunner(CommandLine cmd, LogFormat format) {
+    final AnsiReportRunner reportRunner = new AnsiReportRunner();
+
+    boolean ansi = !cmd.hasOption("a");
+    boolean fixedWidth = cmd.hasOption("f");
+    boolean interactive = !cmd.hasOption("n");
+
+    reportRunner.setInteractive(interactive);
+
+    Renderer<Line> renderer = format.getLineRenderer();
+    ConsoleRenderer<Line> lineRenderer = createRenderer(renderer, ansi, fixedWidth);
+    reportRunner.setLineRenderer(lineRenderer);
+
+    renderer = format.getRequestRenderer();
+    ConsoleRenderer<Line> requestRenderer = createRenderer(renderer, ansi, fixedWidth);
+    reportRunner.setRequestRenderer(requestRenderer);
+    return reportRunner;
   }
 
   private static List<String> unfutzArgs(List<String> v) {
@@ -226,6 +245,8 @@ public class ReportRunnerMain {
     options.addOption(OptionBuilder.hasArg(false).withDescription("Fixed Screen Width").withLongOpt("fixed-width").create('f'));
 
     options.addOption(OptionBuilder.hasArg(false).withDescription("Non Interactive").withLongOpt("non-interactive").create('n'));
+
+    options.addOption(OptionBuilder.hasArg(false).withDescription("Generate HTML Page").withLongOpt("html").create('w'));
 
     return options;
   }

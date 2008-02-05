@@ -29,7 +29,7 @@ import com.baulsupp.kolja.log.viewer.format.BytesFormat;
 
 public class StandardProgressBar implements ProgressBar {
   private ConsoleReader cr;
-  private int last = Integer.MAX_VALUE;
+  private long last = Long.MAX_VALUE;
   private static final int JUMP = 512 * 1024;
 
   private BytesFormat bytesFormat = new BytesFormat();
@@ -52,7 +52,7 @@ public class StandardProgressBar implements ProgressBar {
   }
 
   // http://luka.tnode.com/posts/view/157
-  public void showProgress(int completed, int total) {
+  public void showProgress(long completed, long total) {
     Assert.isTrue(completed >= 0);
     Assert.isTrue(total >= 0);
     Assert.isTrue(completed <= total);
@@ -80,17 +80,17 @@ public class StandardProgressBar implements ProgressBar {
     }
   }
 
-  private String getText(int completed, int total) {
+  private String getText(long completed, long total) {
     String of = format(completed) + " of " + format(total);
     String padding = repetition(' ', Math.max(1, 20 - of.length()));
     return of + padding + "[" + getBar(completed, total) + "]";
   }
 
-  private String format(int total) {
-    return bytesFormat.format(total);
+  private String format(long completed) {
+    return bytesFormat.format(completed);
   }
 
-  private String getBar(int completed, int total) {
+  private String getBar(long completed, long total) {
     double percent = ((double) completed) / total;
     int progress = (int) (barWidth * percent);
 

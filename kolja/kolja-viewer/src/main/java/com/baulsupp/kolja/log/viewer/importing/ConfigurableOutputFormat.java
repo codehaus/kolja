@@ -12,7 +12,7 @@ import com.baulsupp.kolja.log.viewer.renderer.Renderer;
 
 public class ConfigurableOutputFormat implements Serializable {
   private static final long serialVersionUID = -4225346124170712619L;
-  
+
   private ColumnWidths widths;
   private List<OutputFormat> formats;
   private String additional;
@@ -20,44 +20,48 @@ public class ConfigurableOutputFormat implements Serializable {
   private HighlightList<Line> highlights;
 
   private List<String> names;
-  
+
   public List<OutputFormat> getFormats() {
     return formats;
   }
+
   public void setFormats(List<OutputFormat> formats) {
     this.formats = formats;
   }
+
   public ColumnWidths getWidths() {
     return widths;
   }
+
   public void setWidths(ColumnWidths widths) {
     this.widths = widths;
   }
+
   public String getAdditional() {
     return additional;
   }
+
   public void setAdditional(String additional) {
     this.additional = additional;
   }
-  
+
   public void setHighlights(HighlightList<Line> highlights) {
     this.highlights = highlights;
   }
-  
+
   public HighlightList<Line> getHighlights() {
     return highlights;
   }
-  
+
   public List<String> getNames() {
     return names;
   }
-  
+
   public void setNames(List<String> names) {
     this.names = names;
   }
-  
-  public Renderer<Line> getRenderer(ConfigurableLineFormat lineFormat) {
-    List<String> names = this.names != null ? this.names : lineFormat.getTypeNames();
+
+  public Renderer<Line> getRenderer() {
     FieldRenderer grid = new FieldRenderer(widths, names, formats, getHighlights());
     grid.showAdditional(additional);
     return grid;

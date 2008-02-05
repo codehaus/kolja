@@ -30,6 +30,7 @@ import com.baulsupp.kolja.log.viewer.format.FormatFormat;
 import com.baulsupp.kolja.log.viewer.format.JodaFormat;
 import com.baulsupp.kolja.log.viewer.format.OutputFormat;
 import com.baulsupp.kolja.log.viewer.format.ToStringFormat;
+import com.baulsupp.kolja.log.viewer.highlight.FailedHighlight;
 import com.baulsupp.kolja.log.viewer.highlight.Highlight;
 import com.baulsupp.kolja.log.viewer.highlight.HighlightList;
 import com.baulsupp.kolja.log.viewer.highlight.PriorityHighlight;
@@ -75,6 +76,8 @@ public class OutputParser {
   private Highlight<Line> parseHighlight(Element e) {
     if (e.getNodeName().equals("priority-highlight")) {
       return parsePriorityHighlight(e);
+    } else if (e.getNodeName().equals("failed-highlight")) {
+      return new FailedHighlight();
     } else if (e.getNodeName().equals("regex-highlight")) {
       return parseRegexHighlight(e);
     } else if (e.getNodeName().equals("custom-highlight")) {

@@ -9,6 +9,7 @@ import java.util.regex.Pattern;
 import junit.framework.TestCase;
 
 import com.baulsupp.kolja.log.line.Line;
+import com.baulsupp.kolja.log.line.RegexLineParser;
 import com.baulsupp.kolja.log.line.type.NameType;
 import com.baulsupp.kolja.log.line.type.TypeList;
 import com.baulsupp.kolja.log.viewer.importing.ConfigurableLineFormat;
@@ -17,16 +18,19 @@ import com.baulsupp.kolja.log.viewer.importing.ConfigurableLogFormat;
 public class IoUtilTest extends TestCase {
   public void testLoadFromFile() throws IOException {
     File f = IoUtil.createTestFile();
-    
+
     ConfigurableLogFormat format = new ConfigurableLogFormat();
     ConfigurableLineFormat lineFormat = new ConfigurableLineFormat();
     lineFormat.setEntryPattern(Pattern.compile("^\\d", Pattern.MULTILINE));
-    lineFormat.setFieldPattern(Pattern.compile("(\\d+) - (.*)"));
-    lineFormat.setTypes(TypeList.build(new NameType("order"), new NameType("content")));
+
+    RegexLineParser regex = new RegexLineParser(Pattern.compile("(\\d+) - (.*)"), TypeList.build(new NameType("order"),
+        new NameType("content")));
+    lineFormat.setLineParser(regex);
+
     format.setLineFormat(lineFormat);
 
     IoUtil.writeContent(f, "A", "B", "C");
-    
+
     Iterator<Line> i = IoUtil.loadFiles(format, Arrays.asList(f), false);
 
     assertTrue(i.hasNext());

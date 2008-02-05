@@ -1,7 +1,9 @@
 package com.baulsupp.kolja.log.viewer.importing;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import com.baulsupp.kolja.log.line.BasicLine;
 import com.baulsupp.kolja.log.line.Line;
@@ -15,7 +17,11 @@ public class PlainTextLineParser implements LineParser {
 
     Map<String, Object> emptyMap = new HashMap<String, Object>();
     l.setValues(emptyMap);
-    
+
     return l;
+  }
+
+  public Set<String> getNames() {
+    return Collections.emptySet();
   }
 }

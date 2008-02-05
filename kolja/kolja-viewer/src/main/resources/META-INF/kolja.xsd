@@ -68,28 +68,74 @@
           <xsd:restriction base="xsd:string" />
         </xsd:simpleType>
       </xsd:element>
-      <xsd:element name="field-pattern" maxOccurs=" 1" minOccurs="1">
+      <xsd:element ref="line-parser" maxOccurs=" 1" minOccurs="1">
         <xsd:annotation>
-          <xsd:documentation>
-            Field extraction pattern, for parsing the log line. Should be a java regular expression
-          </xsd:documentation>
+          <xsd:documentation source="java:com.baulsupp.kolja.log.line.LineParser">Parsing of log lines</xsd:documentation>
         </xsd:annotation>
-        <xsd:simpleType>
-          <xsd:restriction base="xsd:string" />
-        </xsd:simpleType>
-      </xsd:element>
-      <xsd:element name="types" maxOccurs=" 1" minOccurs="1">
-        <xsd:annotation>
-          <xsd:documentation>Set of fields parsed from the field extraction.</xsd:documentation>
-        </xsd:annotation>
-        <xsd:complexType>
-          <xsd:sequence minOccurs="1" maxOccurs="unbounded">
-            <xsd:element ref="input-type" />
-          </xsd:sequence>
-        </xsd:complexType>
       </xsd:element>
     </xsd:sequence>
   </xsd:complexType>
+
+  <xsd:element name="line-parser" type="line-parser" abstract="true" />
+
+  <xsd:complexType name="line-parser"></xsd:complexType>
+
+  <xsd:element name="multiple-line-parser" substitutionGroup="line-parser">
+    <xsd:complexType>
+      <xsd:complexContent>
+        <xsd:extension base="line-parser">
+          <xsd:sequence>
+            <xsd:element ref="line-parser" minOccurs="1" maxOccurs="unbounded">
+              <xsd:annotation>
+                <xsd:documentation source="java:com.baulsupp.kolja.log.line.LineParser">Parsing of log lines</xsd:documentation>
+              </xsd:annotation>
+            </xsd:element>
+          </xsd:sequence>
+        </xsd:extension>
+      </xsd:complexContent>
+    </xsd:complexType>
+  </xsd:element>
+  
+  <xsd:element name="regex-line-parser" substitutionGroup="line-parser">
+    <xsd:complexType>
+      <xsd:complexContent>
+        <xsd:extension base="line-parser">
+          <xsd:sequence>
+            <xsd:element name="field-pattern" maxOccurs="1" minOccurs="1">
+              <xsd:annotation>
+                <xsd:documentation>
+                  Field extraction pattern, for parsing the log line. Should be a java regular expression
+                </xsd:documentation>
+              </xsd:annotation>
+              <xsd:simpleType>
+                <xsd:restriction base="xsd:string" />
+              </xsd:simpleType>
+            </xsd:element>
+            <xsd:element name="types" maxOccurs=" 1" minOccurs="1">
+              <xsd:annotation>
+                <xsd:documentation>Set of fields parsed from the field extraction.</xsd:documentation>
+              </xsd:annotation>
+              <xsd:complexType>
+                <xsd:sequence minOccurs="1" maxOccurs="unbounded">
+                  <xsd:element ref="input-type" />
+                </xsd:sequence>
+              </xsd:complexType>
+            </xsd:element>
+          </xsd:sequence>
+        </xsd:extension>
+      </xsd:complexContent>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="custom-line-parser" substitutionGroup="line-parser">
+    <xsd:complexType>
+      <xsd:complexContent>
+        <xsd:extension base="line-parser">
+          <xsd:attribute name="class" use="required"></xsd:attribute>
+        </xsd:extension>
+      </xsd:complexContent>
+    </xsd:complexType>
+  </xsd:element>
 
   <xsd:element name="input-type" type="input-type" abstract="true" />
 
@@ -117,6 +163,14 @@
             </xsd:element>
           </xsd:sequence>
         </xsd:extension>
+      </xsd:complexContent>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="long-type" substitutionGroup="input-type">
+    <xsd:complexType>
+      <xsd:complexContent>
+        <xsd:extension base="input-type"></xsd:extension>
       </xsd:complexContent>
     </xsd:complexType>
   </xsd:element>
@@ -260,6 +314,9 @@
     </xsd:complexType>
   </xsd:element>
 
+  <xsd:element name="failed-highlight" substitutionGroup="highlight">
+  </xsd:element>
+
   <xsd:element name="custom-highlight" substitutionGroup="highlight">
     <xsd:complexType>
       <xsd:attribute name="class" use="required" />
@@ -286,7 +343,7 @@
   </xsd:complexType>
 
   <xsd:complexType name="Events">
-    <xsd:sequence minOccurs="1">
+    <xsd:sequence minOccurs="1" maxOccurs="unbounded">
       <xsd:element ref="event-matcher" />
     </xsd:sequence>
   </xsd:complexType>

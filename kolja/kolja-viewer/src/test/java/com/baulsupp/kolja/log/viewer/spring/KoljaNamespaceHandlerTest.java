@@ -12,6 +12,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.baulsupp.kolja.log.line.Line;
+import com.baulsupp.kolja.log.line.RegexLineParser;
 import com.baulsupp.kolja.log.line.type.DateType;
 import com.baulsupp.kolja.log.line.type.ExceptionType;
 import com.baulsupp.kolja.log.line.type.MessageType;
@@ -77,11 +78,11 @@ public class KoljaNamespaceHandlerTest extends TestCase {
     assertEquals(Pattern.MULTILINE, entryPattern.flags());
     assertEquals("^20", entryPattern.pattern());
 
-    Pattern fieldPattern = clf.getFieldPattern();
+    Pattern fieldPattern = ((RegexLineParser) clf.getLineParser()).getPattern();
     assertEquals(Pattern.MULTILINE | Pattern.DOTALL, fieldPattern.flags());
     assertEquals("([\\d-]+ [\\d:,]+) \\[(.*?)\\] \\[(.*?)\\] ?([A-Z]{4,5}) (\\S+) - (.*?)$\\n?(.*)\\z", fieldPattern.pattern());
 
-    TypeList types = clf.getTypes();
+    TypeList types = ((RegexLineParser) clf.getLineParser()).getColumns();
     assertEquals(7, types.size());
 
     DateType date = (DateType) types.getTypes().get(0);

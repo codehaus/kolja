@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans:beans xmlns="http://baulsupp.com/schema/kolja" xmlns:beans="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:r="http://baulsupp.com/schema/kolja-reports"
+  xsi:schemaLocation="
+http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+http://baulsupp.com/schema/kolja http://baulsupp.com/schema/kolja.xsd
+http://baulsupp.com/schema/kolja-reports http://baulsupp.com/schema/kolja-reports.xsd">
+
+  <format id="logFormat">
+    <line-format>
+      <entry-format>^(?:starting|ending|loadData|select)</entry-format>
+      <multiple-line-parser>
+        <regex-line-parser>
+          <field-pattern>starting \w+ &lt;\*&gt; StartTime\[(\d+)\] CurrentUser\[(\w+)\] Action\[(\w+)\] ActionName\[(\w+)\] ActionDescription\[(.*)\] FreeMemory\[(\d+)\] TotalMemory\[(\d+)\] &lt;\*&gt; LogThread\[(.*)\] LogLevel\[([A-Z]+) ?\] LogClass\[(.*?)\] LogDate\[(.*?)\].*</field-pattern>
+          <types>
+            <name-type name="request_id" />
+            <name-type name="user" />
+            <name-type name="state" />
+            <name-type name="action" />
+            <name-type name="description" />
+            <long-type name="freeMemory" />
+            <long-type name="totalMemory" />
+            <name-type name="thread" />
+            <priority-type name="level" />
+            <name-type name="class" />
+            <date-type name="date">
+              <pattern>yyyy-MM-dd HH:mm:ss,SSS</pattern>
+            </date-type>
+          </types>
+        </regex-line-parser>
+        <regex-line-parser>
+          <field-pattern>ending \w+ &lt;\*&gt; StartTime\[(\d+)\] Duration\[(\d+)\] CurrentUser\[(\w+)\] Action\[(\w+)\] ActionName\[(\w+)\] ActionDescription\[(.*)\] FreeMemory\[(\d+)\] TotalMemory\[(\d+)\] &lt;\*&gt; LogThread\[(.*)\] LogLevel\[([A-Z]+) ?\] LogClass\[(.*?)\] LogDate\[(.*?)\].*</field-pattern>
+          <types>
+            <name-type name="request_id" />
+            <long-type name="duration" />
+            <name-type name="user" />
+            <name-type name="state" />
+            <name-type name="action" />
+            <name-type name="description" />
+            <long-type name="freeMemory" />
+            <long-type name="totalMemory" />
+            <name-type name="thread" />
+            <priority-type name="level" />
+            <name-type name="class" />
+            <date-type name="date">
+              <pattern>yyyy-MM-dd HH:mm:ss,SSS</pattern>
+            </date-type>
+          </types>
+        </regex-line-parser>
+        <regex-line-parser>
+          <field-pattern>(.*) &lt;\*&gt; LogThread\[(.*)\] LogLevel\[([A-Z]+) ?\] LogClass\[(.*?)\] LogDate\[(.*?)\].*</field-pattern>
+          <types>
+            <message-type name="sql" />
+            <name-type name="thread" />
+            <priority-type name="level" />
+            <name-type name="class" />
+            <date-type name="date">
+              <pattern>yyyy-MM-dd HH:mm:ss,SSS</pattern>
+            </date-type>
+          </types>
+        </regex-line-parser>
+      </multiple-line-parser>
+    </line-format>
+
+    <output-format>
+      <widths>8,10,10,10,10,40</widths>
+      <additional>sql</additional>
+      <formats>
+        <time-format field="date" style="short-time" />
+        <string-format field="user" />
+        <string-format field="state" />
+        <string-format field="action" />
+        <custom-format field="duration" class="com.baulsupp.kolja.log.viewer.format.PeriodFormat" />
+        <string-format field="description" />
+      </formats>
+      <highlights>
+        <failed-highlight />
+        <priority-highlight field="priority" />
+        <custom-highlight class="com.baulsupp.kolja.jez.SqlHighlight" />
+      </highlights>
+    </output-format>
+
+    <events>
+      <priority-events />
+      <custom-events class="com.baulsupp.kolja.jez.LongRequests"/>
+    </events>
+  </format>
+
+  <r:report id="freq" class="com.baulsupp.kolja.ansi.reports.FrequencyReport" />
+
+  <r:report id="failed" class="com.baulsupp.kolja.ansi.reports.FailureReport" />
+
+  <r:report id="usage" class="com.baulsupp.kolja.jez.reports.DurationByUser" />
+  
+  <r:report id="events" class="com.baulsupp.kolja.ansi.reports.DumpEvents"/>
+</beans:beans>

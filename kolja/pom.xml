@@ -57,6 +57,7 @@
     <module>kolja-assembly</module>
     <module>kolja-widefinder</module>
     <module>kolja-bank</module>
+    <module>kolja-jez</module>
   </modules>
 
   <dependencyManagement>

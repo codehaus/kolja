@@ -21,6 +21,6 @@ public class NullProgressBar implements ProgressBar {
   public void clear() {
   }
 
-  public void showProgress(int completed, int total) {
+  public void showProgress(long completed, long total) {
   }
 }

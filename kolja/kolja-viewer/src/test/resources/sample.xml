@@ -9,18 +9,20 @@ http://baulsupp.com/schema/kolja http://baulsupp.com/schema/kolja.xsd">
   <format id="default">
     <line-format>
       <entry-format>^20</entry-format>
-      <field-pattern>([\d-]+ [\d:,]+) \[(.*?)\] \[(.*?)\] ?([A-Z]{4,5}) (\S+) - (.*?)$\n?(.*)\z</field-pattern>
-      <types>
-        <date-type name="date">
-          <pattern>yyyy-MM-dd HH:mm:ss,SSS</pattern>
-        </date-type>
-        <name-type name="thread" />
-        <name-type name="request_id" />
-        <priority-type name="priority" />
-        <name-type name="logger_id" />
-        <message-type name="content" />
-        <exception-type name="exception" />
-      </types>
+      <regex-line-parser>
+        <field-pattern>([\d-]+ [\d:,]+) \[(.*?)\] \[(.*?)\] ?([A-Z]{4,5}) (\S+) - (.*?)$\n?(.*)\z</field-pattern>
+        <types>
+          <date-type name="date">
+            <pattern>yyyy-MM-dd HH:mm:ss,SSS</pattern>
+          </date-type>
+          <name-type name="thread" />
+          <name-type name="request_id" />
+          <priority-type name="priority" />
+          <name-type name="logger_id" />
+          <message-type name="content" />
+          <exception-type name="exception" />
+        </types>
+      </regex-line-parser>
     </line-format>
 
     <output-format>

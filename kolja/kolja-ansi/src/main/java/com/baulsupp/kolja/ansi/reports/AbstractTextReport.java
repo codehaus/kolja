@@ -73,6 +73,13 @@ public abstract class AbstractTextReport implements TextReport {
   public void completed() {
   }
 
+  protected void printTitleIfNeeded() {
+    if (this.reportRunner.hasMultipleReports()) {
+      println(describe());
+      println("");
+    }
+  }
+
   public void println(MultiColourString string) {
     reportRunner.println(string);
   }

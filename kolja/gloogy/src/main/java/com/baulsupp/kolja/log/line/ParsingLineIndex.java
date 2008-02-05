@@ -3,11 +3,11 @@ package com.baulsupp.kolja.log.line;
 import com.baulsupp.kolja.log.entry.LogEntryIndex;
 
 public class ParsingLineIndex extends LogEntryLineIndex {
-  private RegexLineParser parser;
+  private LineParser parser;
 
   private boolean strict = false;
 
-  public ParsingLineIndex(RegexLineParser parser, LogEntryIndex index, CharSequence text) {
+  public ParsingLineIndex(LineParser parser, LogEntryIndex index, CharSequence text) {
     super(index, text);
 
     this.parser = parser;

@@ -17,6 +17,7 @@
  */
 package com.baulsupp.kolja.log.viewer.format;
 
+import org.joda.time.Period;
 import org.joda.time.ReadableDuration;
 import org.joda.time.ReadableInterval;
 import org.joda.time.ReadablePeriod;
@@ -49,6 +50,8 @@ public class PeriodFormat implements OutputFormat {
       p = ((ReadableDuration) value).toPeriod();
     } else if (value instanceof ReadablePeriod) {
       p = (ReadablePeriod) value;
+    } else if (value instanceof Long) {
+      p = new Period(((Long) value).longValue());
     } else {
       return "";
     }

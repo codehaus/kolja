@@ -60,14 +60,14 @@ public class ConfigurableLogFormat implements LogFormat, Serializable {
   }
 
   public Renderer<Line> getLineRenderer() {
-    return outputFormat.getRenderer(lineFormat);
+    return outputFormat.getRenderer();
   }
 
   public Renderer<Line> getRequestRenderer() {
     if (requestOutputFormat == null) {
       return getLineRenderer();
     } else {
-      return requestOutputFormat.getRenderer(lineFormat);
+      return requestOutputFormat.getRenderer();
     }
   }
 

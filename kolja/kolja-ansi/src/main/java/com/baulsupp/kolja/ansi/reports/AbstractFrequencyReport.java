@@ -50,10 +50,7 @@ public abstract class AbstractFrequencyReport<T> extends AbstractTextReport {
 
   @Override
   public void completed() {
-    if (this.reportRunner.hasMultipleReports()) {
-      println(describe());
-      println("");
-    }
+    printTitleIfNeeded();
 
     if (count != null) {
       displayMostFrequent();

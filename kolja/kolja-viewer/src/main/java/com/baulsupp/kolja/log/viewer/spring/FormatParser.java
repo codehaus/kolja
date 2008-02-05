@@ -60,7 +60,7 @@ public class FormatParser extends AbstractSingleBeanDefinitionParser {
   }
 
   private ConfigurableLineFormat parseLineFormat(Element element) {
-    return new LineParser(getSingleElement(element, "line-format")).parse();
+    return new ConfigurableLineParser(getSingleElement(element, "line-format")).parse();
   }
 
   private ConfigurableOutputFormat parseOutputFormat(Element element) {

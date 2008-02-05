@@ -47,6 +47,7 @@ public class Frequencies<T> implements Iterable<Frequencies.Count<T>> {
     }
   };
 
+  @SuppressWarnings("unchecked")
   public Frequencies() {
     Comparator<T> comp = ComparatorUtils.nullLowComparator(ComparatorUtils.naturalComparator());
     counts = new TreeMap<T, Count<T>>(comp);

@@ -10,18 +10,20 @@ http://baulsupp.com/schema/kolja-reports http://baulsupp.com/schema/kolja-report
   <format id="logFormat">
     <line-format>
       <entry-format>^</entry-format>
-      <field-pattern>([^ ]+) - - \[(.*?) .\d{4}\] "([A-Z]+) (.*?) HTTP.*?" (\d+) ([^ ]+) "[^"]*" "([^"]*)".*</field-pattern>
-      <types>
-        <name-type name="ipaddress" />
-        <date-type name="date">
-          <pattern>dd/MMM/yyyy:HH:mm:ss</pattern>
-        </date-type>
-        <name-type name="action" />
-        <name-type name="url" />
-        <custom-type name="status" class="com.baulsupp.kolja.widefinder.format.StatusType" />
-        <custom-type name="size" class="com.baulsupp.kolja.widefinder.format.BytesType" />
-        <custom-type name="useragent" class="com.baulsupp.kolja.widefinder.format.UserAgentType" />
-      </types>
+      <regex-line-parser>
+        <field-pattern>([^ ]+) - - \[(.*?) .\d{4}\] "([A-Z]+) (.*?) HTTP.*?" (\d+) ([^ ]+) "[^"]*" "([^"]*)".*</field-pattern>
+        <types>
+          <name-type name="ipaddress" />
+          <date-type name="date">
+            <pattern>dd/MMM/yyyy:HH:mm:ss</pattern>
+          </date-type>
+          <name-type name="action" />
+          <name-type name="url" />
+          <custom-type name="status" class="com.baulsupp.kolja.widefinder.format.StatusType" />
+          <custom-type name="size" class="com.baulsupp.kolja.log.line.type.BytesType" />
+          <custom-type name="useragent" class="com.baulsupp.kolja.widefinder.format.UserAgentType" />
+        </types>
+      </regex-line-parser>
     </line-format>
     <output-format>
       <widths>20,8,4,3,6,15,40</widths>
@@ -50,5 +52,7 @@ http://baulsupp.com/schema/kolja-reports http://baulsupp.com/schema/kolja-report
   <r:report id="events" class="com.baulsupp.kolja.ansi.reports.DumpEvents"/>
   
   <r:report id="tsv" class="com.baulsupp.kolja.ansi.reports.TsvReport"/>
+  
+  <r:report id="bytes" class="com.baulsupp.kolja.widefinder.TotalBytesReport"/>
   
 </beans:beans>

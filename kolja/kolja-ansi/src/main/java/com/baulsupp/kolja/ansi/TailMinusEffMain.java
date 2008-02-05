@@ -123,8 +123,9 @@ public class TailMinusEffMain {
     log.error(type, pe);
   }
 
+  @SuppressWarnings("unchecked")
   private static List<File> commandFiles(CommandLine cmd) {
-    List args = cmd.getArgList();
+    List<String> args = cmd.getArgList();
     List<File> files = new ArrayList<File>();
 
     for (Object a : args) {

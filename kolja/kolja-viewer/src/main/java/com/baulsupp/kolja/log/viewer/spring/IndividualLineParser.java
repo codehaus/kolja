@@ -22,7 +22,13 @@ import java.util.regex.Pattern;
 
 import org.springframework.util.ClassUtils;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
+import com.baulsupp.kolja.log.line.LineParser;
+import com.baulsupp.kolja.log.line.MultipleLineParser;
+import com.baulsupp.kolja.log.line.RegexLineParser;
+import com.baulsupp.kolja.log.line.type.BytesType;
 import com.baulsupp.kolja.log.line.type.DateType;
 import com.baulsupp.kolja.log.line.type.ExceptionType;
 import com.baulsupp.kolja.log.line.type.MessageType;
@@ -30,35 +36,69 @@ import com.baulsupp.kolja.log.line.type.NameType;
 import com.baulsupp.kolja.log.line.type.PriorityType;
 import com.baulsupp.kolja.log.line.type.Type;
 import com.baulsupp.kolja.log.line.type.TypeList;
-import com.baulsupp.kolja.log.viewer.importing.ConfigurableLineFormat;
 
-/**
- * Line Parser
- * 
- * @author Yuri Schimke
- */
-public class LineParser {
+public class IndividualLineParser {
   private Element root;
 
-  public LineParser(Element root) {
+  public IndividualLineParser(Element root) {
     this.root = root;
   }
 
-  public ConfigurableLineFormat parse() {
-    ConfigurableLineFormat lineFormat = new ConfigurableLineFormat();
+  public LineParser parseLineParser() {
+    NodeList children = root.getChildNodes();
 
-    lineFormat.setEntryPattern(parseEntryPattern());
-    lineFormat.setFieldPattern(parseFieldPattern());
+    for (int i = 0; i < children.getLength(); i++) {
+      Node item = children.item(i);
+      if (item instanceof Element && ((Element) item).getTagName().endsWith("-line-parser")) {
+        return parseLineParser((Element) item);
+      }
+    }
 
+    throw new IllegalStateException("line parser not found");
+  }
+
+  private LineParser parseLineParser(Element e) {
+    if (e.getTagName().equals("multiple-line-parser")) {
+      return parseMultipleLineParser(e);
+    }
+
+    if (e.getTagName().equals("regex-line-parser")) {
+      return parseRegexLineParser(e);
+    }
+
+    if (e.getTagName().equals("custom-line-parser")) {
+      return parseCustomLineParser(e);
+    }
+
+    throw new IllegalStateException("unknown line parser " + e.getTagName());
+  }
+
+  private LineParser parseMultipleLineParser(Element e) {
+    MultipleLineParser lp = new MultipleLineParser();
+
+    NodeList children = e.getChildNodes();
+    for (int i = 0; i < children.getLength(); i++) {
+      Node item = children.item(i);
+      if (item instanceof Element) {
+        lp.addLineParser(parseLineParser((Element) item));
+      }
+    }
+
+    return lp;
+  }
+
+  private LineParser parseRegexLineParser(Element r) {
     TypeList types = new TypeList();
 
-    for (Element e : XmlReaderUtil.getChildElements(root, "types")) {
+    for (Element e : XmlReaderUtil.getChildElements(r, "types")) {
       types.add(parseType(e));
     }
 
-    lineFormat.setTypes(types);
+    return new RegexLineParser(parseFieldPattern(r), types);
+  }
 
-    return lineFormat;
+  public Pattern parseFieldPattern(Element r) {
+    return XmlReaderUtil.parsePattern(XmlReaderUtil.getSingleElement(r, "field-pattern"), Pattern.MULTILINE | Pattern.DOTALL);
   }
 
   public Type parseType(Element e) {
@@ -70,6 +110,8 @@ public class LineParser {
       return parsePriorityType(e);
     } else if (e.getNodeName().equals("message-type")) {
       return parseMessageType(e);
+    } else if (e.getNodeName().equals("long-type")) {
+      return parseLongType(e);
     } else if (e.getNodeName().equals("exception-type")) {
       return parseExceptionType(e);
     } else if (e.getNodeName().equals("custom-type")) {
@@ -91,6 +133,10 @@ public class LineParser {
     return new PriorityType(e.getAttribute("name"));
   }
 
+  private BytesType parseLongType(Element e) {
+    return new BytesType(e.getAttribute("name"));
+  }
+
   private NameType parseNameType(Element e) {
     return new NameType(e.getAttribute("name"));
   }
@@ -104,7 +150,24 @@ public class LineParser {
 
       Constructor constructor = ClassUtils.getConstructorIfAvailable(c, new Class[] { String.class });
 
-      return (Type) constructor.newInstance(e.getAttribute("name"));
+      return Type.class.cast(constructor.newInstance(e.getAttribute("name")));
+    } catch (RuntimeException ex) {
+      throw ex;
+    } catch (Exception ex) {
+      throw new RuntimeException(ex);
+    }
+  }
+
+  @SuppressWarnings("unchecked")
+  private LineParser parseCustomLineParser(Element e) {
+    String className = e.getAttribute("class");
+
+    try {
+      Class c = ClassUtils.forName(className);
+
+      Constructor constructor = ClassUtils.getConstructorIfAvailable(c, new Class[] { String.class });
+
+      return (LineParser) constructor.newInstance();
     } catch (RuntimeException ex) {
       throw ex;
     } catch (Exception ex) {
@@ -116,14 +179,6 @@ public class LineParser {
     String pattern = XmlReaderUtil.getElementString(e, "pattern");
 
     return new DateType(e.getAttribute("name"), pattern);
-  }
-
-  public Pattern parseEntryPattern() {
-    return XmlReaderUtil.parsePattern(XmlReaderUtil.getSingleElement(root, "entry-format"), Pattern.MULTILINE);
-  }
-
-  public Pattern parseFieldPattern() {
-    return XmlReaderUtil.parsePattern(XmlReaderUtil.getSingleElement(root, "field-pattern"), Pattern.MULTILINE | Pattern.DOTALL);
   }
 
 }
