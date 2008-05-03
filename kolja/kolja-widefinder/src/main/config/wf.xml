@@ -55,4 +55,6 @@ http://baulsupp.com/schema/kolja-reports http://baulsupp.com/schema/kolja-report
   
   <r:report id="bytes" class="com.baulsupp.kolja.widefinder.TotalBytesReport"/>
   
+  <r:report id="types" class="com.baulsupp.kolja.widefinder.categories.CategorisationReport"/>
+  
 </beans:beans>

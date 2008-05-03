@@ -37,6 +37,14 @@ public class BytesFormat implements OutputFormat {
       return null;
     }
 
+    return formatBytes(((Number) value).longValue());
+  }
+
+  public static String formatBytes(Long value) {
+    if (value == null) {
+      return null;
+    }
+
     long bytes = ((Number) value).longValue();
 
     if (bytes >= GB) {
