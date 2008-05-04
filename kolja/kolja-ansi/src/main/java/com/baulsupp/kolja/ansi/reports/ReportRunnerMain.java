@@ -155,7 +155,7 @@ public class ReportRunnerMain {
 
     boolean ansi = !cmd.hasOption("a");
     boolean fixedWidth = cmd.hasOption("f");
-    boolean interactive = !cmd.hasOption("n");
+    boolean interactive = cmd.hasOption("i");
 
     reportRunner.setInteractive(interactive);
 
@@ -244,7 +244,7 @@ public class ReportRunnerMain {
 
     options.addOption(OptionBuilder.hasArg(false).withDescription("Fixed Screen Width").withLongOpt("fixed-width").create('f'));
 
-    options.addOption(OptionBuilder.hasArg(false).withDescription("Non Interactive").withLongOpt("non-interactive").create('n'));
+    options.addOption(OptionBuilder.hasArg(false).withDescription("Interactive").withLongOpt("interactive").create('i'));
 
     options.addOption(OptionBuilder.hasArg(false).withDescription("Generate HTML Page").withLongOpt("html").create('w'));
 

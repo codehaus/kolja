@@ -39,7 +39,7 @@ public class AnsiReportRunner extends BaseReportRunner {
 
   private ProgressBar progress;
 
-  private boolean interactive = true;
+  private boolean interactive = false;
 
   public AnsiReportRunner() {
   }
