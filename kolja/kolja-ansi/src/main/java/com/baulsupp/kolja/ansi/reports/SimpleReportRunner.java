@@ -17,6 +17,7 @@
  */
 package com.baulsupp.kolja.ansi.reports;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,7 +25,7 @@ import com.baulsupp.kolja.log.line.Line;
 import com.baulsupp.kolja.log.viewer.request.RequestLine;
 import com.baulsupp.kolja.util.colours.MultiColourString;
 
-public class SimpleReportRunner implements ReportRunner {
+public class SimpleReportRunner implements ReportPrinter {
   private List<String> lines = new ArrayList<String>();
 
   public void println(MultiColourString string) {
@@ -43,10 +44,6 @@ public class SimpleReportRunner implements ReportRunner {
     lines.add(request.toString());
   }
 
-  public Line readLine(int i) {
-    return null;
-  }
-
   public void printLine() {
     lines.add("");
   }
@@ -55,7 +52,12 @@ public class SimpleReportRunner implements ReportRunner {
     lines.add(title);
   }
 
-  public boolean hasMultipleReports() {
-    return false;
+  public void initialise() throws IOException {
+  }
+
+  public void setReportEngine(ReportEngine reportEngine) {
+  }
+
+  public void completed() throws IOException {
   }
 }

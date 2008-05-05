@@ -24,6 +24,7 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.baulsupp.kolja.ansi.reports.basic.DumpEvents;
 import com.baulsupp.kolja.log.line.BasicLine;
 import com.baulsupp.kolja.log.line.Line;
 import com.baulsupp.kolja.log.viewer.event.Event;

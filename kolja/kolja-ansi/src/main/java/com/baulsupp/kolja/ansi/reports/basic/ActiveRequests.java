@@ -15,7 +15,7 @@
  * along with this library; if not, write to the Free Software Foundation, Inc.,
  * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
-package com.baulsupp.kolja.ansi.reports;
+package com.baulsupp.kolja.ansi.reports.basic;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -25,6 +25,7 @@ import org.joda.time.DateTime;
 import org.joda.time.Interval;
 import org.joda.time.LocalTime;
 
+import com.baulsupp.kolja.ansi.reports.AbstractTextReport;
 import com.baulsupp.kolja.log.LogConstants;
 import com.baulsupp.kolja.log.viewer.request.RequestLine;
 

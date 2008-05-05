@@ -17,11 +17,13 @@
  */
 package com.baulsupp.kolja.ansi.reports;
 
+import java.io.IOException;
+
 import com.baulsupp.kolja.log.line.Line;
 import com.baulsupp.kolja.log.viewer.request.RequestLine;
 import com.baulsupp.kolja.util.colours.MultiColourString;
 
-public interface ReportRunner {
+public interface ReportPrinter {
   void println(MultiColourString string);
 
   void printLine(Line line);
@@ -32,7 +34,9 @@ public interface ReportRunner {
 
   void printRequest(RequestLine request);
 
-  Line readLine(int i);
+  void initialise() throws IOException;
 
-  boolean hasMultipleReports();
+  void setReportEngine(ReportEngine reportEngine);
+
+  void completed() throws IOException;
 }

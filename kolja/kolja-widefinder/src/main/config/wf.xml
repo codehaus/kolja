@@ -45,13 +45,13 @@ http://baulsupp.com/schema/kolja-reports http://baulsupp.com/schema/kolja-report
     </events>
   </format>
   
-  <r:report id="freq" class="com.baulsupp.kolja.ansi.reports.FrequencyReport"/>
+  <r:report id="freq" class="com.baulsupp.kolja.ansi.reports.basic.FrequencyReport"/>
   
   <r:report id="time" class="com.baulsupp.kolja.widefinder.TimeReport"/>
   
-  <r:report id="events" class="com.baulsupp.kolja.ansi.reports.DumpEvents"/>
+  <r:report id="events" class="com.baulsupp.kolja.ansi.reports.basic.DumpEvents"/>
   
-  <r:report id="tsv" class="com.baulsupp.kolja.ansi.reports.TsvReport"/>
+  <r:report id="tsv" class="com.baulsupp.kolja.ansi.reports.basic.TsvReport"/>
   
   <r:report id="bytes" class="com.baulsupp.kolja.widefinder.TotalBytesReport"/>
   

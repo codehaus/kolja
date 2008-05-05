@@ -18,6 +18,8 @@
 package com.baulsupp.kolja.ansi.reports;
 
 import java.io.File;
+import java.io.IOException;
+import java.util.List;
 
 import com.baulsupp.kolja.log.line.Line;
 
@@ -25,36 +27,16 @@ import com.baulsupp.kolja.log.line.Line;
  * @author Yuri Schimke
  * 
  */
-public class FailureReport extends AbstractTextReport {
-  private int count;
+public interface ReportEngine {
+  Line readLine(int i);
 
-  public FailureReport() {
-  }
+  boolean hasMultipleReports();
 
-  public String describe() {
-    return "Failed Log Lines";
-  }
+  void initialise() throws IOException;
 
-  @Override
-  public void beforeFile(File file) {
-    super.beforeFile(file);
+  void setReports(List<TextReport> createReports);
 
-    count = 0;
-  }
+  void setReportPrinter(ReportPrinter reportPrinter);
 
-  @Override
-  public void processLine(Line line) {
-    if (line.isFailed()) {
-      count++;
-
-      printLine(line);
-    }
-  }
-
-  @Override
-  public void afterFile(File file) {
-    super.afterFile(file);
-
-    println("" + count + " failures");
-  }
+  void process(List<File> commandFiles) throws Exception;
 }

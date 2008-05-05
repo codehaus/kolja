@@ -39,16 +39,11 @@ import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 
 import com.baulsupp.kolja.ansi.ConsoleRenderer;
 import com.baulsupp.kolja.ansi.TailRenderer;
-import com.baulsupp.kolja.log.line.BasicLineIterator;
 import com.baulsupp.kolja.log.line.Line;
-import com.baulsupp.kolja.log.line.LineIndex;
-import com.baulsupp.kolja.log.util.WrappedCharBuffer;
-import com.baulsupp.kolja.log.viewer.event.EventList;
 import com.baulsupp.kolja.log.viewer.importing.LogFormat;
 import com.baulsupp.kolja.log.viewer.importing.SavedLogFormatLoader;
 import com.baulsupp.kolja.log.viewer.importing.SpringBeanLogFormatLoader;
 import com.baulsupp.kolja.log.viewer.renderer.Renderer;
-import com.baulsupp.kolja.log.viewer.request.RequestIndex;
 
 public class ReportRunnerMain {
   private static final Logger log = LoggerFactory.getLogger(ReportRunnerMain.class);
@@ -91,13 +86,18 @@ public class ReportRunnerMain {
 
     LogFormat format = SpringBeanLogFormatLoader.getLogFormat(appCtxt);
 
-    final BaseReportRunner reportRunner;
+    final ReportPrinter reportPrinter;
 
     if (cmd.hasOption('w')) {
-      reportRunner = createHtmlReportRunner(cmd, format);
+      reportPrinter = createHtmlReportRunner(cmd, format);
     } else {
-      reportRunner = createAnsiReportRunner(cmd, format);
+      reportPrinter = createAnsiReportRunner(cmd, format);
     }
+
+    final ReportEngine reportEngine = createReportEngine(format);
+
+    reportPrinter.setReportEngine(reportEngine);
+    reportEngine.setReportPrinter(reportPrinter);
 
     String[] reportValues = cmd.getOptionValues("r");
 
@@ -112,37 +112,25 @@ public class ReportRunnerMain {
     log.info("reports " + v);
     log.info("files " + filenames);
 
-    reportRunner.setReports(createReports(new ReportBuilder(appCtxt), v));
+    reportEngine.setReports(createReports(new ReportBuilder(appCtxt), v));
 
     List<File> commandFiles = commandFiles(filenames);
 
-    reportRunner.initialise();
+    reportEngine.initialise();
 
-    for (File file : commandFiles) {
-      if (commandFiles.size() == 1) {
-        WrappedCharBuffer buffer = WrappedCharBuffer.fromFile(file);
-
-        LineIndex li = format.getLineIndex(buffer);
-
-        if (format.supportsRequests()) {
-          RequestIndex requestIndex = format.getRequestIndex(li);
-          reportRunner.setRequestIndex(requestIndex);
-        }
-
-        if (format.supportsEvents()) {
-          EventList eventList = format.getEventList(li);
-          reportRunner.setEventList(eventList);
-        }
-
-        reportRunner.run(file, new BasicLineIterator(li));
-      }
-    }
-
-    reportRunner.completed();
+    reportEngine.process(commandFiles);
   }
 
-  private static BaseReportRunner createHtmlReportRunner(CommandLine cmd, LogFormat format) {
-    HtmlReportRunner htmlReportRunner = new HtmlReportRunner();
+  private static DefaultReportEngine createReportEngine(LogFormat format) {
+    DefaultReportEngine defaultReportEngine = new DefaultReportEngine();
+
+    defaultReportEngine.setLogFormat(format);
+
+    return defaultReportEngine;
+  }
+
+  private static ReportPrinter createHtmlReportRunner(CommandLine cmd, LogFormat format) {
+    HtmlReportPrinter htmlReportRunner = new HtmlReportPrinter();
 
     htmlReportRunner.setRenderer(format.getLineRenderer());
     htmlReportRunner.setRequestRenderer(format.getRequestRenderer());
@@ -150,8 +138,8 @@ public class ReportRunnerMain {
     return htmlReportRunner;
   }
 
-  private static BaseReportRunner createAnsiReportRunner(CommandLine cmd, LogFormat format) {
-    final AnsiReportRunner reportRunner = new AnsiReportRunner();
+  private static ReportPrinter createAnsiReportRunner(CommandLine cmd, LogFormat format) {
+    final AnsiReportPrinter reportRunner = new AnsiReportPrinter();
 
     boolean ansi = !cmd.hasOption("a");
     boolean fixedWidth = cmd.hasOption("f");

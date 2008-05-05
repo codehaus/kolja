@@ -15,8 +15,9 @@
  * along with this library; if not, write to the Free Software Foundation, Inc.,
  * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
-package com.baulsupp.kolja.ansi.reports;
+package com.baulsupp.kolja.ansi.reports.basic;
 
+import com.baulsupp.kolja.ansi.reports.ReportPrinter;
 import com.baulsupp.kolja.log.line.Line;
 
 /**
@@ -45,7 +46,7 @@ public class FrequencyReport<T> extends AbstractFrequencyReport<T> {
   }
 
   @Override
-  public void initialise(ReportRunner reportRunner) {
+  public void initialise(ReportPrinter reportRunner) {
     super.initialise(reportRunner);
 
     if (field == null) {

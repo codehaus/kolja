@@ -17,7 +17,7 @@
  */
 package com.baulsupp.kolja.bank;
 
-import com.baulsupp.kolja.ansi.reports.ActiveRequests;
+import com.baulsupp.kolja.ansi.reports.basic.ActiveRequests;
 
 public class BankActiveRequests extends ActiveRequests {
 }

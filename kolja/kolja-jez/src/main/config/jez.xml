@@ -87,11 +87,11 @@ http://baulsupp.com/schema/kolja-reports http://baulsupp.com/schema/kolja-report
     </events>
   </format>
 
-  <r:report id="freq" class="com.baulsupp.kolja.ansi.reports.FrequencyReport" />
+  <r:report id="freq" class="com.baulsupp.kolja.ansi.reports.basic.FrequencyReport" />
 
-  <r:report id="failed" class="com.baulsupp.kolja.ansi.reports.FailureReport" />
+  <r:report id="failed" class="com.baulsupp.kolja.ansi.reports.basic.FailureReport" />
 
   <r:report id="usage" class="com.baulsupp.kolja.jez.reports.DurationByUser" />
   
-  <r:report id="events" class="com.baulsupp.kolja.ansi.reports.DumpEvents"/>
+  <r:report id="events" class="com.baulsupp.kolja.ansi.reports.basic.DumpEvents"/>
 </beans:beans>

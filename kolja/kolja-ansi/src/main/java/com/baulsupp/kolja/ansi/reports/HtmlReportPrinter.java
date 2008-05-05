@@ -31,12 +31,15 @@ import com.baulsupp.kolja.util.colours.MultiColourString;
 /**
  * @author Yuri Schimke
  */
-public class HtmlReportRunner extends BaseReportRunner {
-  FileWriter fw;
+public class HtmlReportPrinter implements ReportPrinter {
+  private FileWriter fw;
 
   private Renderer<Line> renderer;
 
   private Renderer<Line> requestRenderer;
+
+  @SuppressWarnings("unused")
+  private ReportEngine reportEngine;
 
   public void setRequestRenderer(Renderer<Line> requestRenderer) {
     this.requestRenderer = requestRenderer;
@@ -46,19 +49,13 @@ public class HtmlReportRunner extends BaseReportRunner {
     this.renderer = renderer;
   }
 
-  @Override
   public void initialise() throws IOException {
-    super.initialise();
-
     fw = new FileWriter("./out.html");
 
     fw.write("<html><head><title>Kolja Report</title></head><body>");
   }
 
-  @Override
   public void completed() throws IOException {
-    super.completed();
-
     fw.write("</body></html>");
 
     fw.close();
@@ -108,5 +105,9 @@ public class HtmlReportRunner extends BaseReportRunner {
     for (MultiColourString s : lines) {
       println(s);
     }
+  }
+
+  public void setReportEngine(ReportEngine reportEngine) {
+    this.reportEngine = reportEngine;
   }
 }

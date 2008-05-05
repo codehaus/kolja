@@ -24,7 +24,7 @@ import org.joda.time.DateTimeFieldType;
 import org.joda.time.Partial;
 import org.joda.time.format.DateTimeFormatter;
 
-import com.baulsupp.kolja.ansi.reports.AbstractFrequencyReport;
+import com.baulsupp.kolja.ansi.reports.basic.AbstractFrequencyReport;
 import com.baulsupp.kolja.log.line.Line;
 
 public class TimeReport extends AbstractFrequencyReport<Partial> {

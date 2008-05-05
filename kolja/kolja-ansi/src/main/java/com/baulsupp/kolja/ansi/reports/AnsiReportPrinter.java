@@ -17,7 +17,6 @@
  */
 package com.baulsupp.kolja.ansi.reports;
 
-import java.io.File;
 import java.io.IOException;
 
 import jline.ANSIBuffer;
@@ -25,12 +24,12 @@ import jline.ANSIBuffer;
 import com.baulsupp.kolja.ansi.AnsiUtils;
 import com.baulsupp.kolja.ansi.ConsoleRenderer;
 import com.baulsupp.kolja.ansi.progress.ProgressBar;
-import com.baulsupp.kolja.log.line.BasicLineIterator;
 import com.baulsupp.kolja.log.line.Line;
 import com.baulsupp.kolja.log.viewer.request.RequestLine;
 import com.baulsupp.kolja.util.colours.MultiColourString;
 
-public class AnsiReportRunner extends BaseReportRunner {
+// TODO implement progress
+public class AnsiReportPrinter implements ReportPrinter {
   protected boolean ansi;
 
   protected ConsoleRenderer<Line> lineRenderer;
@@ -41,11 +40,10 @@ public class AnsiReportRunner extends BaseReportRunner {
 
   private boolean interactive = false;
 
-  public AnsiReportRunner() {
-  }
+  @SuppressWarnings("unused")
+  private ReportEngine reportEngine;
 
-  public void setReports(java.util.List<TextReport> reports) {
-    this.reports = reports;
+  public AnsiReportPrinter() {
   }
 
   public void setInteractive(boolean interactive) {
@@ -61,25 +59,23 @@ public class AnsiReportRunner extends BaseReportRunner {
   }
 
   public void initialise() throws IOException {
-    super.initialise();
-
     progress = AnsiUtils.getProgressBar(interactive);
   }
 
-  @Override
-  protected void iterateThroughFile(File f, BasicLineIterator i) {
-    long total = f.length();
-
-    while (i.hasNext()) {
-      Line l = i.next();
-
-      progress.showProgress(l.getOffset(), total);
-
-      processLine(l);
-    }
-
-    progress.clear();
-  }
+  // @Override
+  // protected void iterateThroughFile(File f, BasicLineIterator i) {
+  // long total = f.length();
+  //
+  // while (i.hasNext()) {
+  // Line l = i.next();
+  //
+  // progress.showProgress(l.getOffset(), total);
+  //
+  // processLine(l);
+  // }
+  //
+  // progress.clear();
+  // }
 
   public void printLine() {
     progress.clear();
@@ -118,5 +114,13 @@ public class AnsiReportRunner extends BaseReportRunner {
     progress.clear();
 
     requestRenderer.show(request);
+  }
+
+  public void setReportEngine(ReportEngine reportEngine) {
+    this.reportEngine = reportEngine;
+  }
+
+  public void completed() throws IOException {
+    progress.clear();
   }
 }

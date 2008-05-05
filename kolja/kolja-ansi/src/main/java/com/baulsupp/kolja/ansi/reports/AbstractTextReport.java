@@ -34,7 +34,7 @@ import com.baulsupp.kolja.util.colours.MultiColourString;
  * @author Yuri Schimke
  */
 public abstract class AbstractTextReport implements TextReport {
-  protected ReportRunner reportRunner;
+  protected ReportPrinter reportRunner;
   private HashSet<Detail> details;
 
   public AbstractTextReport() {
@@ -45,7 +45,7 @@ public abstract class AbstractTextReport implements TextReport {
     this.details = new HashSet<Detail>(Arrays.asList(selected));
   }
 
-  public void initialise(ReportRunner reportRunner) {
+  public void initialise(ReportPrinter reportRunner) {
     Assert.notNull(reportRunner);
 
     this.reportRunner = reportRunner;
@@ -74,10 +74,11 @@ public abstract class AbstractTextReport implements TextReport {
   }
 
   protected void printTitleIfNeeded() {
-    if (this.reportRunner.hasMultipleReports()) {
-      println(describe());
-      println("");
-    }
+    // TODO print title for multiple reports
+    // if (this.reportRunner.hasMultipleReports()) {
+    println(describe());
+    println("");
+    // }
   }
 
   public void println(MultiColourString string) {
@@ -101,7 +102,10 @@ public abstract class AbstractTextReport implements TextReport {
   }
 
   protected Line readLine(int i) {
-    return reportRunner.readLine(i);
+    // TODO implement this
+    // return reportRunner.readLine(i);
+
+    return null;
   }
 
   public void println(String string) {
