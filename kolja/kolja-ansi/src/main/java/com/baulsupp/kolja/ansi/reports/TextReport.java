@@ -33,7 +33,7 @@ public interface TextReport {
     LINES, REQUESTS, EVENTS;
   }
 
-  void initialise(ReportPrinter reportRunner);
+  void initialise(ReportPrinter reportRunner, ReportEngine reportEngine);
 
   boolean isInterested(Detail detail);
 

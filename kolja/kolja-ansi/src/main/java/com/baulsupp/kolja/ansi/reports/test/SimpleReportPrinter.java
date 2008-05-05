@@ -15,17 +15,19 @@
  * along with this library; if not, write to the Free Software Foundation, Inc.,
  * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
-package com.baulsupp.kolja.ansi.reports;
+package com.baulsupp.kolja.ansi.reports.test;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.baulsupp.kolja.ansi.reports.ReportEngine;
+import com.baulsupp.kolja.ansi.reports.ReportPrinter;
 import com.baulsupp.kolja.log.line.Line;
 import com.baulsupp.kolja.log.viewer.request.RequestLine;
 import com.baulsupp.kolja.util.colours.MultiColourString;
 
-public class SimpleReportRunner implements ReportPrinter {
+public class SimpleReportPrinter implements ReportPrinter {
   private List<String> lines = new ArrayList<String>();
 
   public void println(MultiColourString string) {
@@ -49,7 +51,7 @@ public class SimpleReportRunner implements ReportPrinter {
   }
 
   public void printTitle(String title) {
-    lines.add(title);
+    // lines.add(title);
   }
 
   public void initialise() throws IOException {

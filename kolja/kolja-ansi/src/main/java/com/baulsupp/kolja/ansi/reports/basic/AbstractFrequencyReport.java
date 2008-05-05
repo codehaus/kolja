@@ -51,7 +51,7 @@ public abstract class AbstractFrequencyReport<T> extends AbstractTextReport {
 
   @Override
   public void completed() {
-    printTitleIfNeeded();
+    printTitle();
 
     if (count != null) {
       displayMostFrequent();

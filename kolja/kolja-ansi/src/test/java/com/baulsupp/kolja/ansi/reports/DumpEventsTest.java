@@ -25,21 +25,23 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.baulsupp.kolja.ansi.reports.basic.DumpEvents;
+import com.baulsupp.kolja.ansi.reports.test.SimpleReportEngine;
+import com.baulsupp.kolja.ansi.reports.test.SimpleReportPrinter;
 import com.baulsupp.kolja.log.line.BasicLine;
 import com.baulsupp.kolja.log.line.Line;
 import com.baulsupp.kolja.log.viewer.event.Event;
 
 public class DumpEventsTest {
   private DumpEvents pages;
-  private SimpleReportRunner reportRunner;
+  private SimpleReportPrinter reportRunner;
 
   @Before
   public void setup() {
     pages = new DumpEvents();
 
-    reportRunner = new SimpleReportRunner();
+    reportRunner = new SimpleReportPrinter();
 
-    pages.initialise(reportRunner);
+    pages.initialise(reportRunner, new SimpleReportEngine());
   }
 
   @Test

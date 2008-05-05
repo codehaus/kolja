@@ -17,6 +17,7 @@
  */
 package com.baulsupp.kolja.ansi.reports.basic;
 
+import com.baulsupp.kolja.ansi.reports.ReportEngine;
 import com.baulsupp.kolja.ansi.reports.ReportPrinter;
 import com.baulsupp.kolja.log.line.Line;
 
@@ -46,8 +47,8 @@ public class FrequencyReport<T> extends AbstractFrequencyReport<T> {
   }
 
   @Override
-  public void initialise(ReportPrinter reportRunner) {
-    super.initialise(reportRunner);
+  public void initialise(ReportPrinter reportRunner, ReportEngine reportEngine) {
+    super.initialise(reportRunner, reportEngine);
 
     if (field == null) {
       throw new IllegalStateException("q not set");

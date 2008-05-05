@@ -148,7 +148,7 @@ public class DefaultReportEngine implements ReportEngine {
     showEvents = show(Detail.EVENTS);
 
     for (TextReport r : reports) {
-      r.initialise(reportPrinter);
+      r.initialise(reportPrinter, this);
     }
   }
 

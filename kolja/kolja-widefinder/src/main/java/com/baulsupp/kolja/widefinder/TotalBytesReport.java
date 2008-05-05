@@ -13,7 +13,6 @@ public class TotalBytesReport extends AbstractTextReport {
   @Override
   public void processLine(Line line) {
     Long bytes = (Long) line.getValue(WideFinderConstants.SIZE);
-    String url = (String) line.getValue(WideFinderConstants.URL);
 
     if (bytes != null) {
       total.addAndGet(bytes);

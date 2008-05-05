@@ -20,6 +20,7 @@ package com.baulsupp.kolja.ansi.reports.basic;
 import java.util.Arrays;
 
 import com.baulsupp.kolja.ansi.reports.AbstractTextReport;
+import com.baulsupp.kolja.ansi.reports.ReportEngine;
 import com.baulsupp.kolja.ansi.reports.ReportPrinter;
 import com.baulsupp.kolja.log.line.Line;
 
@@ -33,8 +34,8 @@ public class TsvReport extends AbstractTextReport {
   }
 
   @Override
-  public void initialise(ReportPrinter reportRunner) {
-    super.initialise(reportRunner);
+  public void initialise(ReportPrinter reportRunner, ReportEngine reportEngine) {
+    super.initialise(reportRunner, reportEngine);
 
     if (fields == null) {
       throw new IllegalStateException("no fields specified");

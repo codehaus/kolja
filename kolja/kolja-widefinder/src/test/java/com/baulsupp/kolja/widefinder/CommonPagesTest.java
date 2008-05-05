@@ -25,24 +25,25 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.baulsupp.kolja.ansi.reports.SimpleReportRunner;
 import com.baulsupp.kolja.ansi.reports.basic.Frequencies;
 import com.baulsupp.kolja.ansi.reports.basic.FrequencyReport;
 import com.baulsupp.kolja.ansi.reports.basic.Frequencies.Count;
+import com.baulsupp.kolja.ansi.reports.test.SimpleReportEngine;
+import com.baulsupp.kolja.ansi.reports.test.SimpleReportPrinter;
 import com.baulsupp.kolja.log.line.BasicLine;
 import com.baulsupp.kolja.log.line.Line;
 
 public class CommonPagesTest {
   private FrequencyReport<String> pages;
-  private SimpleReportRunner reportRunner;
+  private SimpleReportPrinter reportRunner;
 
   @Before
   public void setup() {
     pages = new FrequencyReport<String>(WideFinderConstants.URL);
 
-    reportRunner = new SimpleReportRunner();
+    reportRunner = new SimpleReportPrinter();
 
-    pages.initialise(reportRunner);
+    pages.initialise(reportRunner, new SimpleReportEngine());
   }
 
   @Test
