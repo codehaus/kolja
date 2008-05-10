@@ -33,7 +33,7 @@ public interface TextReport<T extends TextReport<T>> {
     LINES, REQUESTS, EVENTS;
   }
 
-  void initialise(ReportPrinter reportRunner, ReportEngine reportEngine, ReportContext reportContext);
+  void initialise(ReportPrinter reportPrinter, ReportContext reportContext);
 
   boolean isInterested(Detail detail);
 
@@ -54,4 +54,6 @@ public interface TextReport<T extends TextReport<T>> {
   T newInstance();
 
   void merge(T partReport);
+
+  void cleanup();
 }

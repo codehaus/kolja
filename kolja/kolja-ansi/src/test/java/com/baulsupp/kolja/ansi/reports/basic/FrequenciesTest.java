@@ -15,17 +15,36 @@
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-package com.baulsupp.kolja.ansi.reports.test;
+package com.baulsupp.kolja.ansi.reports.basic;
 
-import com.baulsupp.kolja.ansi.reports.ReportContext;
-import com.baulsupp.kolja.log.line.Line;
+import static org.junit.Assert.assertEquals;
+
+import org.junit.Before;
+import org.junit.Test;
 
 /**
  * @author Yuri Schimke
  * 
  */
-public class SimpleReportEngine implements ReportContext {
-  public Line readLine(int i) {
-    return null;
+public class FrequenciesTest {
+  @Before
+  public void setup() {
+  }
+
+  @Test
+  public void testMergable() {
+    Frequencies<String> freq1 = new Frequencies<String>();
+    freq1.increment("a");
+    freq1.increment("b");
+
+    Frequencies<String> freq2 = new Frequencies<String>();
+    freq2.increment("b");
+    freq2.increment("c");
+
+    freq1.merge(freq2);
+
+    assertEquals(1, freq1.get("a"));
+    assertEquals(2, freq1.get("b"));
+    assertEquals(1, freq1.get("c"));
   }
 }

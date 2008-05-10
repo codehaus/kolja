@@ -28,7 +28,7 @@ public class PeriodFormatTest {
   public void testIsSerializable() throws Exception {
     PeriodFormat f = new PeriodFormat();
 
-    PeriodFormat f2 = TestUtil.serialiseAndDeserialize(f);
+    TestUtil.serialiseAndDeserialize(f);
   }
 
   @Test

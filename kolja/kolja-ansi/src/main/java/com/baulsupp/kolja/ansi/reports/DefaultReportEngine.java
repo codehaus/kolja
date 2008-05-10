@@ -82,7 +82,7 @@ public class DefaultReportEngine implements ReportEngine, ReportContext {
     return reports.size() > 1;
   }
 
-  protected void iterateThroughFile(File file, BasicLineIterator i) {
+  protected void iterateThroughFile(BasicLineIterator i) {
     while (i.hasNext()) {
       Line l = i.next();
 
@@ -97,7 +97,7 @@ public class DefaultReportEngine implements ReportEngine, ReportContext {
       r.beforeFile(file);
     }
 
-    iterateThroughFile(file, i);
+    iterateThroughFile(i);
 
     processRequests();
 
@@ -141,14 +141,12 @@ public class DefaultReportEngine implements ReportEngine, ReportContext {
   }
 
   public void initialise() throws IOException {
-    reportPrinter.initialise();
-
     showRequests = show(Detail.REQUESTS);
 
     showEvents = show(Detail.EVENTS);
 
     for (TextReport<?> r : reports) {
-      r.initialise(reportPrinter, this, this);
+      r.initialise(reportPrinter, this);
     }
   }
 
@@ -180,23 +178,21 @@ public class DefaultReportEngine implements ReportEngine, ReportContext {
 
   public void process(List<File> commandFiles) throws Exception {
     for (File file : commandFiles) {
-      if (commandFiles.size() == 1) {
-        WrappedCharBuffer buffer = WrappedCharBuffer.fromFile(file);
+      WrappedCharBuffer buffer = WrappedCharBuffer.fromFile(file);
 
-        LineIndex li = format.getLineIndex(buffer);
+      LineIndex li = format.getLineIndex(buffer);
 
-        if (format.supportsRequests()) {
-          RequestIndex requestIndex = format.getRequestIndex(li);
-          setRequestIndex(requestIndex);
-        }
-
-        if (format.supportsEvents()) {
-          EventList eventList = format.getEventList(li);
-          setEventList(eventList);
-        }
-
-        run(file, new BasicLineIterator(li));
+      if (format.supportsRequests()) {
+        RequestIndex requestIndex = format.getRequestIndex(li);
+        setRequestIndex(requestIndex);
       }
+
+      if (format.supportsEvents()) {
+        EventList eventList = format.getEventList(li);
+        setEventList(eventList);
+      }
+
+      run(file, new BasicLineIterator(li));
     }
 
     completed();

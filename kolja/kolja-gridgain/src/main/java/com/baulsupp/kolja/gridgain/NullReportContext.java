@@ -15,7 +15,7 @@
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-package com.baulsupp.kolja.ansi.reports.test;
+package com.baulsupp.kolja.gridgain;
 
 import com.baulsupp.kolja.ansi.reports.ReportContext;
 import com.baulsupp.kolja.log.line.Line;
@@ -24,7 +24,7 @@ import com.baulsupp.kolja.log.line.Line;
  * @author Yuri Schimke
  * 
  */
-public class SimpleReportEngine implements ReportContext {
+public class NullReportContext implements ReportContext {
   public Line readLine(int i) {
     return null;
   }

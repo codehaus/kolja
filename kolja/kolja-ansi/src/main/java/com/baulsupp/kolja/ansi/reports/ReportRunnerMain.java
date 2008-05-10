@@ -111,6 +111,7 @@ public class ReportRunnerMain {
 
     List<File> commandFiles = commandFiles(filenames);
 
+    reportPrinter.initialise();
     reportEngine.initialise();
 
     reportEngine.process(commandFiles);

@@ -35,9 +35,8 @@ import com.baulsupp.kolja.util.colours.MultiColourString;
  * @author Yuri Schimke
  */
 public abstract class AbstractTextReport<T extends AbstractTextReport<T>> implements TextReport<T>, Cloneable, Serializable {
-  protected ReportPrinter reportRunner;
+  protected ReportPrinter reportPrinter;
   private HashSet<Detail> details;
-  protected ReportEngine reportEngine;
   private ReportContext reportContext;
 
   public AbstractTextReport() {
@@ -48,16 +47,19 @@ public abstract class AbstractTextReport<T extends AbstractTextReport<T>> implem
     this.details = new HashSet<Detail>(Arrays.asList(selected));
   }
 
-  public void initialise(ReportPrinter reportRunner, ReportEngine reportEngine, ReportContext reportContext) {
-    Assert.notNull(reportRunner);
-    Assert.notNull(reportEngine);
+  public void initialise(ReportPrinter reportPrinter, ReportContext reportContext) {
+    Assert.notNull(reportPrinter);
     Assert.notNull(reportContext);
 
-    this.reportRunner = reportRunner;
-    this.reportEngine = reportEngine;
+    this.reportPrinter = reportPrinter;
     this.reportContext = reportContext;
 
     validate();
+  }
+
+  public void cleanup() {
+    this.reportPrinter = null;
+    this.reportContext = null;
   }
 
   /**
@@ -89,19 +91,19 @@ public abstract class AbstractTextReport<T extends AbstractTextReport<T>> implem
   }
 
   protected void printTitle() {
-    reportRunner.printTitle(describe());
+    reportPrinter.printTitle(describe());
   }
 
   public void println(MultiColourString string) {
-    reportRunner.println(string);
+    reportPrinter.println(string);
   }
 
   public void printLine(Line line) {
-    reportRunner.printLine(line);
+    reportPrinter.printLine(line);
   }
 
   public void printRequestLine(RequestLine line) {
-    reportRunner.printRequest(line);
+    reportPrinter.printRequest(line);
   }
 
   protected void printLinesForRequests(RequestLine l) {
@@ -117,7 +119,7 @@ public abstract class AbstractTextReport<T extends AbstractTextReport<T>> implem
   }
 
   public void println(String string) {
-    reportRunner.println(new MultiColourString(string));
+    reportPrinter.println(new MultiColourString(string));
   }
 
   @SuppressWarnings("unchecked")
@@ -125,8 +127,7 @@ public abstract class AbstractTextReport<T extends AbstractTextReport<T>> implem
     try {
       T clone = (T) super.clone();
 
-      clone.reportEngine = null;
-      clone.reportRunner = null;
+      clone.reportPrinter = null;
       clone.reportContext = null;
 
       return clone;

@@ -19,11 +19,14 @@ package com.baulsupp.kolja.gridgain;
 
 import java.io.File;
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.List;
 
 import org.gridgain.grid.GridException;
 import org.gridgain.grid.GridJob;
 
+import com.baulsupp.kolja.ansi.reports.DefaultReportEngine;
+import com.baulsupp.kolja.ansi.reports.ReportPrinter;
 import com.baulsupp.kolja.ansi.reports.TextReport;
 import com.baulsupp.kolja.log.viewer.importing.LogFormat;
 
@@ -50,7 +53,29 @@ public class GridReportJob implements GridJob {
   }
 
   public Serializable execute() throws GridException {
-    System.out.println("\n\nProcessing " + file + "\n\n");
+    try {
+      DefaultReportEngine reportEngine = new DefaultReportEngine();
+      reportEngine.setLogFormat(logFormat);
+
+      ReportPrinter reportPrinter = new NullReportPrinter();
+      // ReportPrinter reportPrinter = new AnsiReportPrinter();
+      reportPrinter.initialise();
+
+      reportEngine.setReportPrinter(reportPrinter);
+
+      reportEngine.setReports(reports);
+
+      reportEngine.initialise();
+
+      reportEngine.process(Arrays.asList(file));
+    } catch (Exception e) {
+      throw new GridException(e);
+    }
+
+    for (TextReport<?> report : reports) {
+      report.cleanup();
+
+    }
 
     return (Serializable) reports;
   }

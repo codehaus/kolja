@@ -15,17 +15,43 @@
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-package com.baulsupp.kolja.ansi.reports.test;
+package com.baulsupp.kolja.gridgain;
 
-import com.baulsupp.kolja.ansi.reports.ReportContext;
+import java.io.IOException;
+
+import com.baulsupp.kolja.ansi.reports.ReportEngine;
+import com.baulsupp.kolja.ansi.reports.ReportPrinter;
 import com.baulsupp.kolja.log.line.Line;
+import com.baulsupp.kolja.log.viewer.request.RequestLine;
+import com.baulsupp.kolja.util.colours.MultiColourString;
 
 /**
  * @author Yuri Schimke
  * 
  */
-public class SimpleReportEngine implements ReportContext {
-  public Line readLine(int i) {
-    return null;
+public class NullReportPrinter implements ReportPrinter {
+
+  public void completed() throws IOException {
+  }
+
+  public void initialise() throws IOException {
+  }
+
+  public void printLine(Line line) {
+  }
+
+  public void printLine() {
+  }
+
+  public void printRequest(RequestLine request) {
+  }
+
+  public void printTitle(String title) {
+  }
+
+  public void println(MultiColourString string) {
+  }
+
+  public void setReportEngine(ReportEngine reportEngine) {
   }
 }

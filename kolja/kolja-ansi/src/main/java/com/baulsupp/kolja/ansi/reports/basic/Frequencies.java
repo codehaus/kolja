@@ -17,6 +17,7 @@
  */
 package com.baulsupp.kolja.ansi.reports.basic;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -71,7 +72,9 @@ public class Frequencies<T> implements Iterable<Frequencies.Count<T>> {
     }
   }
 
-  public static class Count<S> {
+  public static class Count<S> implements Serializable {
+    private static final long serialVersionUID = -6312937012496559725L;
+
     private S url;
     private int i;
 
@@ -131,6 +134,8 @@ public class Frequencies<T> implements Iterable<Frequencies.Count<T>> {
   }
 
   public void merge(Frequencies<T> other) {
-
+    for (Count<T> count : other.counts.values()) {
+      incrementBy(count.url, count.i);
+    }
   }
 }

@@ -56,13 +56,14 @@ public class GridGainReportEngine implements ReportEngine {
   }
 
   public void initialise() throws IOException {
-    reportPrinter.initialise();
   }
 
   public void completed() throws IOException {
     boolean first = true;
 
     for (TextReport<?> r : reports) {
+      r.initialise(reportPrinter, new NullReportContext());
+
       if (!first) {
         reportPrinter.printLine();
       } else {

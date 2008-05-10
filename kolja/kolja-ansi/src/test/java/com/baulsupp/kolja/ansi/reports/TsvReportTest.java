@@ -43,7 +43,7 @@ public class TsvReportTest {
     pages.setFields("url", "status");
 
     SimpleReportEngine engine = new SimpleReportEngine();
-    pages.initialise(reportRunner, engine, engine);
+    pages.initialise(reportRunner, engine);
   }
 
   @Test
