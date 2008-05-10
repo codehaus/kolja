@@ -15,26 +15,50 @@
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-package com.baulsupp.kolja.ansi.reports;
+package com.baulsupp.kolja.gridgain;
 
 import java.io.File;
-import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
+import com.baulsupp.kolja.ansi.reports.TextReport;
 import com.baulsupp.kolja.log.viewer.importing.LogFormat;
 
 /**
  * @author Yuri Schimke
  * 
  */
-public interface ReportEngine {
-  void initialise() throws IOException;
+public class ReportBatch {
 
-  void setReports(List<TextReport<?>> createReports);
+  private List<File> files;
+  private LogFormat format;
+  private List<TextReport<?>> reports;
 
-  void setReportPrinter(ReportPrinter reportPrinter);
+  public ReportBatch(LogFormat format, List<File> files, List<TextReport<?>> report) {
+    this.format = format;
+    this.files = files;
+    this.reports = report;
+  }
 
-  void process(List<File> commandFiles) throws Exception;
+  public List<File> getFiles() {
+    return files;
+  }
 
-  void setLogFormat(LogFormat format);
+  public LogFormat getFormat() {
+    return format;
+  }
+
+  public List<TextReport<?>> getReportsCopy() {
+    ArrayList<TextReport<?>> copy = new ArrayList<TextReport<?>>(reports.size());
+
+    for (TextReport<?> textReport : reports) {
+      copy.add(textReport.newInstance());
+    }
+
+    return copy;
+  }
+
+  public List<TextReport<?>> getReports() {
+    return reports;
+  }
 }

@@ -17,24 +17,12 @@
  */
 package com.baulsupp.kolja.ansi.reports;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.List;
-
-import com.baulsupp.kolja.log.viewer.importing.LogFormat;
+import com.baulsupp.kolja.log.line.Line;
 
 /**
  * @author Yuri Schimke
  * 
  */
-public interface ReportEngine {
-  void initialise() throws IOException;
-
-  void setReports(List<TextReport<?>> createReports);
-
-  void setReportPrinter(ReportPrinter reportPrinter);
-
-  void process(List<File> commandFiles) throws Exception;
-
-  void setLogFormat(LogFormat format);
+public interface ReportContext {
+  Line readLine(int i);
 }

@@ -28,12 +28,12 @@ import com.baulsupp.kolja.log.viewer.request.RequestLine;
  * 
  * @author Yuri Schimke
  */
-public interface TextReport {
+public interface TextReport<T extends TextReport<T>> {
   enum Detail {
     LINES, REQUESTS, EVENTS;
   }
 
-  void initialise(ReportPrinter reportRunner, ReportEngine reportEngine);
+  void initialise(ReportPrinter reportRunner, ReportEngine reportEngine, ReportContext reportContext);
 
   boolean isInterested(Detail detail);
 
@@ -50,4 +50,8 @@ public interface TextReport {
   void completed();
 
   String describe();
+
+  T newInstance();
+
+  void merge(T partReport);
 }

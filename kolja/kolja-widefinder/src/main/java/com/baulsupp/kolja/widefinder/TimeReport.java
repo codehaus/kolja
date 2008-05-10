@@ -27,7 +27,8 @@ import org.joda.time.format.DateTimeFormatter;
 import com.baulsupp.kolja.ansi.reports.basic.AbstractFrequencyReport;
 import com.baulsupp.kolja.log.line.Line;
 
-public class TimeReport extends AbstractFrequencyReport<Partial> {
+public class TimeReport extends AbstractFrequencyReport<Partial, TimeReport> {
+  private static final long serialVersionUID = -5979234989893318614L;
 
   private DateTimeFieldType[] types = { DateTimeFieldType.hourOfDay() };
   private DateTimeFormatter formatter = JodaUtil.buildDateTimeFormatter(types);

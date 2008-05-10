@@ -9,7 +9,9 @@ import com.baulsupp.kolja.ansi.reports.AbstractTextReport;
 import com.baulsupp.kolja.log.line.Line;
 import com.baulsupp.kolja.widefinder.WideFinderConstants;
 
-public class CategorisationReport extends AbstractTextReport {
+public class CategorisationReport extends AbstractTextReport<CategorisationReport> {
+  private static final long serialVersionUID = 8104789163998408401L;
+
   private FileTypeCategoriser categoriser = new WideFinderTypeCategoriser();
 
   private Map<String, Stats> stats = new HashMap<String, Stats>();

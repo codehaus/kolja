@@ -26,7 +26,9 @@ import com.baulsupp.kolja.log.line.Line;
  * @author Yuri Schimke
  * 
  */
-public class FailureReport extends AbstractTextReport {
+public final class FailureReport extends AbstractTextReport<FailureReport> {
+  private static final long serialVersionUID = 6089075160216434619L;
+
   private int count;
 
   public FailureReport() {

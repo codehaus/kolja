@@ -17,8 +17,6 @@
  */
 package com.baulsupp.kolja.ansi.reports.basic;
 
-import com.baulsupp.kolja.ansi.reports.ReportEngine;
-import com.baulsupp.kolja.ansi.reports.ReportPrinter;
 import com.baulsupp.kolja.log.line.Line;
 
 /**
@@ -26,7 +24,9 @@ import com.baulsupp.kolja.log.line.Line;
  * 
  * @author Yuri Schimke
  */
-public class FrequencyReport<T> extends AbstractFrequencyReport<T> {
+public final class FrequencyReport<S> extends AbstractFrequencyReport<S, FrequencyReport<S>> {
+  private static final long serialVersionUID = 7904855697341368970L;
+
   private String field;
 
   public FrequencyReport() {
@@ -42,14 +42,12 @@ public class FrequencyReport<T> extends AbstractFrequencyReport<T> {
 
   @SuppressWarnings("unchecked")
   @Override
-  protected T getValue(Line line) {
-    return (T) line.getValue(field);
+  protected S getValue(Line line) {
+    return (S) line.getValue(field);
   }
 
   @Override
-  public void initialise(ReportPrinter reportRunner, ReportEngine reportEngine) {
-    super.initialise(reportRunner, reportEngine);
-
+  protected void validate() {
     if (field == null) {
       throw new IllegalStateException("q not set");
     }

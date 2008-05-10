@@ -33,7 +33,7 @@ public class ReportBuilder {
     this.appCtxt = appCtxt;
   }
 
-  public TextReport buildReport(String name) {
+  public TextReport<?> buildReport(String name) {
     String[] parts = null;
 
     if (name.contains("?")) {
@@ -48,7 +48,7 @@ public class ReportBuilder {
       parts = parts[1].split("\\&");
     }
 
-    TextReport bean = (TextReport) appCtxt.getBean(name);
+    TextReport<?> bean = (TextReport<?>) appCtxt.getBean(name);
 
     if (parts != null) {
       applyConfig(bean, parts);
@@ -57,7 +57,7 @@ public class ReportBuilder {
     return bean;
   }
 
-  public void applyConfig(TextReport bean, String[] parts) {
+  public void applyConfig(TextReport<?> bean, String[] parts) {
     BeanWrapperImpl bw = new BeanWrapperImpl(bean);
 
     new KoljaPropertyEditorRegistrar().registerCustomEditors(bw);

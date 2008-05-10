@@ -15,45 +15,48 @@
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-package com.baulsupp.kolja.ansi.reports.test;
+package com.baulsupp.kolja.gridgain;
+
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
-import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 
-import com.baulsupp.kolja.ansi.reports.ReportContext;
-import com.baulsupp.kolja.ansi.reports.ReportEngine;
-import com.baulsupp.kolja.ansi.reports.ReportPrinter;
+import org.junit.Before;
+import org.junit.Test;
+
 import com.baulsupp.kolja.ansi.reports.TextReport;
-import com.baulsupp.kolja.log.line.Line;
 import com.baulsupp.kolja.log.viewer.importing.LogFormat;
+import com.baulsupp.kolja.log.viewer.importing.PlainTextLogFormat;
+import com.baulsupp.kolja.widefinder.TimeReport;
 
 /**
  * @author Yuri Schimke
  * 
  */
-public class SimpleReportEngine implements ReportEngine, ReportContext {
+public class ReportBatchTest {
+  private LogFormat format;
+  private List<File> files;
+  private List<TextReport<?>> reports;
 
-  public boolean hasMultipleReports() {
-    return false;
+  @Before
+  public void setup() {
+    format = new PlainTextLogFormat();
+    files = Collections.singletonList(new File("a.txt"));
+    reports = Collections.<TextReport<?>> singletonList(new TimeReport());
   }
 
-  public void initialise() throws IOException {
+  @Test
+  public void testBatch() {
+    ReportBatch batch = new ReportBatch(format, files, reports);
+
+    assertTrue(reports == batch.getReports());
+
+    List<TextReport<?>> copy = batch.getReportsCopy();
+    assertFalse(reports == copy);
+    assertFalse(reports.get(0) == copy.get(0));
   }
 
-  public void process(List<File> commandFiles) throws Exception {
-  }
-
-  public Line readLine(int i) {
-    return null;
-  }
-
-  public void setReportPrinter(ReportPrinter reportPrinter) {
-  }
-
-  public void setReports(List<TextReport<?>> createReports) {
-  }
-
-  public void setLogFormat(LogFormat format) {
-  }
 }

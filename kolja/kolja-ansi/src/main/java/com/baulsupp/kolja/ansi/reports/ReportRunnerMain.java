@@ -36,6 +36,7 @@ import org.apache.commons.cli.PosixParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
+import org.springframework.util.ClassUtils;
 
 import com.baulsupp.kolja.ansi.ConsoleRenderer;
 import com.baulsupp.kolja.ansi.TailRenderer;
@@ -86,15 +87,9 @@ public class ReportRunnerMain {
 
     LogFormat format = SpringBeanLogFormatLoader.getLogFormat(appCtxt);
 
-    final ReportPrinter reportPrinter;
+    final ReportPrinter reportPrinter = createReportPrinter(cmd, format);
 
-    if (cmd.hasOption('w')) {
-      reportPrinter = createHtmlReportRunner(cmd, format);
-    } else {
-      reportPrinter = createAnsiReportRunner(cmd, format);
-    }
-
-    final ReportEngine reportEngine = createReportEngine(format);
+    final ReportEngine reportEngine = createReportEngine(cmd, format);
 
     reportPrinter.setReportEngine(reportEngine);
     reportEngine.setReportPrinter(reportPrinter);
@@ -121,15 +116,35 @@ public class ReportRunnerMain {
     reportEngine.process(commandFiles);
   }
 
-  private static DefaultReportEngine createReportEngine(LogFormat format) {
-    DefaultReportEngine defaultReportEngine = new DefaultReportEngine();
+  private static ReportPrinter createReportPrinter(CommandLine cmd, LogFormat format) {
+    final ReportPrinter reportPrinter;
+    if (cmd.hasOption('w')) {
+      reportPrinter = createHtmlReportPrinter(cmd, format);
+    } else {
+      reportPrinter = createAnsiReportPrinter(cmd, format);
+    }
+    return reportPrinter;
+  }
+
+  private static ReportEngine createReportEngine(CommandLine cmd, LogFormat format) throws Exception {
+    ReportEngine defaultReportEngine;
+
+    if (cmd.hasOption('g')) {
+      defaultReportEngine = createReportEngine(cmd.getOptionValue('g'));
+    } else {
+      defaultReportEngine = new DefaultReportEngine();
+    }
 
     defaultReportEngine.setLogFormat(format);
 
     return defaultReportEngine;
   }
 
-  private static ReportPrinter createHtmlReportRunner(CommandLine cmd, LogFormat format) {
+  private static ReportEngine createReportEngine(String clazz) throws Exception {
+    return (ReportEngine) ClassUtils.forName(clazz).newInstance();
+  }
+
+  private static ReportPrinter createHtmlReportPrinter(CommandLine cmd, LogFormat format) {
     HtmlReportPrinter htmlReportRunner = new HtmlReportPrinter();
 
     htmlReportRunner.setRenderer(format.getLineRenderer());
@@ -138,7 +153,7 @@ public class ReportRunnerMain {
     return htmlReportRunner;
   }
 
-  private static ReportPrinter createAnsiReportRunner(CommandLine cmd, LogFormat format) {
+  private static ReportPrinter createAnsiReportPrinter(CommandLine cmd, LogFormat format) {
     final AnsiReportPrinter reportRunner = new AnsiReportPrinter();
 
     boolean ansi = !cmd.hasOption("a");
@@ -186,8 +201,8 @@ public class ReportRunnerMain {
     return tr;
   }
 
-  private static List<TextReport> createReports(ReportBuilder builder, List<String> v) throws Exception {
-    List<TextReport> reports = new ArrayList<TextReport>();
+  private static List<TextReport<?>> createReports(ReportBuilder builder, List<String> v) throws Exception {
+    List<TextReport<?>> reports = new ArrayList<TextReport<?>>();
 
     for (String string : v) {
       reports.add(builder.buildReport(string));
@@ -227,6 +242,9 @@ public class ReportRunnerMain {
 
     options.addOption(OptionBuilder.withArgName("outputFormat").hasArg().withDescription("printf output format").withLongOpt(
         "printf").create('o'));
+
+    options.addOption(OptionBuilder.withArgName("engine").hasArgs().withDescription("Report Engine").withLongOpt("engine").create(
+        'g'));
 
     options.addOption(OptionBuilder.withArgName("report").hasArgs().withDescription("report").withLongOpt("report").create('r'));
 

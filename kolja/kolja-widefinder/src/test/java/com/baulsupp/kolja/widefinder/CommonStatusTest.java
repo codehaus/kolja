@@ -48,7 +48,8 @@ public class CommonStatusTest {
 
     reportRunner = new SimpleReportPrinter();
 
-    pages.initialise(reportRunner, new SimpleReportEngine());
+    SimpleReportEngine engine = new SimpleReportEngine();
+    pages.initialise(reportRunner, engine, engine);
   }
 
   @Test

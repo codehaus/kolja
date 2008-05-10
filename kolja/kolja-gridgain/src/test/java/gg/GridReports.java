@@ -15,26 +15,18 @@
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-package com.baulsupp.kolja.ansi.reports;
+package gg;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.List;
-
-import com.baulsupp.kolja.log.viewer.importing.LogFormat;
+import com.baulsupp.kolja.ansi.reports.ReportRunnerMain;
 
 /**
  * @author Yuri Schimke
  * 
  */
-public interface ReportEngine {
-  void initialise() throws IOException;
-
-  void setReports(List<TextReport<?>> createReports);
-
-  void setReportPrinter(ReportPrinter reportPrinter);
-
-  void process(List<File> commandFiles) throws Exception;
-
-  void setLogFormat(LogFormat format);
+public class GridReports {
+  public static void main(String[] args) {
+    ReportRunnerMain.main("-x", "../kolja-widefinder/src/main/config/wf.xml", "-g",
+        "com.baulsupp.kolja.gridgain.GridGainReportEngine", "-r", "freq?q=url&count=3",
+        "../kolja-widefinder/src/test/logs/o10k.ap", "../kolja-widefinder/src/test/logs/o10k.ap");
+  }
 }

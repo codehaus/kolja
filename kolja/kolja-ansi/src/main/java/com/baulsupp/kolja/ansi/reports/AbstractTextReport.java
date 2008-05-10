@@ -18,6 +18,7 @@
 package com.baulsupp.kolja.ansi.reports;
 
 import java.io.File;
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.HashSet;
 
@@ -33,10 +34,11 @@ import com.baulsupp.kolja.util.colours.MultiColourString;
  * 
  * @author Yuri Schimke
  */
-public abstract class AbstractTextReport implements TextReport {
+public abstract class AbstractTextReport<T extends AbstractTextReport<T>> implements TextReport<T>, Cloneable, Serializable {
   protected ReportPrinter reportRunner;
   private HashSet<Detail> details;
   protected ReportEngine reportEngine;
+  private ReportContext reportContext;
 
   public AbstractTextReport() {
     this(Detail.LINES);
@@ -46,12 +48,22 @@ public abstract class AbstractTextReport implements TextReport {
     this.details = new HashSet<Detail>(Arrays.asList(selected));
   }
 
-  public void initialise(ReportPrinter reportRunner, ReportEngine reportEngine) {
+  public void initialise(ReportPrinter reportRunner, ReportEngine reportEngine, ReportContext reportContext) {
     Assert.notNull(reportRunner);
     Assert.notNull(reportEngine);
+    Assert.notNull(reportContext);
 
     this.reportRunner = reportRunner;
     this.reportEngine = reportEngine;
+    this.reportContext = reportContext;
+
+    validate();
+  }
+
+  /**
+   * Validate Report Settings
+   */
+  protected void validate() {
   }
 
   public boolean isInterested(Detail detail) {
@@ -101,10 +113,28 @@ public abstract class AbstractTextReport implements TextReport {
   }
 
   protected Line readLine(int i) {
-    return reportEngine.readLine(i);
+    return reportContext.readLine(i);
   }
 
   public void println(String string) {
     reportRunner.println(new MultiColourString(string));
+  }
+
+  @SuppressWarnings("unchecked")
+  public T newInstance() {
+    try {
+      T clone = (T) super.clone();
+
+      clone.reportEngine = null;
+      clone.reportRunner = null;
+      clone.reportContext = null;
+
+      return clone;
+    } catch (CloneNotSupportedException e) {
+      throw new IllegalStateException(e);
+    }
+  }
+
+  public void merge(T partReport) {
   }
 }

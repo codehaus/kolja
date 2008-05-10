@@ -24,28 +24,28 @@ import com.baulsupp.kolja.ansi.reports.AbstractTextReport;
 import com.baulsupp.kolja.ansi.reports.basic.Frequencies.Count;
 import com.baulsupp.kolja.log.line.Line;
 
-public abstract class AbstractFrequencyReport<T> extends AbstractTextReport {
-  private Frequencies<T> counts;
+public abstract class AbstractFrequencyReport<S, T extends AbstractFrequencyReport<S, T>> extends AbstractTextReport<T> {
+  private Frequencies<S> counts;
   protected Integer count = null;
 
   public AbstractFrequencyReport() {
-    counts = new Frequencies<T>();
+    counts = new Frequencies<S>();
   }
 
-  public AbstractFrequencyReport(SortedMap<T, Count<T>> map) {
-    counts = new Frequencies<T>(map);
+  public AbstractFrequencyReport(SortedMap<S, Count<S>> map) {
+    counts = new Frequencies<S>(map);
   }
 
   @Override
   public void processLine(Line line) {
-    T value = getValue(line);
+    S value = getValue(line);
 
     increment(value);
   }
 
-  protected abstract T getValue(Line line);
+  protected abstract S getValue(Line line);
 
-  protected void increment(T t) {
+  protected void increment(S t) {
     counts.increment(t);
   }
 
@@ -61,17 +61,17 @@ public abstract class AbstractFrequencyReport<T> extends AbstractTextReport {
   }
 
   public void displayFrequencies() {
-    for (Count<T> c : getFrequencies()) {
+    for (Count<S> c : getFrequencies()) {
       println(toString(c.getItem()) + " " + c.getCount());
     }
   }
 
-  protected String toString(T item) {
+  protected String toString(S item) {
     return String.valueOf(item);
   }
 
   public void displayMostFrequent() {
-    for (Count<T> c : getMostFrequent(count)) {
+    for (Count<S> c : getMostFrequent(count)) {
       println(c.getCount() + " " + toString(c.getItem()));
     }
   }
@@ -80,12 +80,28 @@ public abstract class AbstractFrequencyReport<T> extends AbstractTextReport {
     this.count = count;
   }
 
-  public Frequencies<T> getFrequencies() {
+  public Frequencies<S> getFrequencies() {
     return counts;
   }
 
-  public List<Count<T>> getMostFrequent(int urlCount) {
+  public List<Count<S>> getMostFrequent(int urlCount) {
     return counts.getMostFrequent(urlCount);
   }
 
+  @SuppressWarnings("unchecked")
+  @Override
+  public T newInstance() {
+    T newInstance = (T) super.newInstance();
+
+    newInstance.counts = new Frequencies<S>();
+
+    return newInstance;
+  }
+
+  @Override
+  public void merge(T partReport) {
+    super.merge(partReport);
+
+    counts.merge(partReport.counts);
+  }
 }

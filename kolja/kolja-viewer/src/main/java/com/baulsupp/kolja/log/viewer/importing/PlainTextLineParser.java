@@ -10,6 +10,8 @@ import com.baulsupp.kolja.log.line.Line;
 import com.baulsupp.kolja.log.line.LineParser;
 
 public class PlainTextLineParser implements LineParser {
+  private static final long serialVersionUID = 5837014928434123410L;
+
   public Line parse(CharSequence c) {
     BasicLine l = new BasicLine();
 

@@ -20,7 +20,9 @@ package com.baulsupp.kolja.ansi.reports.basic;
 import com.baulsupp.kolja.ansi.reports.AbstractTextReport;
 import com.baulsupp.kolja.log.viewer.event.Event;
 
-public class DumpEvents extends AbstractTextReport {
+public class DumpEvents extends AbstractTextReport<DumpEvents> {
+  private static final long serialVersionUID = -7230227903333837349L;
+
   public DumpEvents() {
     super(Detail.EVENTS);
   }

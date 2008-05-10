@@ -6,7 +6,9 @@ import com.baulsupp.kolja.ansi.reports.AbstractTextReport;
 import com.baulsupp.kolja.log.line.Line;
 import com.baulsupp.kolja.log.viewer.format.BytesFormat;
 
-public class TotalBytesReport extends AbstractTextReport {
+public class TotalBytesReport extends AbstractTextReport<TotalBytesReport> {
+  private static final long serialVersionUID = 3736367542519968003L;
+
   private AtomicLong total = new AtomicLong();
   private BytesFormat format = new BytesFormat();
 

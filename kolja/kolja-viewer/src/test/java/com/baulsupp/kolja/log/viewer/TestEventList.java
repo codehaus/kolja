@@ -12,6 +12,7 @@ import com.baulsupp.kolja.log.viewer.event.EventList;
 import com.baulsupp.kolja.log.viewer.event.EventMatcher;
 
 public class TestEventList extends TestCase {
+  @SuppressWarnings("serial")
   public void testEventLog() {
     MockLineIndex index = new MockLineIndex();
 

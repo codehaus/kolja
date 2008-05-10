@@ -20,4 +20,5 @@ package com.baulsupp.kolja.bank;
 import com.baulsupp.kolja.ansi.reports.basic.ActiveRequests;
 
 public class BankActiveRequests extends ActiveRequests {
+  private static final long serialVersionUID = 2083396041870449319L;
 }

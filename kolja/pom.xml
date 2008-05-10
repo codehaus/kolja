@@ -58,6 +58,9 @@
     <module>kolja-widefinder</module>
     <module>kolja-bank</module>
     <module>kolja-jez</module>
+    <!--
+    <module>kolja-gridgain</module>
+    -->
   </modules>
 
   <dependencyManagement>
@@ -71,7 +74,7 @@
       <dependency>
         <groupId>org.slf4j</groupId>
         <artifactId>slf4j-api</artifactId>
-        <version>1.4.3</version>
+        <version>1.5.0</version>
       </dependency>
       <dependency>
         <groupId>xom</groupId>
@@ -129,7 +132,7 @@
       <dependency>
         <groupId>org.slf4j</groupId>
         <artifactId>log4j-over-slf4j</artifactId>
-        <version>1.4.3</version>
+        <version>1.5.0</version>
       </dependency>
     </dependencies>
   </dependencyManagement>

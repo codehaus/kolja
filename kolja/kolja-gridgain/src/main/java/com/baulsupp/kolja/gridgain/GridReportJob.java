@@ -15,26 +15,47 @@
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-package com.baulsupp.kolja.ansi.reports;
+package com.baulsupp.kolja.gridgain;
 
 import java.io.File;
-import java.io.IOException;
+import java.io.Serializable;
 import java.util.List;
 
+import org.gridgain.grid.GridException;
+import org.gridgain.grid.GridJob;
+
+import com.baulsupp.kolja.ansi.reports.TextReport;
 import com.baulsupp.kolja.log.viewer.importing.LogFormat;
 
 /**
  * @author Yuri Schimke
  * 
  */
-public interface ReportEngine {
-  void initialise() throws IOException;
+public class GridReportJob implements GridJob {
+  private static final long serialVersionUID = -1353677666898433825L;
 
-  void setReports(List<TextReport<?>> createReports);
+  private LogFormat logFormat;
 
-  void setReportPrinter(ReportPrinter reportPrinter);
+  private File file;
 
-  void process(List<File> commandFiles) throws Exception;
+  private List<TextReport<?>> reports;
 
-  void setLogFormat(LogFormat format);
+  public GridReportJob(LogFormat logFormat, File file, List<TextReport<?>> reports) {
+    this.logFormat = logFormat;
+    this.file = file;
+    this.reports = reports;
+  }
+
+  public void cancel() {
+  }
+
+  public Serializable execute() throws GridException {
+    System.out.println("\n\nProcessing " + file + "\n\n");
+
+    return (Serializable) reports;
+  }
+
+  public File getFile() {
+    return file;
+  }
 }

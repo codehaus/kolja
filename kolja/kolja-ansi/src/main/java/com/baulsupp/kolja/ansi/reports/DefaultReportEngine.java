@@ -36,10 +36,10 @@ import com.baulsupp.kolja.log.viewer.request.RequestLine;
 /**
  * @author Yuri Schimke
  */
-public class DefaultReportEngine implements ReportEngine {
+public class DefaultReportEngine implements ReportEngine, ReportContext {
   protected BasicLineIterator i;
 
-  protected java.util.List<TextReport> reports;
+  protected java.util.List<TextReport<?>> reports;
 
   private RequestIndex requestIndex;
 
@@ -60,7 +60,7 @@ public class DefaultReportEngine implements ReportEngine {
     this.reportPrinter = reportPrinter;
   }
 
-  public void setReports(java.util.List<TextReport> reports) {
+  public void setReports(java.util.List<TextReport<?>> reports) {
     this.reports = reports;
   }
 
@@ -93,7 +93,7 @@ public class DefaultReportEngine implements ReportEngine {
   public void run(File file, BasicLineIterator i) throws InterruptedException, IOException {
     this.i = i;
 
-    for (TextReport r : reports) {
+    for (TextReport<?> r : reports) {
       r.beforeFile(file);
     }
 
@@ -101,7 +101,7 @@ public class DefaultReportEngine implements ReportEngine {
 
     processRequests();
 
-    for (TextReport r : reports) {
+    for (TextReport<?> r : reports) {
       r.afterFile(file);
     }
 
@@ -109,7 +109,7 @@ public class DefaultReportEngine implements ReportEngine {
   }
 
   protected void processLine(Line line) {
-    for (TextReport r : reports) {
+    for (TextReport<?> r : reports) {
       r.processLine(line);
     }
 
@@ -117,7 +117,7 @@ public class DefaultReportEngine implements ReportEngine {
       Event event = eventList.readEvent(line);
 
       if (event != null) {
-        for (TextReport r : reports) {
+        for (TextReport<?> r : reports) {
           r.processEvent(event);
         }
       }
@@ -133,7 +133,7 @@ public class DefaultReportEngine implements ReportEngine {
       Collection<RequestLine> requests = requestIndex.getKnown();
 
       for (RequestLine requestLine : requests) {
-        for (TextReport r : reports) {
+        for (TextReport<?> r : reports) {
           r.processRequest(requestLine);
         }
       }
@@ -147,13 +147,13 @@ public class DefaultReportEngine implements ReportEngine {
 
     showEvents = show(Detail.EVENTS);
 
-    for (TextReport r : reports) {
-      r.initialise(reportPrinter, this);
+    for (TextReport<?> r : reports) {
+      r.initialise(reportPrinter, this, this);
     }
   }
 
   private boolean show(Detail detail) {
-    for (TextReport r : reports) {
+    for (TextReport<?> r : reports) {
       if (r.isInterested(detail)) {
         return true;
       }
@@ -165,7 +165,7 @@ public class DefaultReportEngine implements ReportEngine {
   public void completed() throws IOException {
     boolean first = true;
 
-    for (TextReport r : reports) {
+    for (TextReport<?> r : reports) {
       if (!first) {
         reportPrinter.printLine();
       } else {

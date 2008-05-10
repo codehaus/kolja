@@ -29,7 +29,9 @@ import com.baulsupp.kolja.ansi.reports.AbstractTextReport;
 import com.baulsupp.kolja.log.LogConstants;
 import com.baulsupp.kolja.log.viewer.request.RequestLine;
 
-public class ActiveRequests extends AbstractTextReport {
+public class ActiveRequests extends AbstractTextReport<ActiveRequests> {
+  private static final long serialVersionUID = -6837582094819173737L;
+
   private LocalTime from;
 
   private LocalTime to;

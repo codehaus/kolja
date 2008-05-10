@@ -29,7 +29,9 @@ import com.baulsupp.kolja.log.line.Line;
  * @author Yuri Schimke
  * 
  */
-public class DurationByUser extends AbstractTextReport {
+public final class DurationByUser extends AbstractTextReport<DurationByUser> {
+  private static final long serialVersionUID = 5136930933855032187L;
+
   private Map<String, Long> times = new TreeMap<String, Long>();
 
   public String describe() {

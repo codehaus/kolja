@@ -58,12 +58,16 @@ public class Frequencies<T> implements Iterable<Frequencies.Count<T>> {
   }
 
   public void increment(T url) {
+    incrementBy(url, 1);
+  }
+
+  private void incrementBy(T url, int by) {
     Count<T> count = counts.get(url);
 
     if (count == null) {
-      counts.put(url, new Count<T>(url, 1));
+      counts.put(url, new Count<T>(url, by));
     } else {
-      count.increment();
+      count.increment(by);
     }
   }
 
@@ -74,6 +78,10 @@ public class Frequencies<T> implements Iterable<Frequencies.Count<T>> {
     public Count(S url, int i) {
       this.url = url;
       this.i = i;
+    }
+
+    public void increment(int by) {
+      this.i += by;
     }
 
     public void increment() {
@@ -120,5 +128,9 @@ public class Frequencies<T> implements Iterable<Frequencies.Count<T>> {
   public int get(T string) {
     Count<T> c = counts.get(string);
     return c != null ? c.getCount() : 0;
+  }
+
+  public void merge(Frequencies<T> other) {
+
   }
 }

@@ -20,11 +20,11 @@ package com.baulsupp.kolja.ansi.reports.basic;
 import java.util.Arrays;
 
 import com.baulsupp.kolja.ansi.reports.AbstractTextReport;
-import com.baulsupp.kolja.ansi.reports.ReportEngine;
-import com.baulsupp.kolja.ansi.reports.ReportPrinter;
 import com.baulsupp.kolja.log.line.Line;
 
-public class TsvReport extends AbstractTextReport {
+public final class TsvReport extends AbstractTextReport<TsvReport> {
+  private static final long serialVersionUID = 1585931861594446683L;
+
   private String[] fields;
 
   private StringBuilder sb = new StringBuilder(100);
@@ -34,9 +34,7 @@ public class TsvReport extends AbstractTextReport {
   }
 
   @Override
-  public void initialise(ReportPrinter reportRunner, ReportEngine reportEngine) {
-    super.initialise(reportRunner, reportEngine);
-
+  protected void validate() {
     if (fields == null) {
       throw new IllegalStateException("no fields specified");
     }
