@@ -15,30 +15,48 @@
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-package com.baulsupp.kolja.ansi.reports;
+package com.baulsupp.kolja.gridgain;
+
+import static org.junit.Assert.assertEquals;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.List;
 
-import com.baulsupp.kolja.log.util.IntRange;
-import com.baulsupp.kolja.log.viewer.importing.LogFormat;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 
 /**
  * @author Yuri Schimke
  * 
  */
-public interface ReportEngine {
-  void initialise() throws Exception;
+public class DefaultFileDividerTest {
 
-  void setReports(List<TextReport<?>> createReports);
+  private DefaultFileDivider divider;
+  private File fileA;
+  private File fileB;
 
-  void setReportPrinter(ReportPrinter reportPrinter);
+  @Before
+  public void setup() {
+    divider = new DefaultFileDivider();
 
-  void process(List<File> commandFiles) throws Exception;
+    fileA = new File("a.txt");
+    fileB = new File("b.txt");
+  }
 
-  void setLogFormat(LogFormat format);
+  @Test
+  public void testDividesSmallFiles() {
+    List<FileSection> parts = divider.split(Arrays.asList(fileA, fileB));
 
-  void completed() throws Exception;
+    Assert.assertEquals(2, parts.size());
 
-  void process(File file, IntRange intRange) throws Exception;
+    FileSection sectionA = parts.get(0);
+    assertEquals(fileA, sectionA.getFile());
+    Assert.assertNull(sectionA.getIntRange());
+
+    FileSection sectionB = parts.get(1);
+    assertEquals(fileB, sectionB.getFile());
+    Assert.assertNull(sectionB.getIntRange());
+  }
 }

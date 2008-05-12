@@ -2,18 +2,18 @@ package com.baulsupp.kolja.log.viewer.io;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.baulsupp.kolja.log.line.Line;
+import com.baulsupp.kolja.log.line.LineIterator;
 import com.baulsupp.kolja.log.line.LineParser;
 import com.baulsupp.kolja.log.viewer.importing.ConfigurableLineFormat;
 import com.baulsupp.kolja.log.viewer.importing.ConfigurableLogFormat;
 import com.baulsupp.kolja.log.viewer.importing.LogFormat;
 
-public class FileLineIterator implements Iterator<Line> {
+public class FileLineIterator implements LineIterator {
   private Matcher entryMatcher;
   private BufferingStringBuilder content;
   private LineParser lineParser;
@@ -31,10 +31,10 @@ public class FileLineIterator implements Iterator<Line> {
     BufferingStringBuilder content = new FileBufferingStringBuilder(file, end);
     return new FileLineIterator(content, entryPattern, lineParser);
   }
-  
+
   public static FileLineIterator loadFromStdin(LogFormat format) throws IOException {
     ConfigurableLineFormat lineFormat = ((ConfigurableLogFormat) format).getLineFormat();
-    
+
     Pattern entryPattern = lineFormat.getEntryPattern();
 
     BufferingStringBuilder content = new StreamBufferingStringBuilder(System.in);
@@ -61,7 +61,7 @@ public class FileLineIterator implements Iterator<Line> {
     } else {
       lineString = content.trim();
     }
-    
+
     // TODO is this needed?
     lineString = lineString.trim();
 
@@ -76,7 +76,27 @@ public class FileLineIterator implements Iterator<Line> {
     }
   }
 
-  public void remove() { 
+  public void remove() {
+    throw new UnsupportedOperationException();
+  }
+
+  public boolean hasPrevious() {
+    return false;
+  }
+
+  public void moveTo(int position) {
+    throw new UnsupportedOperationException();
+  }
+
+  public void moveToEnd() {
+    throw new UnsupportedOperationException();
+  }
+
+  public void moveToStart() {
+    throw new UnsupportedOperationException();
+  }
+
+  public Line previous() {
     throw new UnsupportedOperationException();
   }
 }

@@ -15,30 +15,19 @@
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-package com.baulsupp.kolja.ansi.reports;
+package com.baulsupp.kolja.log.viewer.importing;
 
 import java.io.File;
-import java.util.List;
+import java.io.IOException;
 
-import com.baulsupp.kolja.log.util.IntRange;
-import com.baulsupp.kolja.log.viewer.importing.LogFormat;
+import com.baulsupp.kolja.log.line.LineIndex;
 
 /**
  * @author Yuri Schimke
  * 
  */
-public interface ReportEngine {
-  void initialise() throws Exception;
+public interface LineIndexFactory {
 
-  void setReports(List<TextReport<?>> createReports);
+  LineIndex buildLineIndex(File file, LogFormat format) throws IOException;
 
-  void setReportPrinter(ReportPrinter reportPrinter);
-
-  void process(List<File> commandFiles) throws Exception;
-
-  void setLogFormat(LogFormat format);
-
-  void completed() throws Exception;
-
-  void process(File file, IntRange intRange) throws Exception;
 }

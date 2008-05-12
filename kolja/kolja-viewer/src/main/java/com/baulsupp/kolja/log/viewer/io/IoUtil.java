@@ -106,8 +106,7 @@ public class IoUtil {
   }
 
   public static Iterator<Line> loadFromStdin(LogFormat format) {
-    // TODO Auto-generated method stub
-    return null;
+    throw new UnsupportedOperationException();
   }
 
   private static int count;

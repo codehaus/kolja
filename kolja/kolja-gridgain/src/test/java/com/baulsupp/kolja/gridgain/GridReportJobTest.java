@@ -23,39 +23,113 @@ import java.io.File;
 import java.util.Collections;
 import java.util.List;
 
-import org.gridgain.grid.GridException;
+import org.jmock.Expectations;
+import org.jmock.Mockery;
+import org.jmock.integration.junit4.JMock;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
+import com.baulsupp.kolja.ansi.reports.ReportEngine;
+import com.baulsupp.kolja.ansi.reports.ReportEngineFactory;
 import com.baulsupp.kolja.ansi.reports.TextReport;
-import com.baulsupp.kolja.log.viewer.importing.PlainTextLogFormat;
-import com.baulsupp.kolja.widefinder.TimeReport;
+import com.baulsupp.kolja.log.util.IntRange;
+import com.baulsupp.kolja.log.viewer.importing.LogFormat;
 
 /**
  * @author Yuri Schimke
  * 
  */
+@RunWith(JMock.class)
 public class GridReportJobTest {
-  private static final File FILE_A = new File("a.txt");
+  private Mockery context = new Mockery();
 
-  private PlainTextLogFormat format;
+  private File fileA = new File("a.txt");
+
+  private LogFormat format;
   private List<TextReport<?>> reports;
+
+  private ReportEngineFactory reportEngineFactory;
+  private ReportEngine reportEngine;
+
+  private TextReport<?> report;
 
   @Before
   public void setup() {
+    format = context.mock(LogFormat.class);
+    report = context.mock(TextReport.class);
+    reports = Collections.<TextReport<?>> singletonList(report);
 
-    format = new PlainTextLogFormat();
-    reports = Collections.<TextReport<?>> singletonList(new TimeReport());
+    reportEngineFactory = context.mock(ReportEngineFactory.class);
+    reportEngine = context.mock(ReportEngine.class);
   }
 
   @SuppressWarnings("unchecked")
   @Test
-  public void testRuns() throws GridException {
-    GridReportJob job = new GridReportJob(format, FILE_A, reports);
+  public void testRuns() throws Exception {
+    checkSetup();
+
+    context.checking(new Expectations() {
+      {
+        one(reportEngine).process(fileA, null);
+      }
+    });
+
+    checkCompletion();
+
+    GridReportJob job = new GridReportJob(format, fileA, reports, null);
+    job.setReportEngineFactory(reportEngineFactory);
 
     List<TextReport<?>> results = (List<TextReport<?>>) job.execute();
 
     assertTrue(results == reports);
+  }
+
+  @SuppressWarnings("unchecked")
+  @Test
+  public void testRunsWithRange() throws Exception {
+    checkSetup();
+
+    context.checking(new Expectations() {
+      {
+        one(reportEngine).process(fileA, new IntRange(10000, 20000));
+      }
+    });
+
+    checkCompletion();
+
+    GridReportJob job = new GridReportJob(format, fileA, reports, new IntRange(10000, 20000));
+    job.setReportEngineFactory(reportEngineFactory);
+
+    List<TextReport<?>> results = (List<TextReport<?>>) job.execute();
+
+    assertTrue(results == reports);
+  }
+
+  private void checkCompletion() throws Exception {
+    context.checking(new Expectations() {
+      {
+        one(reportEngine).completed();
+        one(report).cleanup();
+      }
+    });
+  }
+
+  private void checkSetup() throws Exception {
+    context.checking(new Expectations() {
+      {
+        one(reportEngineFactory).createEngine();
+        will(returnValue(reportEngine));
+
+        one(reportEngine).setLogFormat(format);
+
+        one(reportEngine).setReportPrinter(with(aNonNull(NullReportPrinter.class)));
+
+        one(reportEngine).setReports(reports);
+
+        one(reportEngine).initialise();
+      }
+    });
   }
 
 }

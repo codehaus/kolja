@@ -17,7 +17,7 @@ import com.baulsupp.kolja.log.util.IntRange;
 /**
  * A list of events in a log file.
  */
-public class EventList extends ValueIndexer {
+public class EventList extends ValueIndexer implements EventDetector {
   private List<EventMatcher> matchers = new ArrayList<EventMatcher>();
 
   private SortedSet<Event> events = new TreeSet<Event>(new Comparator<Event>() {

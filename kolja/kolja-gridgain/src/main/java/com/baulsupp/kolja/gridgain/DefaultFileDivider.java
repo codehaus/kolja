@@ -15,30 +15,24 @@
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-package com.baulsupp.kolja.ansi.reports;
+package com.baulsupp.kolja.gridgain;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
-
-import com.baulsupp.kolja.log.util.IntRange;
-import com.baulsupp.kolja.log.viewer.importing.LogFormat;
 
 /**
  * @author Yuri Schimke
  * 
  */
-public interface ReportEngine {
-  void initialise() throws Exception;
+public class DefaultFileDivider implements FileDivider {
+  public List<FileSection> split(List<File> files) {
+    List<FileSection> result = new ArrayList<FileSection>();
 
-  void setReports(List<TextReport<?>> createReports);
+    for (File f : files) {
+      result.add(new FileSection(f, null));
+    }
 
-  void setReportPrinter(ReportPrinter reportPrinter);
-
-  void process(List<File> commandFiles) throws Exception;
-
-  void setLogFormat(LogFormat format);
-
-  void completed() throws Exception;
-
-  void process(File file, IntRange intRange) throws Exception;
+    return result;
+  }
 }

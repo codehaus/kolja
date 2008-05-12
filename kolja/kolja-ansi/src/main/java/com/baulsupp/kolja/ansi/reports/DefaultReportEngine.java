@@ -26,10 +26,14 @@ import com.baulsupp.kolja.ansi.reports.TextReport.Detail;
 import com.baulsupp.kolja.log.line.BasicLineIterator;
 import com.baulsupp.kolja.log.line.Line;
 import com.baulsupp.kolja.log.line.LineIndex;
-import com.baulsupp.kolja.log.util.WrappedCharBuffer;
+import com.baulsupp.kolja.log.line.LineIterator;
+import com.baulsupp.kolja.log.util.IntRange;
 import com.baulsupp.kolja.log.viewer.event.Event;
-import com.baulsupp.kolja.log.viewer.event.EventList;
+import com.baulsupp.kolja.log.viewer.event.EventDetector;
+import com.baulsupp.kolja.log.viewer.importing.DefaultLineIndexFactory;
+import com.baulsupp.kolja.log.viewer.importing.LineIndexFactory;
 import com.baulsupp.kolja.log.viewer.importing.LogFormat;
+import com.baulsupp.kolja.log.viewer.request.RequestDetector;
 import com.baulsupp.kolja.log.viewer.request.RequestIndex;
 import com.baulsupp.kolja.log.viewer.request.RequestLine;
 
@@ -37,21 +41,23 @@ import com.baulsupp.kolja.log.viewer.request.RequestLine;
  * @author Yuri Schimke
  */
 public class DefaultReportEngine implements ReportEngine, ReportContext {
-  protected BasicLineIterator i;
+  protected LineIterator i;
 
   protected java.util.List<TextReport<?>> reports;
 
-  private RequestIndex requestIndex;
+  private RequestDetector requestIndex;
 
   private boolean showEvents;
 
-  private EventList eventList;
+  private EventDetector eventList;
 
   private boolean showRequests;
 
   protected ReportPrinter reportPrinter;
 
   private LogFormat format;
+
+  private LineIndexFactory lineIndexFactory = new DefaultLineIndexFactory();
 
   public DefaultReportEngine() {
   }
@@ -68,8 +74,12 @@ public class DefaultReportEngine implements ReportEngine, ReportContext {
     this.requestIndex = requestIndex;
   }
 
-  public void setEventList(EventList eventList) {
+  public void setEventList(EventDetector eventList) {
     this.eventList = eventList;
+  }
+
+  public void setLineIndexFactory(LineIndexFactory lineIndexFactory) {
+    this.lineIndexFactory = lineIndexFactory;
   }
 
   public Line readLine(int pos) {
@@ -82,7 +92,7 @@ public class DefaultReportEngine implements ReportEngine, ReportContext {
     return reports.size() > 1;
   }
 
-  protected void iterateThroughFile(BasicLineIterator i) {
+  protected void iterateThroughFile(LineIterator i) {
     while (i.hasNext()) {
       Line l = i.next();
 
@@ -90,7 +100,7 @@ public class DefaultReportEngine implements ReportEngine, ReportContext {
     }
   }
 
-  public void run(File file, BasicLineIterator i) throws InterruptedException, IOException {
+  public void run(File file, LineIterator i) throws InterruptedException, IOException {
     this.i = i;
 
     for (TextReport<?> r : reports) {
@@ -178,24 +188,26 @@ public class DefaultReportEngine implements ReportEngine, ReportContext {
 
   public void process(List<File> commandFiles) throws Exception {
     for (File file : commandFiles) {
-      WrappedCharBuffer buffer = WrappedCharBuffer.fromFile(file);
+      process(file, null);
+    }
+  }
 
-      LineIndex li = format.getLineIndex(buffer);
+  public void process(File file, IntRange intRange) throws Exception {
+    LineIndex li = lineIndexFactory.buildLineIndex(file, format);
 
-      if (format.supportsRequests()) {
-        RequestIndex requestIndex = format.getRequestIndex(li);
-        setRequestIndex(requestIndex);
-      }
+    BasicLineIterator lineIterator = new BasicLineIterator(li, intRange);
 
-      if (format.supportsEvents()) {
-        EventList eventList = format.getEventList(li);
-        setEventList(eventList);
-      }
-
-      run(file, new BasicLineIterator(li));
+    if (format.supportsRequests()) {
+      RequestIndex requestIndex = format.getRequestIndex(li);
+      setRequestIndex(requestIndex);
     }
 
-    completed();
+    if (format.supportsEvents()) {
+      EventDetector eventList = format.getEventList(li);
+      setEventList(eventList);
+    }
+
+    run(file, lineIterator);
   }
 
   public void setLogFormat(LogFormat format) {

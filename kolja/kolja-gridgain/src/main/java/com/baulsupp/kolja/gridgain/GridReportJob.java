@@ -19,15 +19,16 @@ package com.baulsupp.kolja.gridgain;
 
 import java.io.File;
 import java.io.Serializable;
-import java.util.Arrays;
 import java.util.List;
 
 import org.gridgain.grid.GridException;
 import org.gridgain.grid.GridJob;
 
-import com.baulsupp.kolja.ansi.reports.DefaultReportEngine;
+import com.baulsupp.kolja.ansi.reports.ReportEngine;
+import com.baulsupp.kolja.ansi.reports.ReportEngineFactory;
 import com.baulsupp.kolja.ansi.reports.ReportPrinter;
 import com.baulsupp.kolja.ansi.reports.TextReport;
+import com.baulsupp.kolja.log.util.IntRange;
 import com.baulsupp.kolja.log.viewer.importing.LogFormat;
 
 /**
@@ -43,10 +44,19 @@ public class GridReportJob implements GridJob {
 
   private List<TextReport<?>> reports;
 
-  public GridReportJob(LogFormat logFormat, File file, List<TextReport<?>> reports) {
+  private IntRange intRange;
+
+  private ReportEngineFactory reportEngineFactory;
+
+  public GridReportJob(LogFormat logFormat, File file, List<TextReport<?>> reports, IntRange intRange) {
     this.logFormat = logFormat;
     this.file = file;
     this.reports = reports;
+    this.intRange = intRange;
+  }
+
+  public void setReportEngineFactory(ReportEngineFactory reportEngineFactory) {
+    this.reportEngineFactory = reportEngineFactory;
   }
 
   public void cancel() {
@@ -54,11 +64,10 @@ public class GridReportJob implements GridJob {
 
   public Serializable execute() throws GridException {
     try {
-      DefaultReportEngine reportEngine = new DefaultReportEngine();
+      ReportEngine reportEngine = createLocalReportEngine();
       reportEngine.setLogFormat(logFormat);
 
       ReportPrinter reportPrinter = new NullReportPrinter();
-      // ReportPrinter reportPrinter = new AnsiReportPrinter();
       reportPrinter.initialise();
 
       reportEngine.setReportPrinter(reportPrinter);
@@ -67,7 +76,9 @@ public class GridReportJob implements GridJob {
 
       reportEngine.initialise();
 
-      reportEngine.process(Arrays.asList(file));
+      reportEngine.process(file, intRange);
+
+      reportEngine.completed();
     } catch (Exception e) {
       throw new GridException(e);
     }
@@ -80,7 +91,15 @@ public class GridReportJob implements GridJob {
     return (Serializable) reports;
   }
 
+  private ReportEngine createLocalReportEngine() {
+    return reportEngineFactory.createEngine();
+  }
+
   public File getFile() {
     return file;
+  }
+
+  public IntRange getIntRange() {
+    return intRange;
   }
 }

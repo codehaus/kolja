@@ -35,7 +35,7 @@ import com.baulsupp.kolja.log.line.LineIndex;
 import com.baulsupp.kolja.log.line.ValueIndexer;
 import com.baulsupp.kolja.log.util.IntRange;
 
-public class RequestIndex extends ValueIndexer {
+public class RequestIndex extends ValueIndexer implements RequestDetector {
   protected String requestField;
 
   protected String messageField;

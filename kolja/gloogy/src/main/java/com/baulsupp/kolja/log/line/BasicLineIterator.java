@@ -7,6 +7,7 @@ import java.util.NoSuchElementException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.Assert;
 
 import com.baulsupp.kolja.log.util.IntRange;
 
@@ -20,27 +21,31 @@ public class BasicLineIterator implements LineIterator {
 
   private ListIterator<Line> currentIterator = null;
 
+  private IntRange intRange;
+
   private static final int BUFFER = 4096;
 
   public BasicLineIterator(LineIndex index) {
-    this.index = index;
-
-    int to = Math.min(BUFFER, index.length());
-    currentRange = new IntRange(0, to);
-    
-    if (to > 0) {
-      currentIterator = index.get(currentRange).listIterator();
-    } else {
-      List<Line> emptyList = Collections.emptyList();
-      currentIterator = emptyList.listIterator();
-    }
+    this(index, null);
   }
-  
+
+  public BasicLineIterator(LineIndex index, IntRange intRange) {
+    this.index = index;
+    this.intRange = intRange;
+
+    if (intRange != null) {
+      Assert.isTrue(intRange.getFrom() >= 0);
+      Assert.isTrue(intRange.getTo() >= intRange.getFrom());
+    }
+
+    moveToStart();
+  }
+
   public boolean hasNext() {
     boolean hasNext = currentIterator.hasNext();
 
     while (!hasNext) {
-      int length = index.length();
+      int length = maximumOffset();
 
       int newFrom = currentRange.getTo();
       int newTo = Math.min(length, newFrom + BUFFER);
@@ -56,8 +61,6 @@ public class BasicLineIterator implements LineIterator {
       }
     }
 
-    // log.debug("hasNext " + hasNext);
-
     return hasNext;
   }
 
@@ -68,37 +71,48 @@ public class BasicLineIterator implements LineIterator {
 
     Line l = currentIterator.next();
 
-    // log.debug("next " + l.getOffset());
-
     return l;
   }
 
-  // TODO iterator that can move to end, or swap half way
-  // TODO optimise
   public void moveToEnd() {
-    moveTo(index.length());
+    moveTo(maximumOffset());
+  }
+
+  private int maximumOffset() {
+    int fileLength = index.length();
+
+    if (intRange != null) {
+      return Math.min(fileLength, intRange.getTo());
+    }
+
+    return fileLength;
   }
 
   public void moveToStart() {
-    moveTo(0);
+    moveTo(minimumOffset());
+  }
+
+  private int minimumOffset() {
+    if (intRange != null) {
+      return intRange.getFrom();
+    }
+
+    return 0;
   }
 
   private List<Line> EMPTY_LIST = Collections.emptyList();
 
-  // TODO optimise!!!!
-  // TODO should we move half way, even though its expensive to do. Or edge?
   public void moveTo(int position) {
-    // log.debug("moveTo " + position);
     currentIterator = EMPTY_LIST.listIterator();
     currentRange = new IntRange(position, position);
-    // log.debug("resetting " + currentRange + "");
   }
 
   public boolean hasPrevious() {
     boolean hasPrevious = currentIterator.hasPrevious();
 
-    while (!hasPrevious && currentRange.getFrom() > 0) {
-      int newFrom = Math.max(0, currentRange.getFrom() - BUFFER);
+    int minimumOffset = minimumOffset();
+    while (!hasPrevious && currentRange.getFrom() > minimumOffset) {
+      int newFrom = Math.max(minimumOffset, currentRange.getFrom() - BUFFER);
       int newTo = currentRange.getFrom();
 
       currentRange = new IntRange(newFrom, newTo);
@@ -111,8 +125,6 @@ public class BasicLineIterator implements LineIterator {
       hasPrevious = currentIterator.hasPrevious();
     }
 
-    // log.debug("hasPrevious " + hasPrevious);
-
     return hasPrevious;
   }
 
@@ -122,8 +134,6 @@ public class BasicLineIterator implements LineIterator {
     }
 
     Line l = currentIterator.previous();
-
-    // log.debug("previous " + l.getOffset());
 
     return l;
   }

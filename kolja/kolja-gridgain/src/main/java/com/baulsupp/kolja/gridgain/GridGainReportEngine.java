@@ -18,7 +18,6 @@
 package com.baulsupp.kolja.gridgain;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -32,6 +31,7 @@ import org.gridgain.grid.spi.checkpoint.sharedfs.GridSharedFsCheckpointSpi;
 import com.baulsupp.kolja.ansi.reports.ReportEngine;
 import com.baulsupp.kolja.ansi.reports.ReportPrinter;
 import com.baulsupp.kolja.ansi.reports.TextReport;
+import com.baulsupp.kolja.log.util.IntRange;
 import com.baulsupp.kolja.log.viewer.importing.LogFormat;
 
 /**
@@ -44,6 +44,8 @@ public class GridGainReportEngine implements ReportEngine {
 
   private LogFormat format;
 
+  private Grid grid;
+
   public GridGainReportEngine() {
   }
 
@@ -55,10 +57,17 @@ public class GridGainReportEngine implements ReportEngine {
     this.reports = reports;
   }
 
-  public void initialise() throws IOException {
+  public void initialise() throws Exception {
+    GridConfigurationAdapter conf = getConfiguration();
+
+    GridFactory.start(conf);
+
+    grid = GridFactory.getGrid();
   }
 
-  public void completed() throws IOException {
+  public void completed() throws Exception {
+    GridFactory.stop(true);
+
     boolean first = true;
 
     for (TextReport<?> r : reports) {
@@ -77,21 +86,13 @@ public class GridGainReportEngine implements ReportEngine {
   }
 
   public void process(List<File> commandFiles) throws Exception {
-    GridConfigurationAdapter conf = getConfiguration();
+    ReportBatch batch = new ReportBatch(format, commandFiles, reports);
 
-    GridFactory.start(conf);
+    reports = grid.execute(new GridReportSplitter(), batch).get();
+  }
 
-    try {
-      Grid grid = GridFactory.getGrid();
-
-      ReportBatch batch = new ReportBatch(format, commandFiles, reports);
-
-      reports = grid.execute(new GridReportSplitter(), batch).get();
-    } finally {
-      GridFactory.stop(true);
-    }
-
-    completed();
+  public void process(File file, IntRange intRange) {
+    throw new UnsupportedOperationException();
   }
 
   private GridConfigurationAdapter getConfiguration() {

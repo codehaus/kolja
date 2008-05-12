@@ -17,7 +17,6 @@
  */
 package com.baulsupp.kolja.gridgain;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -36,15 +35,26 @@ import com.baulsupp.kolja.ansi.reports.TextReport;
 public class GridReportSplitter extends GridTaskSplitAdapter<ReportBatch, List<TextReport<?>>> {
   private static final long serialVersionUID = -9046190661906193862L;
   private List<TextReport<?>> reports;
+  private FileDivider fileDivider = new DefaultFileDivider();
+
+  public void setFileDivider(FileDivider fileDivider) {
+    this.fileDivider = fileDivider;
+  }
+
+  public void setReports(List<TextReport<?>> reports) {
+    this.reports = reports;
+  }
 
   @Override
   protected Collection<? extends GridJob> split(int gridSize, ReportBatch job) throws GridException {
     List<GridReportJob> result = new ArrayList<GridReportJob>();
 
-    reports = job.getReports();
+    reports = job.getReportsCopy();
 
-    for (File f : job.getFiles()) {
-      result.add(new GridReportJob(job.getFormat(), f, job.getReportsCopy()));
+    List<FileSection> sections = fileDivider.split(job.getFiles());
+
+    for (FileSection fileSection : sections) {
+      result.add(new GridReportJob(job.getFormat(), fileSection.getFile(), job.getReportsCopy(), fileSection.getIntRange()));
     }
 
     return result;

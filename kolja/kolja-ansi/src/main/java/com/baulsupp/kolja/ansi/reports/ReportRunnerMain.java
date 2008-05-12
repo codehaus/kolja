@@ -115,6 +115,8 @@ public class ReportRunnerMain {
     reportEngine.initialise();
 
     reportEngine.process(commandFiles);
+
+    reportEngine.completed();
   }
 
   private static ReportPrinter createReportPrinter(CommandLine cmd, LogFormat format) {
