@@ -17,16 +17,14 @@
  */
 package com.baulsupp.kolja.gridgain;
 
+import gg.GridConfigFactory;
+
 import java.io.File;
 import java.util.List;
-import java.util.logging.Logger;
 
 import org.gridgain.grid.Grid;
 import org.gridgain.grid.GridConfigurationAdapter;
 import org.gridgain.grid.GridFactory;
-import org.gridgain.grid.logger.GridLogger;
-import org.gridgain.grid.logger.java.GridJavaLogger;
-import org.gridgain.grid.spi.checkpoint.sharedfs.GridSharedFsCheckpointSpi;
 
 import com.baulsupp.kolja.ansi.reports.ReportEngine;
 import com.baulsupp.kolja.ansi.reports.ReportPrinter;
@@ -58,7 +56,7 @@ public class GridGainReportEngine implements ReportEngine {
   }
 
   public void initialise() throws Exception {
-    GridConfigurationAdapter conf = getConfiguration();
+    GridConfigurationAdapter conf = GridConfigFactory.getConfiguration();
 
     GridFactory.start(conf);
 
@@ -93,18 +91,6 @@ public class GridGainReportEngine implements ReportEngine {
 
   public void process(File file, IntRange intRange) {
     throw new UnsupportedOperationException();
-  }
-
-  private GridConfigurationAdapter getConfiguration() {
-    GridConfigurationAdapter conf = new GridConfigurationAdapter();
-    conf.setGridGainHome("C:\\java\\gridgain-2.0.2");
-    Logger logger = Logger.getLogger("grid");
-    GridLogger gridLogger = new GridJavaLogger(logger);
-    conf.setGridLogger(gridLogger);
-    GridSharedFsCheckpointSpi cpSpi = new GridSharedFsCheckpointSpi();
-    cpSpi.setDirectoryPath("C:\\java\\gridgain-work");
-    conf.setCheckpointSpi(cpSpi);
-    return conf;
   }
 
   public void setLogFormat(LogFormat format) {

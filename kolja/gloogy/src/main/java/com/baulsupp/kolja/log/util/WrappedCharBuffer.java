@@ -75,7 +75,11 @@ public class WrappedCharBuffer implements Cloneable, CharSequence {
 
   public static WrappedCharBuffer fromFile(File f) throws IOException {
     FileInputStream fis = new FileInputStream(f);
-    ByteBuffer bb = fis.getChannel().map(FileChannel.MapMode.READ_ONLY, 0, fis.available());
+
+    ByteBuffer bb;
+    synchronized (WrappedCharBuffer.class) {
+      bb = fis.getChannel().map(FileChannel.MapMode.READ_ONLY, 0, fis.available());
+    }
 
     return WrappedCharBuffer.fromSingleByteEncoding(bb);
   }

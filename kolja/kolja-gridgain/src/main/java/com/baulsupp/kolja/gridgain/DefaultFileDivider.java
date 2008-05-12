@@ -21,16 +21,41 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.baulsupp.kolja.log.util.IntRange;
+
 /**
  * @author Yuri Schimke
  * 
  */
 public class DefaultFileDivider implements FileDivider {
+  // MB
+  private int blockSize = 1024 * 1024;
+
+  public void setBlockSize(int blockSize) {
+    this.blockSize = blockSize;
+  }
+
   public List<FileSection> split(List<File> files) {
     List<FileSection> result = new ArrayList<FileSection>();
 
     for (File f : files) {
-      result.add(new FileSection(f, null));
+      if (!f.exists()) {
+        throw new IllegalArgumentException("file missing: " + f);
+      }
+
+      int length = (int) f.length();
+
+      if (length <= blockSize) {
+        result.add(new FileSection(f, null));
+      } else {
+        int offset = 0;
+
+        while (offset < length) {
+          int to = Math.min(offset + blockSize, length);
+          result.add(new FileSection(f, new IntRange(offset, to)));
+          offset = to;
+        }
+      }
     }
 
     return result;

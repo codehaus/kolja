@@ -18,6 +18,7 @@
 package com.baulsupp.kolja.gridgain;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 import java.io.File;
 import java.util.Arrays;
@@ -26,6 +27,8 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
+import com.baulsupp.kolja.log.util.IntRange;
 
 /**
  * @author Yuri Schimke
@@ -41,8 +44,13 @@ public class DefaultFileDividerTest {
   public void setup() {
     divider = new DefaultFileDivider();
 
-    fileA = new File("a.txt");
-    fileB = new File("b.txt");
+    fileA = new File("src/test/log/text.log");
+    fileB = new File("src/test/log/text.log");
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void testFailsOnMissingFiles() {
+    divider.split(Arrays.asList(new File("fdsklj")));
   }
 
   @Test
@@ -53,10 +61,27 @@ public class DefaultFileDividerTest {
 
     FileSection sectionA = parts.get(0);
     assertEquals(fileA, sectionA.getFile());
-    Assert.assertNull(sectionA.getIntRange());
+    assertNull(sectionA.getIntRange());
 
     FileSection sectionB = parts.get(1);
     assertEquals(fileB, sectionB.getFile());
-    Assert.assertNull(sectionB.getIntRange());
+    assertNull(sectionB.getIntRange());
+  }
+
+  @Test
+  public void testDividesLargeFile() {
+    divider.setBlockSize(400);
+
+    List<FileSection> parts = divider.split(Arrays.asList(fileA));
+
+    Assert.assertEquals(2, parts.size());
+
+    FileSection sectionA = parts.get(0);
+    assertEquals(fileA, sectionA.getFile());
+    assertEquals(new IntRange(0, 400), sectionA.getIntRange());
+
+    FileSection sectionB = parts.get(1);
+    assertEquals(fileA, sectionB.getFile());
+    assertEquals(new IntRange(400, 768), sectionB.getIntRange());
   }
 }

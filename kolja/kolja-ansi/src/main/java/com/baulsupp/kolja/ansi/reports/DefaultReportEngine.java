@@ -193,6 +193,8 @@ public class DefaultReportEngine implements ReportEngine, ReportContext {
   }
 
   public void process(File file, IntRange intRange) throws Exception {
+    System.out.println(intRange);
+
     LineIndex li = lineIndexFactory.buildLineIndex(file, format);
 
     BasicLineIterator lineIterator = new BasicLineIterator(li, intRange);

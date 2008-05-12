@@ -17,46 +17,60 @@
  */
 package com.baulsupp.kolja.gridgain;
 
-import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.util.Collections;
 import java.util.List;
 
+import org.jmock.Expectations;
+import org.jmock.Mockery;
 import org.junit.Before;
 import org.junit.Test;
 
 import com.baulsupp.kolja.ansi.reports.TextReport;
 import com.baulsupp.kolja.log.viewer.importing.LogFormat;
 import com.baulsupp.kolja.log.viewer.importing.PlainTextLogFormat;
-import com.baulsupp.kolja.widefinder.TimeReport;
 
 /**
  * @author Yuri Schimke
  * 
  */
 public class ReportBatchTest {
+  private Mockery context = new Mockery();
+
   private LogFormat format;
   private List<File> files;
   private List<TextReport<?>> reports;
+  private TextReport<?> report;
+
+  private TextReport<?> report2;
 
   @Before
   public void setup() {
     format = new PlainTextLogFormat();
     files = Collections.singletonList(new File("a.txt"));
-    reports = Collections.<TextReport<?>> singletonList(new TimeReport());
+    report = context.mock(TextReport.class, "report1");
+    report2 = context.mock(TextReport.class, "report2");
+    reports = Collections.<TextReport<?>> singletonList(report);
   }
 
   @Test
   public void testBatch() {
+    context.checking(new Expectations() {
+      {
+        one(report).newInstance();
+        will(returnValue(report2));
+      }
+    });
+
     ReportBatch batch = new ReportBatch(format, files, reports);
 
     assertTrue(reports == batch.getReports());
 
     List<TextReport<?>> copy = batch.getReportsCopy();
-    assertFalse(reports == copy);
-    assertFalse(reports.get(0) == copy.get(0));
+    assertSame(report2, copy.get(0));
   }
 
 }

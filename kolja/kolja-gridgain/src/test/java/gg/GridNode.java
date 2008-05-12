@@ -17,16 +17,19 @@
  */
 package gg;
 
-import com.baulsupp.kolja.ansi.reports.ReportRunnerMain;
+import org.gridgain.grid.GridConfigurationAdapter;
+import org.gridgain.grid.GridFactory;
 
 /**
  * @author Yuri Schimke
  * 
  */
-public class GridReports {
+public class GridNode {
   public static void main(String[] args) throws Exception {
-    ReportRunnerMain.main("-x", "../kolja-widefinder/src/main/config/wf.xml", "-g",
-        "com.baulsupp.kolja.gridgain.GridGainReportEngine", "-r", "freq?q=url&count=3",
-        "../kolja-widefinder/src/test/logs/o100k.ap");
+    GridConfigurationAdapter conf = GridConfigFactory.getConfiguration();
+
+    GridFactory.start(conf);
+
+    GridFactory.getGrid();
   }
 }

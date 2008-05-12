@@ -24,6 +24,7 @@ import java.util.List;
 import org.gridgain.grid.GridException;
 import org.gridgain.grid.GridJob;
 
+import com.baulsupp.kolja.ansi.reports.DefaultReportEngineFactory;
 import com.baulsupp.kolja.ansi.reports.ReportEngine;
 import com.baulsupp.kolja.ansi.reports.ReportEngineFactory;
 import com.baulsupp.kolja.ansi.reports.ReportPrinter;
@@ -46,7 +47,7 @@ public class GridReportJob implements GridJob {
 
   private IntRange intRange;
 
-  private ReportEngineFactory reportEngineFactory;
+  private ReportEngineFactory reportEngineFactory = new DefaultReportEngineFactory();
 
   public GridReportJob(LogFormat logFormat, File file, List<TextReport<?>> reports, IntRange intRange) {
     this.logFormat = logFormat;
