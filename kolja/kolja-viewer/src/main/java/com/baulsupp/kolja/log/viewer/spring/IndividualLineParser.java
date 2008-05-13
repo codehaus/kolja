@@ -165,7 +165,7 @@ public class IndividualLineParser {
     try {
       Class c = ClassUtils.forName(className);
 
-      Constructor constructor = ClassUtils.getConstructorIfAvailable(c, new Class[] { String.class });
+      Constructor constructor = ClassUtils.getConstructorIfAvailable(c, new Class[] {});
 
       return (LineParser) constructor.newInstance();
     } catch (RuntimeException ex) {
