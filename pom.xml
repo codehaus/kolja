@@ -91,7 +91,7 @@
 								org.springframework.ide.eclipse.core.springbuilder
 							</buildcommand>
 						</additionalBuildcommands>
-						<downloadSources>true</downloadSources>
+						<downloadSources>false</downloadSources>
 						<wtpversion>1.5</wtpversion>
 					</configuration>
 				</plugin>
