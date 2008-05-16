@@ -19,9 +19,14 @@ package com.baulsupp.kolja.log.viewer.importing;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.Charset;
 
 import com.baulsupp.kolja.log.line.LineIndex;
+import com.baulsupp.kolja.log.line.LineIterator;
+import com.baulsupp.kolja.log.util.IntRange;
 import com.baulsupp.kolja.log.util.WrappedCharBuffer;
+import com.baulsupp.kolja.log.viewer.io.fast.ChunkedFileSequence;
+import com.baulsupp.kolja.log.viewer.io.fast.FastLineIterator;
 
 /**
  * @author Yuri Schimke
@@ -34,6 +39,17 @@ public class DefaultLineIndexFactory implements LineIndexFactory {
 
     LineIndex li = format.getLineIndex(buffer);
     return li;
+  }
+
+  public LineIterator buildForwardsLineIterator(File file, LogFormat format, IntRange intRange) throws Exception {
+    int from = 0;
+
+    if (intRange != null && intRange.getFrom() > 0) {
+      from = intRange.getFrom() - 1;
+    }
+
+    CharSequence content = new ChunkedFileSequence(file, ChunkedFileSequence.MB, Charset.forName("US-ASCII"), from);
+    return new FastLineIterator(format.getEntryPattern(), content, format.getLineParser(), intRange);
   }
 
 }

@@ -24,6 +24,7 @@ import java.util.regex.Pattern;
 import com.baulsupp.kolja.log.line.Line;
 import com.baulsupp.kolja.log.line.LineIterator;
 import com.baulsupp.kolja.log.line.LineParser;
+import com.baulsupp.kolja.log.util.IntRange;
 
 /**
  * @author Yuri Schimke
@@ -31,17 +32,25 @@ import com.baulsupp.kolja.log.line.LineParser;
  */
 public class FastLineIterator implements LineIterator {
   private Matcher matcher;
-  private CharSequence nextLine;
+  private Line nextLine;
   private LineParser lineParser;
 
   int lastEnd = -1;
   private CharSequence content;
   private boolean finished;
+  private IntRange intRange;
 
   public FastLineIterator(Pattern pattern, CharSequence content, LineParser lineParser) {
     this.matcher = pattern.matcher(content);
     this.content = content;
     this.lineParser = lineParser;
+  }
+
+  public FastLineIterator(Pattern pattern, CharSequence content, LineParser lineParser, IntRange intRange) {
+    this.matcher = pattern.matcher(content);
+    this.content = content;
+    this.lineParser = lineParser;
+    this.intRange = intRange;
   }
 
   public boolean hasNext() {
@@ -52,27 +61,40 @@ public class FastLineIterator implements LineIterator {
     }
 
     if (lastEnd == -1) {
-      boolean foundNext = matcher.find();
+      int from = intRange == null ? 0 : intRange.getFrom();
+      boolean foundNext = matcher.find(from);
 
       if (!foundNext) {
+        finished = true;
         return false;
       } else {
         lastEnd = matcher.start();
       }
     }
 
+    if (intRange != null && lastEnd >= intRange.getTo()) {
+      finished = true;
+      return false;
+    }
+
     boolean foundNext = matcher.find();
 
     if (foundNext) {
       int nextEnd = matcher.start();
-      nextLine = content.subSequence(lastEnd, nextEnd);
+      nextLine = parse(lastEnd, nextEnd);
       lastEnd = nextEnd;
     } else {
-      nextLine = content.subSequence(lastEnd, content.length());
+      nextLine = parse(lastEnd, content.length());
       finished = true;
     }
 
     return true;
+  }
+
+  private Line parse(int from, int to) {
+    Line line = lineParser.parse(content.subSequence(from, to));
+    line.setOffset(from);
+    return line;
   }
 
   public Line next() {
@@ -80,11 +102,11 @@ public class FastLineIterator implements LineIterator {
       throw new NoSuchElementException();
     }
 
-    Line line = lineParser.parse(nextLine);
+    Line l = nextLine;
 
     nextLine = null;
 
-    return line;
+    return l;
   }
 
   public boolean hasPrevious() {

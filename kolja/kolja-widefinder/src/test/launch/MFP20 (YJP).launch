@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launchConfiguration type="org.eclipse.jdt.launching.localJavaApplication">
+<stringAttribute key="bad_container_name" value="\kolja-widefinder\src\test\launc"/>
+<listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
+<listEntry value="/kolja-widefinder/src/test/java/wf/MFP20.java"/>
+</listAttribute>
+<listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_TYPES">
+<listEntry value="1"/>
+</listAttribute>
+<booleanAttribute key="org.eclipse.debug.core.appendEnvironmentVariables" value="true"/>
+<mapAttribute key="org.eclipse.debug.core.environmentVariables">
+<mapEntry key="PATH" value="c:\Program Files\YourKit Java Profiler 7.0.12\bin\win32"/>
+</mapAttribute>
+<stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="wf.MFP20"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="kolja-widefinder"/>
+<stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-agentlib:yjpagent=sampling,onexit=snapshot"/>
+</launchConfiguration>

@@ -9,6 +9,7 @@ import com.baulsupp.kolja.log.line.Line;
 import com.baulsupp.kolja.log.line.LineIndex;
 import com.baulsupp.kolja.log.line.LineParser;
 import com.baulsupp.kolja.log.line.LogEntryLineIndex;
+import com.baulsupp.kolja.log.viewer.event.EventDetector;
 import com.baulsupp.kolja.log.viewer.event.EventList;
 import com.baulsupp.kolja.log.viewer.highlight.HighlightList;
 import com.baulsupp.kolja.log.viewer.renderer.PlainTextRenderer;
@@ -66,5 +67,9 @@ public class PlainTextLogFormat implements LogFormat {
 
   public LineParser getLineParser() {
     return new PlainTextLineParser();
+  }
+
+  public EventDetector getEventDetector() {
+    return null;
   }
 }

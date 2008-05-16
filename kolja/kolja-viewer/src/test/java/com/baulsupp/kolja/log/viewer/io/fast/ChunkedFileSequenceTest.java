@@ -58,10 +58,10 @@ public class ChunkedFileSequenceTest {
 
   @Test
   public void testSubSequence() {
-    assertEquals(expected3.subSequence(0, 3), seq.subSequence(0, 3).toString());
-    assertEquals(expected3.subSequence(1, 9), seq.subSequence(1, 9).toString());
-    assertEquals(expected3.subSequence(1, 9), seq.subSequence(11, 19).toString());
-    assertEquals(expected3, seq.subSequence(0, 30).toString());
-    assertEquals(expected3.subSequence(9, 21), seq.subSequence(9, 21).toString());
+    for (int i = 0; i < expected3.length(); i++) {
+      for (int j = i; j < expected3.length(); j++) {
+        assertEquals(expected3.subSequence(i, j), seq.subSequence(i, j).toString());
+      }
+    }
   }
 }

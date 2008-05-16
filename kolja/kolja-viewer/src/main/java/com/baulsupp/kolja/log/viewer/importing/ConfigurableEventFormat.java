@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.baulsupp.kolja.log.line.LineIndex;
+import com.baulsupp.kolja.log.viewer.event.BasicEventDetector;
+import com.baulsupp.kolja.log.viewer.event.EventDetector;
 import com.baulsupp.kolja.log.viewer.event.EventList;
 import com.baulsupp.kolja.log.viewer.event.EventMatcher;
 
@@ -15,7 +17,7 @@ public class ConfigurableEventFormat implements Serializable {
 
   public ConfigurableEventFormat() {
   }
-  
+
   public List<EventMatcher> getEventMatchers() {
     return eventMatchers;
   }
@@ -26,13 +28,17 @@ public class ConfigurableEventFormat implements Serializable {
 
   public boolean hasEvents() {
     return !eventMatchers.isEmpty();
-  }  
+  }
 
   public void addEventMatcher(EventMatcher eventMatcher) {
     eventMatchers.add(eventMatcher);
   }
 
   public EventList getEventList(LineIndex li) {
-    return new EventList(li, eventMatchers);
+    return new EventList(li, new BasicEventDetector(eventMatchers));
+  }
+
+  public EventDetector getEventDetector() {
+    return new BasicEventDetector(eventMatchers);
   }
 }

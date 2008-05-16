@@ -7,6 +7,7 @@ import junit.framework.TestCase;
 import com.baulsupp.kolja.log.line.BasicLine;
 import com.baulsupp.kolja.log.line.Line;
 import com.baulsupp.kolja.log.util.IntRange;
+import com.baulsupp.kolja.log.viewer.event.BasicEventDetector;
 import com.baulsupp.kolja.log.viewer.event.Event;
 import com.baulsupp.kolja.log.viewer.event.EventList;
 import com.baulsupp.kolja.log.viewer.event.EventMatcher;
@@ -21,9 +22,9 @@ public class TestEventList extends TestCase {
     index.addLine(new BasicLine(200, "nothing to see here"));
     index.addLine(new BasicLine(300, "Exception: ClassNotFoundException"));
 
-    EventList el = new EventList(index);
+    BasicEventDetector ed = new BasicEventDetector();
 
-    el.addEventMatcher(new EventMatcher() {
+    ed.addEventMatcher(new EventMatcher() {
       public Event match(Line l) {
         if (l.toString().contains("OutOfMemoryException")) {
           return new Event(l, "Out Of Memory");
@@ -33,7 +34,7 @@ public class TestEventList extends TestCase {
       }
     });
 
-    el.addEventMatcher(new EventMatcher() {
+    ed.addEventMatcher(new EventMatcher() {
       public Event match(Line l) {
         if (l.toString().contains("ClassNotFoundException")) {
           return new Event(l, "Missing Class");
@@ -42,6 +43,9 @@ public class TestEventList extends TestCase {
         return null;
       }
     });
+
+    EventList el = new EventList(index);
+    el.setEventDetector(ed);
 
     el.ensureAllKnown();
 

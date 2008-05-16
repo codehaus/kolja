@@ -59,7 +59,6 @@ public class DefaultReportEngineTest {
 
   @Before
   public void setup() {
-
     engine = new DefaultReportEngine();
 
     eventList = context.mock(EventDetector.class);
@@ -77,7 +76,7 @@ public class DefaultReportEngineTest {
 
   @Test
   public void testStandardRun() throws Exception {
-    checkSetup();
+    checkSetup(true);
 
     context.checking(new Expectations() {
       {
@@ -86,6 +85,9 @@ public class DefaultReportEngineTest {
 
         one(lineIndex).get(new IntRange(0, 20));
         will(returnValue(Collections.singletonList(line1)));
+
+        one(eventList).readEvent(line1);
+        will(returnValue(null));
       }
     });
 
@@ -100,7 +102,7 @@ public class DefaultReportEngineTest {
 
   @Test
   public void testWithRange() throws Exception {
-    checkSetup();
+    checkSetup(true);
 
     context.checking(new Expectations() {
       {
@@ -115,6 +117,9 @@ public class DefaultReportEngineTest {
 
         one(lineIndex).get(new IntRange(188192, 190000));
         will(returnValue(Collections.emptyList()));
+
+        one(eventList).readEvent(line1);
+        will(returnValue(null));
       }
     });
 
@@ -143,25 +148,27 @@ public class DefaultReportEngineTest {
     });
   }
 
-  private void checkSetup() throws IOException {
+  private void checkSetup(final boolean events) throws IOException {
     context.checking(new Expectations() {
       {
         one(report).isInterested(Detail.REQUESTS);
         will(returnValue(false));
 
         one(report).isInterested(Detail.EVENTS);
-        will(returnValue(false));
+        will(returnValue(events));
 
         one(report).initialise(reportPrinter, engine);
 
         one(lineIndexFactory).buildLineIndex(fileA, format);
         will(returnValue(lineIndex));
 
-        one(format).supportsRequests();
-        will(returnValue(false));
-
         one(format).supportsEvents();
-        will(returnValue(false));
+        will(returnValue(events));
+
+        if (events) {
+          one(format).getEventDetector();
+          will(returnValue(eventList));
+        }
       }
     });
   }

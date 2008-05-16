@@ -151,9 +151,9 @@ public class DefaultReportEngine implements ReportEngine, ReportContext {
   }
 
   public void initialise() throws IOException {
-    showRequests = show(Detail.REQUESTS);
+    showRequests = show(Detail.REQUESTS) && format.supportsRequests();
 
-    showEvents = show(Detail.EVENTS);
+    showEvents = show(Detail.EVENTS) && format.supportsEvents();
 
     for (TextReport<?> r : reports) {
       r.initialise(reportPrinter, this);
@@ -193,23 +193,31 @@ public class DefaultReportEngine implements ReportEngine, ReportContext {
   }
 
   public void process(File file, IntRange intRange) throws Exception {
-    System.out.println(intRange);
 
-    LineIndex li = lineIndexFactory.buildLineIndex(file, format);
+    LineIterator lineIterator;
+    if (requiresRandomAccess()) {
+      LineIndex li = lineIndexFactory.buildLineIndex(file, format);
 
-    BasicLineIterator lineIterator = new BasicLineIterator(li, intRange);
+      if (showRequests) {
+        RequestIndex requestIndex = format.getRequestIndex(li);
+        setRequestIndex(requestIndex);
+      }
 
-    if (format.supportsRequests()) {
-      RequestIndex requestIndex = format.getRequestIndex(li);
-      setRequestIndex(requestIndex);
-    }
+      if (showEvents) {
+        EventDetector eventList = format.getEventDetector();
+        setEventList(eventList);
+      }
 
-    if (format.supportsEvents()) {
-      EventDetector eventList = format.getEventList(li);
-      setEventList(eventList);
+      lineIterator = new BasicLineIterator(li, intRange);
+    } else {
+      lineIterator = lineIndexFactory.buildForwardsLineIterator(file, format, intRange);
     }
 
     run(file, lineIterator);
+  }
+
+  private boolean requiresRandomAccess() {
+    return showRequests || showEvents;
   }
 
   public void setLogFormat(LogFormat format) {

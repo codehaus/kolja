@@ -15,21 +15,40 @@
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-package com.baulsupp.kolja.log.viewer.importing;
+package com.baulsupp.kolja.log.viewer.event;
 
-import java.io.File;
-import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
-import com.baulsupp.kolja.log.line.LineIndex;
-import com.baulsupp.kolja.log.line.LineIterator;
-import com.baulsupp.kolja.log.util.IntRange;
+import com.baulsupp.kolja.log.line.Line;
 
 /**
  * @author Yuri Schimke
  * 
  */
-public interface LineIndexFactory {
-  LineIndex buildLineIndex(File file, LogFormat format) throws IOException;
+public class BasicEventDetector implements EventDetector {
+  private List<EventMatcher> matchers = new ArrayList<EventMatcher>();
 
-  LineIterator buildForwardsLineIterator(File file, LogFormat format, IntRange intRange) throws Exception;
+  public BasicEventDetector(List<EventMatcher> eventMatchers) {
+    this.matchers = eventMatchers;
+  }
+
+  public BasicEventDetector() {
+  }
+
+  public void addEventMatcher(EventMatcher eventMatcher) {
+    matchers.add(eventMatcher);
+  }
+
+  public Event readEvent(Line l) {
+    for (EventMatcher m : matchers) {
+      Event event = m.match(l);
+
+      if (event != null) {
+        return event;
+      }
+    }
+
+    return null;
+  }
 }

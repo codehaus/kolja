@@ -24,6 +24,8 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.nio.charset.Charset;
 
+import com.baulsupp.kolja.log.util.IntRange;
+
 /**
  * @author Yuri Schimke
  */
@@ -46,16 +48,23 @@ public class ChunkedFileSequence implements CharSequence {
   private boolean finished;
 
   public ChunkedFileSequence(File file, int chunkSize, Charset cs) throws Exception {
+    this(file, chunkSize, cs, 0);
+  }
+
+  public ChunkedFileSequence(File file, int chunkSize, Charset cs, int initialOffset) throws Exception {
     this.file = file;
     this.chunkSize = chunkSize;
     this.fileReader = new InputStreamReader(new FileInputStream(file), cs);
+    this.offset = initialOffset;
+
+    fileReader.skip(initialOffset);
 
     readInitialChunks();
   }
 
   public char charAt(int index) {
     if (index < offset) {
-      throw new IndexOutOfBoundsException();
+      throw new IndexOutOfBoundsException("index " + index + " current range " + new IntRange(offset, chunkThreeAvailable));
     }
 
     if (index < chunkOneAvailable) {
@@ -115,7 +124,7 @@ public class ChunkedFileSequence implements CharSequence {
 
   private void readInitialChunks() throws IOException {
     chunkOne = new char[chunkSize];
-    chunkOneAvailable = readChunk(chunkOne);
+    chunkOneAvailable = readChunk(chunkOne) + offset;
     chunkTwo = new char[chunkSize];
     chunkTwoAvailable = chunkOneAvailable + readChunk(chunkTwo);
     chunkThree = new char[chunkSize];

@@ -21,10 +21,14 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.io.File;
+import java.nio.charset.Charset;
 import java.util.regex.Pattern;
 
 import org.junit.Test;
 
+import com.baulsupp.kolja.log.line.Line;
+import com.baulsupp.kolja.log.util.IntRange;
 import com.baulsupp.kolja.log.viewer.importing.PlainTextLineParser;
 
 /**
@@ -37,15 +41,61 @@ public class FastLineIteratorTest {
         new PlainTextLineParser());
 
     assertTrue(li.hasNext());
-    assertEquals("abc\n", li.next().toString());
+    Line line = li.next();
+    assertEquals("abc\n", line.toString());
+    assertEquals(0, line.getOffset());
 
     assertTrue(li.hasNext());
-    assertEquals("def\n", li.next().toString());
+    assertTrue(li.hasNext());
 
     assertTrue(li.hasNext());
-    assertEquals("ghi\n", li.next().toString());
+    line = li.next();
+    assertEquals("def\n", line.toString());
+    assertEquals(4, line.getOffset());
+
+    assertTrue(li.hasNext());
+    line = li.next();
+    assertEquals("ghi\n", line.toString());
+    assertEquals(8, line.getOffset());
 
     assertFalse(li.hasNext());
   }
 
+  @Test
+  public void testCanBeRestrictedToRange() {
+    FastLineIterator li = new FastLineIterator(Pattern.compile("^", Pattern.MULTILINE), "abc\ndef\nghi\n",
+        new PlainTextLineParser(), new IntRange(4, 8));
+
+    assertTrue(li.hasNext());
+    Line line = li.next();
+    assertEquals("def\n", line.toString());
+    assertEquals(4, line.getOffset());
+
+    assertFalse(li.hasNext());
+  }
+
+  @Test
+  public void testWorksThroughFile() throws Exception {
+    File file = new File("src/test/logs/test.txt");
+    ChunkedFileSequence seq = new ChunkedFileSequence(file, 10, Charset.forName("US-ASCII"));
+
+    FastLineIterator li = new FastLineIterator(Pattern.compile("^", Pattern.MULTILINE), seq, new PlainTextLineParser());
+
+    while (li.hasNext()) {
+      assertEquals("012345678\n", li.next().toString());
+    }
+  }
+
+  @Test
+  public void testWorksThroughFileWithOffset() throws Exception {
+    File file = new File("src/test/logs/test.txt");
+    ChunkedFileSequence seq = new ChunkedFileSequence(file, 10, Charset.forName("US-ASCII"), 9);
+
+    FastLineIterator li = new FastLineIterator(Pattern.compile("^", Pattern.MULTILINE), seq, new PlainTextLineParser(),
+        new IntRange(10, seq.length()));
+
+    while (li.hasNext()) {
+      assertEquals("012345678\n", li.next().toString());
+    }
+  }
 }

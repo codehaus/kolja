@@ -1,6 +1,5 @@
 package com.baulsupp.kolja.log.viewer.event;
 
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.SortedSet;
@@ -17,26 +16,22 @@ import com.baulsupp.kolja.log.util.IntRange;
 /**
  * A list of events in a log file.
  */
-public class EventList extends ValueIndexer implements EventDetector {
-  private List<EventMatcher> matchers = new ArrayList<EventMatcher>();
+public class EventList extends ValueIndexer {
 
   private SortedSet<Event> events = new TreeSet<Event>(new Comparator<Event>() {
     public int compare(Event event, Event event1) {
       return event.getOffset() - event1.getOffset();
     }
   });
+  private EventDetector eventDetector;
 
   public EventList(LineIndex lineIndex) {
     super(lineIndex);
   }
 
-  public EventList(LineIndex lineIndex, List<EventMatcher> eventMatchers) {
+  public EventList(LineIndex lineIndex, EventDetector eventDetector) {
     super(lineIndex);
-    this.matchers = eventMatchers;
-  }
-
-  public void addEventMatcher(EventMatcher eventMatcher) {
-    matchers.add(eventMatcher);
+    this.eventDetector = eventDetector;
   }
 
   protected void processLines(IntRange range, List<Line> regionLines) {
@@ -50,25 +45,13 @@ public class EventList extends ValueIndexer implements EventDetector {
   public Event processLine(Line l) {
     Event event = null;
 
-    event = readEvent(l);
+    event = eventDetector.readEvent(l);
 
     if (event != null) {
       events.add(event);
     }
 
     return event;
-  }
-
-  public Event readEvent(Line l) {
-    for (EventMatcher m : matchers) {
-      Event event = m.match(l);
-
-      if (event != null) {
-        return event;
-      }
-    }
-
-    return null;
   }
 
   public SortedSet<Event> getEvents() {
@@ -85,5 +68,10 @@ public class EventList extends ValueIndexer implements EventDetector {
     }
 
     return subEvents;
+  }
+
+  public void setEventDetector(EventDetector ed) {
+    this.eventDetector = ed;
+
   }
 }
