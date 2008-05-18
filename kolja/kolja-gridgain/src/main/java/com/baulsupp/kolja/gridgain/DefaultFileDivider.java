@@ -29,7 +29,7 @@ import com.baulsupp.kolja.log.util.IntRange;
  */
 public class DefaultFileDivider implements FileDivider {
   // MB
-  private int blockSize = 1024 * 1024;
+  private int blockSize = 8 * 1024 * 1024;
 
   public void setBlockSize(int blockSize) {
     this.blockSize = blockSize;
