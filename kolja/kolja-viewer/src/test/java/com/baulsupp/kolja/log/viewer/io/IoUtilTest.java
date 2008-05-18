@@ -10,6 +10,7 @@ import junit.framework.TestCase;
 
 import com.baulsupp.kolja.log.line.Line;
 import com.baulsupp.kolja.log.line.RegexLineParser;
+import com.baulsupp.kolja.log.line.matcher.RegexEntryPattern;
 import com.baulsupp.kolja.log.line.type.NameType;
 import com.baulsupp.kolja.log.line.type.TypeList;
 import com.baulsupp.kolja.log.viewer.importing.ConfigurableLineFormat;
@@ -21,7 +22,9 @@ public class IoUtilTest extends TestCase {
 
     ConfigurableLogFormat format = new ConfigurableLogFormat();
     ConfigurableLineFormat lineFormat = new ConfigurableLineFormat();
-    lineFormat.setEntryPattern(Pattern.compile("^\\d", Pattern.MULTILINE));
+
+    RegexEntryPattern entryPattern = new RegexEntryPattern(Pattern.compile("^\\d", Pattern.MULTILINE));
+    lineFormat.setEntryPattern(entryPattern);
 
     RegexLineParser regex = new RegexLineParser(Pattern.compile("(\\d+) - (.*)"), TypeList.build(new NameType("order"),
         new NameType("content")));

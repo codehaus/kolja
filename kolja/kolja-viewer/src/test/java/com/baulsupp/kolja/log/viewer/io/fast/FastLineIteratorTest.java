@@ -25,20 +25,66 @@ import java.io.File;
 import java.nio.charset.Charset;
 import java.util.regex.Pattern;
 
+import org.jmock.Expectations;
+import org.jmock.Mockery;
+import org.jmock.integration.junit4.JMock;
+import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import com.baulsupp.kolja.log.line.Line;
+import com.baulsupp.kolja.log.line.matcher.EntryMatcher;
+import com.baulsupp.kolja.log.line.matcher.EntryPattern;
+import com.baulsupp.kolja.log.line.matcher.RegexEntryPattern;
 import com.baulsupp.kolja.log.util.IntRange;
 import com.baulsupp.kolja.log.viewer.importing.PlainTextLineParser;
 
 /**
  * @author Yuri Schimke
  */
+@RunWith(JMock.class)
 public class FastLineIteratorTest {
+  private Mockery context = new Mockery();
+  private EntryPattern pattern;
+  private EntryMatcher matcher;
+
+  @Before
+  public void setup() {
+    pattern = context.mock(EntryPattern.class);
+    matcher = context.mock(EntryMatcher.class);
+  }
+
   @Test
   public void testSimple() {
-    FastLineIterator li = new FastLineIterator(Pattern.compile("^", Pattern.MULTILINE), "abc\ndef\nghi\n",
-        new PlainTextLineParser());
+    context.checking(new Expectations() {
+      {
+        one(pattern).matcher("abc\ndef\nghi\n");
+        will(returnValue(matcher));
+
+        one(matcher).find(0);
+        will(returnValue(true));
+
+        one(matcher).start();
+        will(returnValue(0));
+
+        one(matcher).find();
+        will(returnValue(true));
+
+        one(matcher).start();
+        will(returnValue(4));
+
+        one(matcher).find();
+        will(returnValue(true));
+
+        one(matcher).start();
+        will(returnValue(8));
+
+        one(matcher).find();
+        will(returnValue(false));
+      }
+    });
+
+    FastLineIterator li = new FastLineIterator(pattern, "abc\ndef\nghi\n", new PlainTextLineParser());
 
     assertTrue(li.hasNext());
     Line line = li.next();
@@ -63,8 +109,26 @@ public class FastLineIteratorTest {
 
   @Test
   public void testCanBeRestrictedToRange() {
-    FastLineIterator li = new FastLineIterator(Pattern.compile("^", Pattern.MULTILINE), "abc\ndef\nghi\n",
-        new PlainTextLineParser(), new IntRange(4, 8));
+    context.checking(new Expectations() {
+      {
+        one(pattern).matcher("abc\ndef\nghi\n");
+        will(returnValue(matcher));
+
+        one(matcher).find(4);
+        will(returnValue(true));
+
+        one(matcher).start();
+        will(returnValue(4));
+
+        one(matcher).find();
+        will(returnValue(true));
+
+        one(matcher).start();
+        will(returnValue(8));
+      }
+    });
+
+    FastLineIterator li = new FastLineIterator(pattern, "abc\ndef\nghi\n", new PlainTextLineParser(), new IntRange(4, 8));
 
     assertTrue(li.hasNext());
     Line line = li.next();
@@ -79,7 +143,9 @@ public class FastLineIteratorTest {
     File file = new File("src/test/logs/test.txt");
     ChunkedFileSequence seq = new ChunkedFileSequence(file, 10, Charset.forName("US-ASCII"));
 
-    FastLineIterator li = new FastLineIterator(Pattern.compile("^", Pattern.MULTILINE), seq, new PlainTextLineParser());
+    pattern = new RegexEntryPattern(Pattern.compile("^", Pattern.MULTILINE));
+
+    FastLineIterator li = new FastLineIterator(pattern, seq, new PlainTextLineParser());
 
     while (li.hasNext()) {
       assertEquals("012345678\n", li.next().toString());
@@ -91,8 +157,9 @@ public class FastLineIteratorTest {
     File file = new File("src/test/logs/test.txt");
     ChunkedFileSequence seq = new ChunkedFileSequence(file, 10, Charset.forName("US-ASCII"), 9);
 
-    FastLineIterator li = new FastLineIterator(Pattern.compile("^", Pattern.MULTILINE), seq, new PlainTextLineParser(),
-        new IntRange(10, seq.length()));
+    pattern = new RegexEntryPattern(Pattern.compile("^", Pattern.MULTILINE));
+
+    FastLineIterator li = new FastLineIterator(pattern, seq, new PlainTextLineParser(), new IntRange(10, seq.length()));
 
     while (li.hasNext()) {
       assertEquals("012345678\n", li.next().toString());

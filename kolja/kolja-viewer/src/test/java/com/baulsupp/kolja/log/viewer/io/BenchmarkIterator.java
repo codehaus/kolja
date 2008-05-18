@@ -18,7 +18,6 @@
 package com.baulsupp.kolja.log.viewer.io;
 
 import java.io.File;
-import java.util.regex.Pattern;
 
 import org.springframework.util.ClassUtils;
 import org.springframework.util.StopWatch;
@@ -26,6 +25,8 @@ import org.springframework.util.StopWatch;
 import com.baulsupp.kolja.log.line.Line;
 import com.baulsupp.kolja.log.line.LineIterator;
 import com.baulsupp.kolja.log.line.LineParser;
+import com.baulsupp.kolja.log.line.matcher.EntryPattern;
+import com.baulsupp.kolja.log.line.matcher.NewLineEntryPattern;
 import com.baulsupp.kolja.log.viewer.importing.PlainTextLineParser;
 
 /**
@@ -34,7 +35,7 @@ import com.baulsupp.kolja.log.viewer.importing.PlainTextLineParser;
 public abstract class BenchmarkIterator {
   private LineIterator i;
 
-  protected Pattern pattern;
+  protected EntryPattern pattern;
   protected LineParser lineParser;
   protected File file;
 
@@ -42,7 +43,7 @@ public abstract class BenchmarkIterator {
 
   protected StopWatch sw;
 
-  public void setPattern(Pattern pattern) {
+  public void setPattern(EntryPattern pattern) {
     this.pattern = pattern;
   }
 
@@ -55,7 +56,7 @@ public abstract class BenchmarkIterator {
   }
 
   public void run() throws Exception {
-    setPattern(Pattern.compile("^", Pattern.MULTILINE));
+    setPattern(new NewLineEntryPattern());
     setLineParser(new PlainTextLineParser());
 
     setFile(new File("../kolja-widefinder/src/test/logs/o100k.ap"));

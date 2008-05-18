@@ -17,14 +17,14 @@
  */
 package com.baulsupp.kolja.log.viewer.linenumbers;
 
-import java.util.regex.Pattern;
-
 import org.apache.commons.collections.primitives.IntList;
 
 import com.baulsupp.curses.list.LineNumberIndex;
 import com.baulsupp.kolja.log.entry.BufferedLogEntryIndex;
 import com.baulsupp.kolja.log.entry.LogEntryIndex;
 import com.baulsupp.kolja.log.entry.MemoryLogEntryIndex;
+import com.baulsupp.kolja.log.line.matcher.EntryPattern;
+import com.baulsupp.kolja.log.line.matcher.NewLineEntryPattern;
 import com.baulsupp.kolja.log.util.IntRange;
 
 public class BasicLineNumberIndex implements LineNumberIndex {
@@ -90,7 +90,7 @@ public class BasicLineNumberIndex implements LineNumberIndex {
   }
 
   public static LineNumberIndex create(CharSequence buffer) {
-    Pattern p = Pattern.compile("^", Pattern.MULTILINE);
+    EntryPattern p = new NewLineEntryPattern();
     MemoryLogEntryIndex rawIndex = new MemoryLogEntryIndex(buffer, p);
     BufferedLogEntryIndex entryIndex = new BufferedLogEntryIndex(rawIndex);
 

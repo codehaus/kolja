@@ -9,7 +9,9 @@ http://baulsupp.com/schema/kolja-reports http://baulsupp.com/schema/kolja-report
 
   <format id="logFormat">
     <line-format>
-      <entry-format>^(?:starting|ending|loadData|select)</entry-format>
+      <regex-entry-pattern>
+        <pattern>^(?:starting|ending|loadData|select)</pattern>
+      </regex-entry-pattern>
       <multiple-line-parser>
         <regex-line-parser>
           <field-pattern>starting \w+ &lt;\*&gt; StartTime\[(\d+)\] CurrentUser\[(\w+)\] Action\[(\w+)\] ActionName\[(\w+)\] ActionDescription\[(.*)\] FreeMemory\[(\d+)\] TotalMemory\[(\d+)\] &lt;\*&gt; LogThread\[(.*)\] LogLevel\[([A-Z]+) ?\] LogClass\[(.*?)\] LogDate\[(.*?)\].*</field-pattern>

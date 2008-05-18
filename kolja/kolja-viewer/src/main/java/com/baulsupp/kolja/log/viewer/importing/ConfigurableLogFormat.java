@@ -1,11 +1,11 @@
 package com.baulsupp.kolja.log.viewer.importing;
 
 import java.io.Serializable;
-import java.util.regex.Pattern;
 
 import com.baulsupp.kolja.log.line.Line;
 import com.baulsupp.kolja.log.line.LineIndex;
 import com.baulsupp.kolja.log.line.LineParser;
+import com.baulsupp.kolja.log.line.matcher.EntryPattern;
 import com.baulsupp.kolja.log.viewer.event.EventDetector;
 import com.baulsupp.kolja.log.viewer.event.EventList;
 import com.baulsupp.kolja.log.viewer.renderer.Renderer;
@@ -96,7 +96,7 @@ public class ConfigurableLogFormat implements LogFormat, Serializable {
     return requestFormat != null ? requestFormat.getRequestField() : null;
   }
 
-  public Pattern getEntryPattern() {
+  public EntryPattern getEntryPattern() {
     return lineFormat.getEntryPattern();
   }
 

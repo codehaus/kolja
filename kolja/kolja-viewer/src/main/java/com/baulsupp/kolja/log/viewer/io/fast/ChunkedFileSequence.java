@@ -32,7 +32,6 @@ import com.baulsupp.kolja.log.util.IntRange;
 public class ChunkedFileSequence implements CharSequence {
   public static final int MB = 1024 * 1024;
 
-  private File file;
   private int chunkSize;
 
   private Reader fileReader;
@@ -47,15 +46,17 @@ public class ChunkedFileSequence implements CharSequence {
   private int chunkThreeAvailable = 0;
   private boolean finished;
 
+  private int length;
+
   public ChunkedFileSequence(File file, int chunkSize, Charset cs) throws Exception {
     this(file, chunkSize, cs, 0);
   }
 
   public ChunkedFileSequence(File file, int chunkSize, Charset cs, int initialOffset) throws Exception {
-    this.file = file;
     this.chunkSize = chunkSize;
     this.fileReader = new InputStreamReader(new FileInputStream(file), cs);
     this.offset = initialOffset;
+    this.length = (int) file.length();
 
     fileReader.skip(initialOffset);
 
@@ -87,7 +88,7 @@ public class ChunkedFileSequence implements CharSequence {
   }
 
   public int length() {
-    return (int) file.length();
+    return length;
   }
 
   public CharSequence subSequence(int start, int end) {
@@ -99,7 +100,7 @@ public class ChunkedFileSequence implements CharSequence {
       throw new IndexOutOfBoundsException();
     }
 
-    StringBuilder builder = new StringBuilder();
+    StringBuilder builder = new StringBuilder(end - start);
 
     if (start < chunkOneAvailable) {
       int from = start - offset;

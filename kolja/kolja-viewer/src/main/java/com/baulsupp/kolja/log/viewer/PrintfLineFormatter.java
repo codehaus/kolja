@@ -19,7 +19,17 @@ public class PrintfLineFormatter implements LineFormatter, Serializable {
   }
 
   public String format(Line l) {
-    return String.format(pattern, l.getValues(fields));
+    return String.format(pattern, getValues(l, fields));
+  }
+
+  public Object[] getValues(Line l, String[] fields) {
+    Object[] values = new Object[fields.length];
+
+    for (int i = 0; i < fields.length; i++) {
+      values[i] = l.getValue(fields[i]);
+    }
+
+    return values;
   }
 
   public String getPattern() {

@@ -1,7 +1,5 @@
 package com.baulsupp.kolja.log.viewer.importing;
 
-import java.util.regex.Pattern;
-
 import com.baulsupp.kolja.log.entry.BufferedLogEntryIndex;
 import com.baulsupp.kolja.log.entry.LogEntryIndex;
 import com.baulsupp.kolja.log.entry.MemoryLogEntryIndex;
@@ -9,6 +7,8 @@ import com.baulsupp.kolja.log.line.Line;
 import com.baulsupp.kolja.log.line.LineIndex;
 import com.baulsupp.kolja.log.line.LineParser;
 import com.baulsupp.kolja.log.line.LogEntryLineIndex;
+import com.baulsupp.kolja.log.line.matcher.EntryPattern;
+import com.baulsupp.kolja.log.line.matcher.NewLineEntryPattern;
 import com.baulsupp.kolja.log.viewer.event.EventDetector;
 import com.baulsupp.kolja.log.viewer.event.EventList;
 import com.baulsupp.kolja.log.viewer.highlight.HighlightList;
@@ -26,7 +26,7 @@ public class PlainTextLogFormat implements LogFormat {
   }
 
   public LineIndex getLineIndex(CharSequence buffer) {
-    Pattern p = getEntryPattern();
+    EntryPattern p = getEntryPattern();
     LogEntryIndex entryIndex = new MemoryLogEntryIndex(buffer, p);
 
     entryIndex = new BufferedLogEntryIndex(entryIndex);
@@ -61,8 +61,8 @@ public class PlainTextLogFormat implements LogFormat {
     return null;
   }
 
-  public Pattern getEntryPattern() {
-    return Pattern.compile("^", Pattern.MULTILINE);
+  public EntryPattern getEntryPattern() {
+    return new NewLineEntryPattern();
   }
 
   public LineParser getLineParser() {

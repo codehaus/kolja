@@ -2,7 +2,6 @@ package com.baulsupp.kolja.log.viewer.importing;
 
 import java.io.Serializable;
 import java.util.Set;
-import java.util.regex.Pattern;
 
 import com.baulsupp.kolja.log.entry.BufferedLogEntryIndex;
 import com.baulsupp.kolja.log.entry.LogEntryIndex;
@@ -10,19 +9,20 @@ import com.baulsupp.kolja.log.entry.MemoryLogEntryIndex;
 import com.baulsupp.kolja.log.line.LineIndex;
 import com.baulsupp.kolja.log.line.LineParser;
 import com.baulsupp.kolja.log.line.ParsingLineIndex;
+import com.baulsupp.kolja.log.line.matcher.EntryPattern;
 
 public class ConfigurableLineFormat implements Serializable {
   private static final long serialVersionUID = 3762034774959051436L;
 
-  private Pattern entryPattern;
+  private EntryPattern entryPattern;
 
   private LineParser lineParser;
 
-  public Pattern getEntryPattern() {
+  public EntryPattern getEntryPattern() {
     return entryPattern;
   }
 
-  public void setEntryPattern(Pattern entryPattern) {
+  public void setEntryPattern(EntryPattern entryPattern) {
     this.entryPattern = entryPattern;
   }
 

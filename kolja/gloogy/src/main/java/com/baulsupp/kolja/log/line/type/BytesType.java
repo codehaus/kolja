@@ -17,7 +17,6 @@
  */
 package com.baulsupp.kolja.log.line.type;
 
-
 /**
  * Bytes type that parse the access log bytes into a long.
  * 
@@ -35,6 +34,10 @@ public class BytesType extends Type {
 
   @Override
   public Object parse(String string) {
+    return parseBytes(string);
+  }
+
+  public static Long parseBytes(String string) {
     if (string.equals("-")) {
       return null;
     }

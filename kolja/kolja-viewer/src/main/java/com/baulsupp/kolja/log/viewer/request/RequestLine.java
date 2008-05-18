@@ -69,16 +69,6 @@ public class RequestLine implements Line {
     return values.get(name);
   }
 
-  public Object[] getValues(String[] fields) {
-    Object[] values = new Object[fields.length];
-
-    for (int i = 0; i < fields.length; i++) {
-      values[i] = getValue(fields[i]);
-    }
-
-    return values;
-  }
-
   public void setValue(String field, Object value) {
     values.put(field, value);
   }

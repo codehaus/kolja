@@ -9,7 +9,9 @@ http://baulsupp.com/schema/kolja-reports http://baulsupp.com/schema/kolja-report
 
   <format id="logFormat">
     <line-format>
-      <entry-format>^20</entry-format>
+      <regex-entry-pattern>
+        <pattern>^20</pattern>
+      </regex-entry-pattern>
       <regex-line-parser>
         <field-pattern>([\d-]+ [\d:,]+) \[(.*?)\] \[(.*?)\] ?([A-Z]{4,5}) (\S+) - (.*?)$\n?(.*)\z</field-pattern>
         <types>

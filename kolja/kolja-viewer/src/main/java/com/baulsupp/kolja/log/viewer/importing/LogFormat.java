@@ -17,11 +17,10 @@
  */
 package com.baulsupp.kolja.log.viewer.importing;
 
-import java.util.regex.Pattern;
-
 import com.baulsupp.kolja.log.line.Line;
 import com.baulsupp.kolja.log.line.LineIndex;
 import com.baulsupp.kolja.log.line.LineParser;
+import com.baulsupp.kolja.log.line.matcher.EntryPattern;
 import com.baulsupp.kolja.log.viewer.event.EventDetector;
 import com.baulsupp.kolja.log.viewer.event.EventList;
 import com.baulsupp.kolja.log.viewer.renderer.Renderer;
@@ -44,7 +43,7 @@ public interface LogFormat {
 
   String getRequestField();
 
-  Pattern getEntryPattern();
+  EntryPattern getEntryPattern();
 
   LineParser getLineParser();
 

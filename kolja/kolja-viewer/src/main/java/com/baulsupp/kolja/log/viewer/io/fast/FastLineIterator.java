@@ -18,12 +18,12 @@
 package com.baulsupp.kolja.log.viewer.io.fast;
 
 import java.util.NoSuchElementException;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import com.baulsupp.kolja.log.line.Line;
 import com.baulsupp.kolja.log.line.LineIterator;
 import com.baulsupp.kolja.log.line.LineParser;
+import com.baulsupp.kolja.log.line.matcher.EntryMatcher;
+import com.baulsupp.kolja.log.line.matcher.EntryPattern;
 import com.baulsupp.kolja.log.util.IntRange;
 
 /**
@@ -31,7 +31,7 @@ import com.baulsupp.kolja.log.util.IntRange;
  * 
  */
 public class FastLineIterator implements LineIterator {
-  private Matcher matcher;
+  private EntryMatcher matcher;
   private Line nextLine;
   private LineParser lineParser;
 
@@ -40,13 +40,13 @@ public class FastLineIterator implements LineIterator {
   private boolean finished;
   private IntRange intRange;
 
-  public FastLineIterator(Pattern pattern, CharSequence content, LineParser lineParser) {
+  public FastLineIterator(EntryPattern pattern, CharSequence content, LineParser lineParser) {
     this.matcher = pattern.matcher(content);
     this.content = content;
     this.lineParser = lineParser;
   }
 
-  public FastLineIterator(Pattern pattern, CharSequence content, LineParser lineParser, IntRange intRange) {
+  public FastLineIterator(EntryPattern pattern, CharSequence content, LineParser lineParser, IntRange intRange) {
     this.matcher = pattern.matcher(content);
     this.content = content;
     this.lineParser = lineParser;

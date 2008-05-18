@@ -60,13 +60,10 @@
 
   <xsd:complexType name="LineFormat">
     <xsd:sequence>
-      <xsd:element name="entry-format" maxOccurs=" 1" minOccurs="1">
+      <xsd:element ref="entry-pattern" maxOccurs=" 1" minOccurs="1">
         <xsd:annotation>
-          <xsd:documentation>Log entry detection pattern.</xsd:documentation>
+          <xsd:documentation source="java:com.baulsupp.kolja.log.line.matcher.EntryPatter">Log line detection</xsd:documentation>
         </xsd:annotation>
-        <xsd:simpleType>
-          <xsd:restriction base="xsd:string" />
-        </xsd:simpleType>
       </xsd:element>
       <xsd:element ref="line-parser" maxOccurs=" 1" minOccurs="1">
         <xsd:annotation>
@@ -75,6 +72,58 @@
       </xsd:element>
     </xsd:sequence>
   </xsd:complexType>
+
+<!-- 
+      <xsd:element name="entry-format" maxOccurs=" 1" minOccurs="1">
+        <xsd:annotation>
+          <xsd:documentation>Log entry detection pattern.</xsd:documentation>
+        </xsd:annotation>
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:string" />
+        </xsd:simpleType>
+      </xsd:element>
+-->
+
+  <xsd:element name="entry-pattern" type="entry-pattern" abstract="true" />
+
+  <xsd:complexType name="entry-pattern"></xsd:complexType>
+
+  <xsd:element name="regex-entry-pattern" substitutionGroup="entry-pattern">
+    <xsd:complexType>
+      <xsd:complexContent>
+        <xsd:extension base="entry-pattern">
+          <xsd:sequence>
+            <xsd:element name="pattern" maxOccurs="1" minOccurs="1">
+              <xsd:simpleType>
+                <xsd:restriction base="xsd:string" />
+              </xsd:simpleType>
+            </xsd:element>            
+          </xsd:sequence>
+        </xsd:extension>
+      </xsd:complexContent>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="new-line-entry-pattern" substitutionGroup="entry-pattern">
+    <xsd:complexType>
+      <xsd:complexContent>
+        <xsd:extension base="entry-pattern">
+        </xsd:extension>
+      </xsd:complexContent>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="custom-entry-pattern" substitutionGroup="entry-pattern">
+    <xsd:complexType>
+      <xsd:complexContent>
+        <xsd:extension base="entry-pattern">
+          <xsd:attribute name="class" use="required"></xsd:attribute>
+        </xsd:extension>
+      </xsd:complexContent>
+    </xsd:complexType>
+  </xsd:element>
+
+
 
   <xsd:element name="line-parser" type="line-parser" abstract="true" />
 

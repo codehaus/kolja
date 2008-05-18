@@ -8,40 +8,42 @@ import junit.framework.TestCase;
 
 import com.baulsupp.kolja.log.line.Line;
 import com.baulsupp.kolja.log.line.RegexLineParser;
+import com.baulsupp.kolja.log.line.matcher.RegexEntryPattern;
 import com.baulsupp.kolja.log.line.type.NameType;
 import com.baulsupp.kolja.log.line.type.TypeList;
 
 public class FileLineIteratorTest extends TestCase {
   private File myFile;
   private FileLineIterator i;
-  
+
   @Override
   protected void setUp() throws Exception {
     super.setUp();
-    
+
     myFile = File.createTempFile("test-", ".log");
     myFile.deleteOnExit();
 
     BufferingStringBuilder content = new FileBufferingStringBuilder(myFile, false);
 
     Pattern entryPattern = Pattern.compile("^\\d", Pattern.MULTILINE);
+
     Pattern fieldPattern = Pattern.compile("(\\d+) - (.*)");
     TypeList types = TypeList.build(new NameType("order"), new NameType("content"));
-    i = new FileLineIterator(content, entryPattern, new RegexLineParser(fieldPattern, types));
+    i = new FileLineIterator(content, new RegexEntryPattern(entryPattern), new RegexLineParser(fieldPattern, types));
   }
-  
+
   @Override
   protected void tearDown() throws Exception {
     myFile.delete();
-    
+
     super.tearDown();
   }
-  
+
   public void testStandard() throws IOException {
     assertFalse(i.hasNext());
-    
+
     IoUtil.writeContent(myFile, "A", "B", "C");
-    
+
     assertTrue(i.hasNext());
     Line l = i.next();
     assertNotNull(l);
@@ -68,7 +70,7 @@ public class FileLineIteratorTest extends TestCase {
 
   public void testTailing() throws IOException {
     IoUtil.writeContent(myFile, "A", "B");
-    
+
     assertTrue(i.hasNext());
     Line l = i.next();
     assertNotNull(l);
@@ -82,9 +84,9 @@ public class FileLineIteratorTest extends TestCase {
     assertEquals("B", l.getValue("content"));
 
     assertFalse(i.hasNext());
-    
+
     IoUtil.writeContent(myFile, "A", "B");
-    
+
     assertTrue(i.hasNext());
     l = i.next();
     assertNotNull(l);

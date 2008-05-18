@@ -20,8 +20,8 @@ public class BasicLine implements Line {
   }
 
   public BasicLine(int offset, String string) {
-      this.offset = offset;
-      this.content = string;
+    this.offset = offset;
+    this.content = string;
   }
 
   public int length() {
@@ -44,21 +44,11 @@ public class BasicLine implements Line {
     return values == null ? null : values.get(name);
   }
 
-  public Object[] getValues(String[] fields) {
-    Object[] values = new Object[fields.length];
-
-    for (int i = 0; i < fields.length; i++) {
-      values[i] = getValue(fields[i]);
-    }
-
-    return values;
-  }
-
   public void setValue(String name, Object value) {
     if (values == null) {
       values = new HashMap<String, Object>();
     }
-    
+
     values.put(name, value);
   }
 

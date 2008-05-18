@@ -14,6 +14,4 @@ public interface Line extends CharSequence {
   void setOffset(int lineStart);
 
   Map<String, Object> getValues();
-
-  Object[] getValues(String[] fields);
 }

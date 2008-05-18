@@ -3,29 +3,29 @@ package com.baulsupp.kolja.log.viewer.io;
 import java.io.File;
 import java.io.IOException;
 import java.util.NoSuchElementException;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import com.baulsupp.kolja.log.line.Line;
 import com.baulsupp.kolja.log.line.LineIterator;
 import com.baulsupp.kolja.log.line.LineParser;
+import com.baulsupp.kolja.log.line.matcher.EntryMatcher;
+import com.baulsupp.kolja.log.line.matcher.EntryPattern;
 import com.baulsupp.kolja.log.viewer.importing.ConfigurableLineFormat;
 import com.baulsupp.kolja.log.viewer.importing.ConfigurableLogFormat;
 import com.baulsupp.kolja.log.viewer.importing.LogFormat;
 
 public class FileLineIterator implements LineIterator {
-  private Matcher entryMatcher;
+  private EntryMatcher entryMatcher;
   private BufferingStringBuilder content;
   private LineParser lineParser;
 
-  public FileLineIterator(BufferingStringBuilder content, Pattern entryPattern, LineParser lineParser) throws IOException {
+  public FileLineIterator(BufferingStringBuilder content, EntryPattern entryPattern, LineParser lineParser) throws IOException {
     this.entryMatcher = entryPattern.matcher("");
     this.lineParser = lineParser;
     this.content = content;
   }
 
   public static FileLineIterator load(LogFormat format, File file, boolean end) throws IOException {
-    Pattern entryPattern = format.getEntryPattern();
+    EntryPattern entryPattern = format.getEntryPattern();
     LineParser lineParser = format.getLineParser();
 
     BufferingStringBuilder content = new FileBufferingStringBuilder(file, end);
@@ -35,7 +35,7 @@ public class FileLineIterator implements LineIterator {
   public static FileLineIterator loadFromStdin(LogFormat format) throws IOException {
     ConfigurableLineFormat lineFormat = ((ConfigurableLogFormat) format).getLineFormat();
 
-    Pattern entryPattern = lineFormat.getEntryPattern();
+    EntryPattern entryPattern = lineFormat.getEntryPattern();
 
     BufferingStringBuilder content = new StreamBufferingStringBuilder(System.in);
     return new FileLineIterator(content, entryPattern, lineFormat.getLineParser());

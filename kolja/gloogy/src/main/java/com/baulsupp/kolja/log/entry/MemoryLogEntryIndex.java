@@ -1,20 +1,19 @@
 package com.baulsupp.kolja.log.entry;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import org.apache.commons.collections.primitives.IntList;
 
 import com.baulsupp.kolja.log.GloogyConstants;
+import com.baulsupp.kolja.log.line.matcher.EntryMatcher;
+import com.baulsupp.kolja.log.line.matcher.EntryPattern;
 import com.baulsupp.kolja.log.util.FastIntList;
 import com.baulsupp.kolja.log.util.IntRange;
 
 public class MemoryLogEntryIndex implements LogEntryIndex {
   private CharSequence text;
 
-  private Matcher matcher;
+  private EntryMatcher matcher;
 
-  public MemoryLogEntryIndex(CharSequence text, Pattern pattern) {
+  public MemoryLogEntryIndex(CharSequence text, EntryPattern pattern) {
     this.text = text;
     this.matcher = pattern.matcher(text);
   }

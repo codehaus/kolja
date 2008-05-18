@@ -13,6 +13,8 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.baulsupp.kolja.log.line.Line;
 import com.baulsupp.kolja.log.line.RegexLineParser;
+import com.baulsupp.kolja.log.line.matcher.EntryPattern;
+import com.baulsupp.kolja.log.line.matcher.RegexEntryPattern;
 import com.baulsupp.kolja.log.line.type.DateType;
 import com.baulsupp.kolja.log.line.type.ExceptionType;
 import com.baulsupp.kolja.log.line.type.MessageType;
@@ -74,9 +76,11 @@ public class KoljaNamespaceHandlerTest extends TestCase {
   private void checkLineFormat(ConfigurableLineFormat clf) {
     assertNotNull(clf);
 
-    Pattern entryPattern = clf.getEntryPattern();
-    assertEquals(Pattern.MULTILINE, entryPattern.flags());
-    assertEquals("^20", entryPattern.pattern());
+    EntryPattern entryPattern = clf.getEntryPattern();
+    assertTrue(entryPattern instanceof RegexEntryPattern);
+    Pattern p = ((RegexEntryPattern) entryPattern).getRegexPattern();
+    assertEquals(Pattern.MULTILINE, p.flags());
+    assertEquals("^20", p.pattern());
 
     Pattern fieldPattern = ((RegexLineParser) clf.getLineParser()).getPattern();
     assertEquals(Pattern.MULTILINE | Pattern.DOTALL, fieldPattern.flags());
