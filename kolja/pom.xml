@@ -136,6 +136,19 @@
       </dependency>
     </dependencies>
   </dependencyManagement>
+  
+  <repositories>
+    <repository>
+      <id>codehaus</id>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+      <url>http://repository.codehaus.org/</url>
+    </repository>
+  </repositories>
 
   <distributionManagement>
     <site>
