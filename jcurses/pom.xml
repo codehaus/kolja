@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.baulsupp.kolja</groupId>
 	<artifactId>jcurses</artifactId>
-	<version>0.9.5.2</version>
+	<version>0.9.5.3-SNAPSHOT</version>
 
 	<name>JCurses</name>
 	<description>Internal Version of JCurses for use with Kolja. For projects please use http://sourceforge.net/projects/javacurses/</description>
@@ -34,10 +34,4 @@
       <version>1.4.3</version>
     </dependency>
 	</dependencies>
-
-  <scm>
-    <connection>scm:svn:http://svn.codehaus.org/kolja/tags/jcurses-0.9.5.2</connection>
-    <developerConnection>scm:svn:https://svn.codehaus.org/kolja/tags/jcurses-0.9.5.2</developerConnection>
-    <url>http://fisheye.codehaus.org/browse/kolja/tags/jcurses-0.9.5.2</url>
-  </scm>
 </project>
