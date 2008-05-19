@@ -45,7 +45,7 @@
     <dependency>
       <groupId>com.baulsupp.kolja</groupId>
       <artifactId>kolja-ansi</artifactId>
-      <version>1.0-SNAPSHOT</version>
+      <version>${project.version}</version>
       <exclusions>
         <exclusion>
           <groupId>org.slf4j</groupId>
@@ -61,7 +61,7 @@
     <dependency>
       <groupId>com.baulsupp.kolja</groupId>
       <artifactId>kolja-widefinder</artifactId>
-      <version>1.0-SNAPSHOT</version>
+      <version>${project.version}</version>
       <exclusions>
         <exclusion>
           <groupId>org.slf4j</groupId>

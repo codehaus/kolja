@@ -49,7 +49,7 @@
     <dependency>
       <groupId>com.baulsupp.kolja</groupId>
       <artifactId>kolja-viewer</artifactId>
-      <version>1.0-SNAPSHOT</version>
+      <version>${project.version}</version>
     </dependency>
     <dependency>
       <groupId>jline</groupId>
