@@ -15,30 +15,17 @@
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-package com.baulsupp.kolja.ansi.reports;
+package com.baulsupp.kolja.ansi.reports.engine.file;
 
-import java.io.File;
-import java.util.List;
-
-import com.baulsupp.kolja.log.util.IntRange;
-import com.baulsupp.kolja.log.viewer.importing.LogFormat;
+import com.baulsupp.kolja.ansi.reports.ReportContext;
+import com.baulsupp.kolja.log.line.Line;
 
 /**
  * @author Yuri Schimke
  * 
  */
-public interface ReportEngine {
-  void initialise() throws Exception;
-
-  void setReports(List<TextReport<?>> createReports);
-
-  void setReportPrinter(ReportPrinter reportPrinter);
-
-  void process(List<File> commandFiles) throws Exception;
-
-  void setLogFormat(LogFormat format);
-
-  void completed() throws Exception;
-
-  void process(File file, IntRange intRange) throws Exception;
+public class NullReportContext implements ReportContext {
+  public Line readLine(int i) {
+    return null;
+  }
 }

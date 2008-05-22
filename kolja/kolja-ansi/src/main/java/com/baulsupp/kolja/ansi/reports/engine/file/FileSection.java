@@ -15,11 +15,9 @@
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-package com.baulsupp.kolja.gridgain;
+package com.baulsupp.kolja.ansi.reports.engine.file;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 
 import com.baulsupp.kolja.log.util.IntRange;
 
@@ -27,37 +25,20 @@ import com.baulsupp.kolja.log.util.IntRange;
  * @author Yuri Schimke
  * 
  */
-public class DefaultFileDivider implements FileDivider {
-  // MB
-  private int blockSize = 8 * 1024 * 1024;
+public class FileSection {
+  private File file;
+  private IntRange intRange;
 
-  public void setBlockSize(int blockSize) {
-    this.blockSize = blockSize;
+  public FileSection(File file, IntRange intRange) {
+    this.file = file;
+    this.intRange = intRange;
   }
 
-  public List<FileSection> split(List<File> files) {
-    List<FileSection> result = new ArrayList<FileSection>();
+  public File getFile() {
+    return file;
+  }
 
-    for (File f : files) {
-      if (!f.exists()) {
-        throw new IllegalArgumentException("file missing: " + f);
-      }
-
-      int length = (int) f.length();
-
-      if (length <= blockSize) {
-        result.add(new FileSection(f, null));
-      } else {
-        int offset = 0;
-
-        while (offset < length) {
-          int to = Math.min(offset + blockSize, length);
-          result.add(new FileSection(f, new IntRange(offset, to)));
-          offset = to;
-        }
-      }
-    }
-
-    return result;
+  public IntRange getIntRange() {
+    return intRange;
   }
 }

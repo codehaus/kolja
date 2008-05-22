@@ -26,7 +26,11 @@ import org.gridgain.grid.GridJob;
 import org.gridgain.grid.GridJobResult;
 import org.gridgain.grid.GridTaskSplitAdapter;
 
+import com.baulsupp.kolja.ansi.reports.ReportUtils;
 import com.baulsupp.kolja.ansi.reports.TextReport;
+import com.baulsupp.kolja.ansi.reports.engine.file.DefaultFileDivider;
+import com.baulsupp.kolja.ansi.reports.engine.file.FileDivider;
+import com.baulsupp.kolja.ansi.reports.engine.file.FileSection;
 
 /**
  * @author Yuri Schimke
@@ -51,7 +55,7 @@ public class GridReportSplitter extends GridTaskSplitAdapter<ReportBatch, List<T
 
     reports = job.getReportsCopy();
 
-    List<FileSection> sections = fileDivider.split(job.getFiles());
+    List<FileSection> sections = fileDivider.split(job.getFiles(), gridSize);
 
     for (FileSection fileSection : sections) {
       result.add(new GridReportJob(job.getFormat(), fileSection.getFile(), job.getReportsCopy(), fileSection.getIntRange()));
@@ -65,14 +69,10 @@ public class GridReportSplitter extends GridTaskSplitAdapter<ReportBatch, List<T
     for (GridJobResult gridJobResult : parts) {
       List<TextReport<?>> partReports = gridJobResult.getData();
 
-      for (int i = 0; i < reports.size(); i++) {
-        TextReport finalReport = reports.get(i);
-        TextReport partReport = partReports.get(i);
-
-        finalReport.merge(partReport);
-      }
+      ReportUtils.mergeReports(reports, partReports);
     }
 
     return reports;
   }
+
 }

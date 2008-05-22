@@ -40,6 +40,9 @@ import org.springframework.util.ClassUtils;
 
 import com.baulsupp.kolja.ansi.ConsoleRenderer;
 import com.baulsupp.kolja.ansi.TailRenderer;
+import com.baulsupp.kolja.ansi.reports.engine.DefaultReportEngineFactory;
+import com.baulsupp.kolja.ansi.reports.engine.ReportEngine;
+import com.baulsupp.kolja.ansi.reports.engine.ReportEngineFactory;
 import com.baulsupp.kolja.log.line.Line;
 import com.baulsupp.kolja.log.viewer.importing.LogFormat;
 import com.baulsupp.kolja.log.viewer.importing.SavedLogFormatLoader;
@@ -130,21 +133,23 @@ public class ReportRunnerMain {
   }
 
   private static ReportEngine createReportEngine(CommandLine cmd, LogFormat format) throws Exception {
-    ReportEngine defaultReportEngine;
+    ReportEngineFactory reportEngineFactory;
 
     if (cmd.hasOption('g')) {
-      defaultReportEngine = createReportEngine(cmd.getOptionValue('g'));
+      reportEngineFactory = createReportEngineFactory(cmd.getOptionValue('g'));
     } else {
-      defaultReportEngine = new DefaultReportEngine();
+      reportEngineFactory = new DefaultReportEngineFactory();
     }
 
-    defaultReportEngine.setLogFormat(format);
+    ReportEngine reportEngine = reportEngineFactory.createEngine();
 
-    return defaultReportEngine;
+    reportEngine.setLogFormat(format);
+
+    return reportEngine;
   }
 
-  private static ReportEngine createReportEngine(String clazz) throws Exception {
-    return (ReportEngine) ClassUtils.forName(clazz).newInstance();
+  private static ReportEngineFactory createReportEngineFactory(String clazz) throws Exception {
+    return (ReportEngineFactory) ClassUtils.forName(clazz).newInstance();
   }
 
   private static ReportPrinter createHtmlReportPrinter(CommandLine cmd, LogFormat format) {

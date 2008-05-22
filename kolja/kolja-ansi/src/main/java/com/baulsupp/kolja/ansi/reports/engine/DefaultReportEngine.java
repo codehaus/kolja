@@ -15,13 +15,19 @@
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-package com.baulsupp.kolja.ansi.reports;
+package com.baulsupp.kolja.ansi.reports.engine;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.baulsupp.kolja.ansi.reports.ReportContext;
+import com.baulsupp.kolja.ansi.reports.ReportPrinter;
+import com.baulsupp.kolja.ansi.reports.TextReport;
 import com.baulsupp.kolja.ansi.reports.TextReport.Detail;
 import com.baulsupp.kolja.log.line.BasicLineIterator;
 import com.baulsupp.kolja.log.line.Line;
@@ -41,6 +47,8 @@ import com.baulsupp.kolja.log.viewer.request.RequestLine;
  * @author Yuri Schimke
  */
 public class DefaultReportEngine implements ReportEngine, ReportContext {
+  private Logger log = LoggerFactory.getLogger(DefaultReportEngine.class);
+
   protected LineIterator i;
 
   protected java.util.List<TextReport<?>> reports;
@@ -193,6 +201,7 @@ public class DefaultReportEngine implements ReportEngine, ReportContext {
   }
 
   public void process(File file, IntRange intRange) throws Exception {
+    log.info(Thread.currentThread() + " " + intRange);
 
     LineIterator lineIterator;
     if (requiresRandomAccess()) {
@@ -214,6 +223,8 @@ public class DefaultReportEngine implements ReportEngine, ReportContext {
     }
 
     run(file, lineIterator);
+
+    log.info(lineIterator + " " + intRange);
   }
 
   private boolean requiresRandomAccess() {

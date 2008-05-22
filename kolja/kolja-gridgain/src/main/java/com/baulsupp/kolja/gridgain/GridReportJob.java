@@ -24,11 +24,12 @@ import java.util.List;
 import org.gridgain.grid.GridException;
 import org.gridgain.grid.GridJob;
 
-import com.baulsupp.kolja.ansi.reports.DefaultReportEngineFactory;
-import com.baulsupp.kolja.ansi.reports.ReportEngine;
-import com.baulsupp.kolja.ansi.reports.ReportEngineFactory;
 import com.baulsupp.kolja.ansi.reports.ReportPrinter;
 import com.baulsupp.kolja.ansi.reports.TextReport;
+import com.baulsupp.kolja.ansi.reports.engine.DefaultReportEngineFactory;
+import com.baulsupp.kolja.ansi.reports.engine.ReportEngine;
+import com.baulsupp.kolja.ansi.reports.engine.ReportEngineFactory;
+import com.baulsupp.kolja.ansi.reports.engine.file.NullReportPrinter;
 import com.baulsupp.kolja.log.util.IntRange;
 import com.baulsupp.kolja.log.viewer.importing.LogFormat;
 
@@ -86,7 +87,6 @@ public class GridReportJob implements GridJob {
 
     for (TextReport<?> report : reports) {
       report.cleanup();
-
     }
 
     return (Serializable) reports;

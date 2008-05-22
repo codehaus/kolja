@@ -15,17 +15,27 @@
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-package com.baulsupp.kolja.gridgain;
+package wf;
 
-import java.io.File;
-import java.util.List;
+import org.springframework.util.StopWatch;
+
+import com.baulsupp.kolja.ansi.reports.ReportRunnerMain;
 
 /**
  * @author Yuri Schimke
  * 
  */
-public interface FileDivider {
+public class ThreadReports {
+  public static void main(String[] args) throws Exception {
+    StopWatch sw = new StopWatch("Frequency - o1000k.ap");
+    sw.start();
 
-  List<FileSection> split(List<File> files);
+    ReportRunnerMain.main("-x", "../kolja-widefinder/src/main/config/wf.xml", "-g",
+        "com.baulsupp.kolja.ansi.reports.engine.ThreadedReportEngineFactory", "-r", "freq?q=url&count=10",
+        "../kolja-widefinder/src/test/logs/o1000k.ap");
 
+    sw.stop();
+
+    System.out.println(sw.shortSummary());
+  }
 }

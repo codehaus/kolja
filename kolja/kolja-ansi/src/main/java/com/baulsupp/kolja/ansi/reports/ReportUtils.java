@@ -15,27 +15,35 @@
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-package gg;
+package com.baulsupp.kolja.ansi.reports;
 
-import org.springframework.util.StopWatch;
-
-import com.baulsupp.kolja.ansi.reports.ReportRunnerMain;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Yuri Schimke
  * 
  */
-public class GridReports {
-  public static void main(String[] args) throws Exception {
-    StopWatch sw = new StopWatch("Frequency - o1000k.ap");
-    sw.start();
+public class ReportUtils {
 
-    ReportRunnerMain.main("-x", "../kolja-widefinder/src/main/config/wf.xml", "-g",
-        "com.baulsupp.kolja.gridgain.GridGainReportEngineFactory", "-r", "freq?q=url&count=10",
-        "../kolja-widefinder/src/test/logs/o1000k.ap");
+  public static List<TextReport<?>> getReportsCopy(List<TextReport<?>> reports) {
+    ArrayList<TextReport<?>> copy = new ArrayList<TextReport<?>>(reports.size());
 
-    sw.stop();
+    for (TextReport<?> textReport : reports) {
+      copy.add(textReport.newInstance());
+    }
 
-    System.out.println(sw.shortSummary());
+    return copy;
   }
+
+  @SuppressWarnings("unchecked")
+  public static void mergeReports(List<TextReport<?>> finalReports, List<TextReport<?>> partReports) {
+    for (int i = 0; i < finalReports.size(); i++) {
+      TextReport finalReport = finalReports.get(i);
+      TextReport partReport = partReports.get(i);
+
+      finalReport.merge(partReport);
+    }
+  }
+
 }

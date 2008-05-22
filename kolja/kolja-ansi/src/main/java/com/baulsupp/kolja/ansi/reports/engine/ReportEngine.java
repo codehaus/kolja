@@ -15,27 +15,32 @@
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-package gg;
+package com.baulsupp.kolja.ansi.reports.engine;
 
-import org.springframework.util.StopWatch;
+import java.io.File;
+import java.util.List;
 
-import com.baulsupp.kolja.ansi.reports.ReportRunnerMain;
+import com.baulsupp.kolja.ansi.reports.ReportPrinter;
+import com.baulsupp.kolja.ansi.reports.TextReport;
+import com.baulsupp.kolja.log.util.IntRange;
+import com.baulsupp.kolja.log.viewer.importing.LogFormat;
 
 /**
  * @author Yuri Schimke
  * 
  */
-public class GridReports {
-  public static void main(String[] args) throws Exception {
-    StopWatch sw = new StopWatch("Frequency - o1000k.ap");
-    sw.start();
+public interface ReportEngine {
+  void initialise() throws Exception;
 
-    ReportRunnerMain.main("-x", "../kolja-widefinder/src/main/config/wf.xml", "-g",
-        "com.baulsupp.kolja.gridgain.GridGainReportEngineFactory", "-r", "freq?q=url&count=10",
-        "../kolja-widefinder/src/test/logs/o1000k.ap");
+  void setReports(List<TextReport<?>> createReports);
 
-    sw.stop();
+  void setReportPrinter(ReportPrinter reportPrinter);
 
-    System.out.println(sw.shortSummary());
-  }
+  void process(List<File> commandFiles) throws Exception;
+
+  void setLogFormat(LogFormat format);
+
+  void completed() throws Exception;
+
+  void process(File file, IntRange intRange) throws Exception;
 }

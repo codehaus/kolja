@@ -21,6 +21,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
 
+import com.baulsupp.kolja.ansi.reports.engine.ReportEngine;
 import com.baulsupp.kolja.log.line.Line;
 import com.baulsupp.kolja.log.viewer.renderer.Renderer;
 import com.baulsupp.kolja.log.viewer.request.RequestLine;

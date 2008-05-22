@@ -39,6 +39,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import com.baulsupp.kolja.ansi.reports.TextReport;
+import com.baulsupp.kolja.ansi.reports.engine.file.FileDivider;
+import com.baulsupp.kolja.ansi.reports.engine.file.FileSection;
 import com.baulsupp.kolja.log.util.IntRange;
 import com.baulsupp.kolja.log.viewer.importing.PlainTextLogFormat;
 
@@ -88,7 +90,7 @@ public class GridReportSplitterTest {
         exactly(4).of(report).newInstance();
         will(returnValue(reportCopy));
 
-        one(fileDivider).split(files);
+        one(fileDivider).split(files, 10);
         will(returnValue(sections));
       }
     });

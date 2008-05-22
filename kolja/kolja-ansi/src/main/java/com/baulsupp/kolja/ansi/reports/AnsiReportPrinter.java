@@ -24,6 +24,7 @@ import jline.ANSIBuffer;
 import com.baulsupp.kolja.ansi.AnsiUtils;
 import com.baulsupp.kolja.ansi.ConsoleRenderer;
 import com.baulsupp.kolja.ansi.progress.ProgressBar;
+import com.baulsupp.kolja.ansi.reports.engine.ReportEngine;
 import com.baulsupp.kolja.log.line.Line;
 import com.baulsupp.kolja.log.viewer.request.RequestLine;
 import com.baulsupp.kolja.util.colours.MultiColourString;

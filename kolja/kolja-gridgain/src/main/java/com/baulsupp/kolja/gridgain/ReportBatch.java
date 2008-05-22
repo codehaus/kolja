@@ -18,9 +18,9 @@
 package com.baulsupp.kolja.gridgain;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 
+import com.baulsupp.kolja.ansi.reports.ReportUtils;
 import com.baulsupp.kolja.ansi.reports.TextReport;
 import com.baulsupp.kolja.log.viewer.importing.LogFormat;
 
@@ -49,13 +49,7 @@ public class ReportBatch {
   }
 
   public List<TextReport<?>> getReportsCopy() {
-    ArrayList<TextReport<?>> copy = new ArrayList<TextReport<?>>(reports.size());
-
-    for (TextReport<?> textReport : reports) {
-      copy.add(textReport.newInstance());
-    }
-
-    return copy;
+    return ReportUtils.getReportsCopy(reports);
   }
 
   public List<TextReport<?>> getReports() {

@@ -15,7 +15,7 @@
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-package com.baulsupp.kolja.gridgain;
+package com.baulsupp.kolja.ansi.reports.engine.file;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
@@ -50,12 +50,12 @@ public class DefaultFileDividerTest {
 
   @Test(expected = IllegalArgumentException.class)
   public void testFailsOnMissingFiles() {
-    divider.split(Arrays.asList(new File("fdsklj")));
+    divider.split(Arrays.asList(new File("fdsklj")), 1);
   }
 
   @Test
   public void testDividesSmallFiles() {
-    List<FileSection> parts = divider.split(Arrays.asList(fileA, fileB));
+    List<FileSection> parts = divider.split(Arrays.asList(fileA, fileB), 1);
 
     Assert.assertEquals(2, parts.size());
 
@@ -72,7 +72,7 @@ public class DefaultFileDividerTest {
   public void testDividesLargeFile() {
     divider.setBlockSize(400);
 
-    List<FileSection> parts = divider.split(Arrays.asList(fileA));
+    List<FileSection> parts = divider.split(Arrays.asList(fileA), 2);
 
     Assert.assertEquals(2, parts.size());
 

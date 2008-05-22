@@ -21,8 +21,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.baulsupp.kolja.ansi.reports.ReportEngine;
 import com.baulsupp.kolja.ansi.reports.ReportPrinter;
+import com.baulsupp.kolja.ansi.reports.engine.ReportEngine;
 import com.baulsupp.kolja.log.line.Line;
 import com.baulsupp.kolja.log.viewer.request.RequestLine;
 import com.baulsupp.kolja.util.colours.MultiColourString;

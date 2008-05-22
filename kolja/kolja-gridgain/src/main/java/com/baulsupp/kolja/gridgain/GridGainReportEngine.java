@@ -26,9 +26,10 @@ import org.gridgain.grid.Grid;
 import org.gridgain.grid.GridConfigurationAdapter;
 import org.gridgain.grid.GridFactory;
 
-import com.baulsupp.kolja.ansi.reports.ReportEngine;
 import com.baulsupp.kolja.ansi.reports.ReportPrinter;
 import com.baulsupp.kolja.ansi.reports.TextReport;
+import com.baulsupp.kolja.ansi.reports.engine.ReportEngine;
+import com.baulsupp.kolja.ansi.reports.engine.file.NullReportContext;
 import com.baulsupp.kolja.log.util.IntRange;
 import com.baulsupp.kolja.log.viewer.importing.LogFormat;
 

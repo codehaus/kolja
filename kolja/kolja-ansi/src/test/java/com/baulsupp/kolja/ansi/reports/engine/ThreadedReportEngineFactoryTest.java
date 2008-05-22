@@ -15,30 +15,22 @@
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-package com.baulsupp.kolja.gridgain;
+package com.baulsupp.kolja.ansi.reports.engine;
 
-import java.io.File;
-
-import com.baulsupp.kolja.log.util.IntRange;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * @author Yuri Schimke
  * 
  */
-public class FileSection {
-  private File file;
-  private IntRange intRange;
+public class ThreadedReportEngineFactoryTest {
+  @Test
+  public void testCreatesReportEngine() {
+    ThreadedReportEngineFactory factory = new ThreadedReportEngineFactory();
 
-  public FileSection(File file, IntRange intRange) {
-    this.file = file;
-    this.intRange = intRange;
-  }
+    ThreadedReportEngine engine = factory.createEngine();
 
-  public File getFile() {
-    return file;
-  }
-
-  public IntRange getIntRange() {
-    return intRange;
+    Assert.assertNotNull(engine);
   }
 }
