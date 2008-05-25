@@ -27,4 +27,8 @@ public class DefaultReportEngineFactory implements ReportEngineFactory {
     return new DefaultReportEngine();
   }
 
+  public String getName() {
+    return "default";
+  }
+
 }

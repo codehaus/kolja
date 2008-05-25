@@ -30,8 +30,7 @@ public class GridReports {
     StopWatch sw = new StopWatch("Frequency - o1000k.ap");
     sw.start();
 
-    ReportRunnerMain.main("-x", "../kolja-widefinder/src/main/config/wf.xml", "-g",
-        "com.baulsupp.kolja.gridgain.GridGainReportEngineFactory", "-r", "freq?q=url&count=10",
+    ReportRunnerMain.main("-x", "../kolja-widefinder/src/main/config/wf.xml", "-g", "gridgain", "-r", "freq?q=url&count=10",
         "../kolja-widefinder/src/test/logs/o1000k.ap");
 
     sw.stop();

@@ -23,4 +23,6 @@ package com.baulsupp.kolja.ansi.reports.engine;
  */
 public interface ReportEngineFactory {
   ReportEngine createEngine();
+
+  String getName();
 }

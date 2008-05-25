@@ -29,4 +29,7 @@ public class GridGainReportEngineFactory implements ReportEngineFactory {
     return new GridGainReportEngine();
   }
 
+  public String getName() {
+    return "gridgain";
+  }
 }

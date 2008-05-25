@@ -31,4 +31,8 @@ public class ThreadedReportEngineFactory implements ReportEngineFactory {
 
     return engine;
   }
+
+  public String getName() {
+    return "threaded";
+  }
 }

@@ -30,8 +30,7 @@ public class ThreadReports {
     StopWatch sw = new StopWatch("Frequency - o1000k.ap");
     sw.start();
 
-    ReportRunnerMain.main("-x", "../kolja-widefinder/src/main/config/wf.xml", "-g",
-        "com.baulsupp.kolja.ansi.reports.engine.ThreadedReportEngineFactory", "-r", "freq?q=url&count=10",
+    ReportRunnerMain.main("-x", "../kolja-widefinder/src/main/config/wf.xml", "-g", "threaded", "-r", "freq?q=url&count=10",
         "../kolja-widefinder/src/test/logs/o1000k.ap");
 
     sw.stop();

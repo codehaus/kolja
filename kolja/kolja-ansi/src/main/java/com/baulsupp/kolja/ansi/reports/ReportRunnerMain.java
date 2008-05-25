@@ -38,6 +38,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.util.ClassUtils;
 
+import sun.misc.Service;
+
 import com.baulsupp.kolja.ansi.ConsoleRenderer;
 import com.baulsupp.kolja.ansi.TailRenderer;
 import com.baulsupp.kolja.ansi.reports.engine.DefaultReportEngineFactory;
@@ -148,8 +150,23 @@ public class ReportRunnerMain {
     return reportEngine;
   }
 
+  @SuppressWarnings("unchecked")
   private static ReportEngineFactory createReportEngineFactory(String clazz) throws Exception {
-    return (ReportEngineFactory) ClassUtils.forName(clazz).newInstance();
+    if (clazz.indexOf('.') == -1) {
+      Iterator<ReportEngineFactory> providers = Service.providers(ReportEngineFactory.class);
+
+      while (providers.hasNext()) {
+        ReportEngineFactory provider = providers.next();
+
+        if (provider.getName().equals(clazz)) {
+          return provider;
+        }
+      }
+
+      throw new IllegalStateException("not registered factory '" + clazz + "'");
+    } else {
+      return (ReportEngineFactory) ClassUtils.forName(clazz).newInstance();
+    }
   }
 
   private static ReportPrinter createHtmlReportPrinter(CommandLine cmd, LogFormat format) {
