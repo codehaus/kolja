@@ -24,11 +24,16 @@ import java.util.List;
 import com.baulsupp.kolja.ansi.reports.ReportPrinter;
 import com.baulsupp.kolja.ansi.reports.engine.ReportEngine;
 import com.baulsupp.kolja.log.line.Line;
+import com.baulsupp.kolja.log.viewer.importing.LogFormat;
 import com.baulsupp.kolja.log.viewer.request.RequestLine;
 import com.baulsupp.kolja.util.colours.MultiColourString;
 
 public class SimpleReportPrinter implements ReportPrinter {
   private List<String> lines = new ArrayList<String>();
+
+  public String getName() {
+    return "test";
+  }
 
   public void println(MultiColourString string) {
     lines.add(string.toString());
@@ -54,7 +59,7 @@ public class SimpleReportPrinter implements ReportPrinter {
     // lines.add(title);
   }
 
-  public void initialise() throws IOException {
+  public void initialise(LogFormat format) throws IOException {
   }
 
   public void setReportEngine(ReportEngine reportEngine) {

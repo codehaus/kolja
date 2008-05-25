@@ -15,16 +15,12 @@
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-package com.baulsupp.kolja.ansi.reports.engine;
-
-import com.baulsupp.kolja.util.services.NamedService;
+package com.baulsupp.kolja.util.services;
 
 /**
  * @author Yuri Schimke
  * 
  */
-public interface ReportEngineFactory extends NamedService {
-  ReportEngine createEngine();
-
-  String getName();
+public interface BeanFactory<T> {
+  T create(String name) throws Exception;
 }

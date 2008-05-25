@@ -21,10 +21,12 @@ import java.io.IOException;
 
 import com.baulsupp.kolja.ansi.reports.engine.ReportEngine;
 import com.baulsupp.kolja.log.line.Line;
+import com.baulsupp.kolja.log.viewer.importing.LogFormat;
 import com.baulsupp.kolja.log.viewer.request.RequestLine;
 import com.baulsupp.kolja.util.colours.MultiColourString;
+import com.baulsupp.kolja.util.services.NamedService;
 
-public interface ReportPrinter {
+public interface ReportPrinter extends NamedService {
   void println(MultiColourString string);
 
   void printLine(Line line);
@@ -35,9 +37,11 @@ public interface ReportPrinter {
 
   void printRequest(RequestLine request);
 
-  void initialise() throws IOException;
+  // void initialise() throws IOException;
 
   void setReportEngine(ReportEngine reportEngine);
 
   void completed() throws IOException;
+
+  void initialise(LogFormat format) throws IOException;
 }

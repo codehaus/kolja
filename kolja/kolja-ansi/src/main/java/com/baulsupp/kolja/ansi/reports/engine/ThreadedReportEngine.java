@@ -165,7 +165,7 @@ public class ThreadedReportEngine implements ReportEngine {
     reportEngine.setLogFormat(format);
 
     ReportPrinter reportPrinter = new NullReportPrinter();
-    reportPrinter.initialise();
+    reportPrinter.initialise(format);
 
     reportEngine.setReportPrinter(reportPrinter);
 

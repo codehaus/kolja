@@ -70,7 +70,7 @@ public class GridReportJob implements GridJob {
       reportEngine.setLogFormat(logFormat);
 
       ReportPrinter reportPrinter = new NullReportPrinter();
-      reportPrinter.initialise();
+      reportPrinter.initialise(logFormat);
 
       reportEngine.setReportPrinter(reportPrinter);
 

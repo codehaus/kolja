@@ -35,21 +35,19 @@ import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.PosixParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.PropertyEditorRegistrar;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
-import org.springframework.util.ClassUtils;
 
-import sun.misc.Service;
-
-import com.baulsupp.kolja.ansi.ConsoleRenderer;
-import com.baulsupp.kolja.ansi.TailRenderer;
 import com.baulsupp.kolja.ansi.reports.engine.DefaultReportEngineFactory;
 import com.baulsupp.kolja.ansi.reports.engine.ReportEngine;
 import com.baulsupp.kolja.ansi.reports.engine.ReportEngineFactory;
-import com.baulsupp.kolja.log.line.Line;
+import com.baulsupp.kolja.log.viewer.importing.KoljaPropertyEditorRegistrar;
 import com.baulsupp.kolja.log.viewer.importing.LogFormat;
 import com.baulsupp.kolja.log.viewer.importing.SavedLogFormatLoader;
 import com.baulsupp.kolja.log.viewer.importing.SpringBeanLogFormatLoader;
-import com.baulsupp.kolja.log.viewer.renderer.Renderer;
+import com.baulsupp.kolja.util.services.BeanBuilder;
+import com.baulsupp.kolja.util.services.NamedService;
+import com.baulsupp.kolja.util.services.ServiceFactory;
 
 public class ReportRunnerMain {
   private static final Logger log = LoggerFactory.getLogger(ReportRunnerMain.class);
@@ -116,7 +114,6 @@ public class ReportRunnerMain {
 
     List<File> commandFiles = commandFiles(filenames);
 
-    reportPrinter.initialise();
     reportEngine.initialise();
 
     reportEngine.process(commandFiles);
@@ -124,13 +121,19 @@ public class ReportRunnerMain {
     reportEngine.completed();
   }
 
-  private static ReportPrinter createReportPrinter(CommandLine cmd, LogFormat format) {
+  private static ReportPrinter createReportPrinter(CommandLine cmd, LogFormat format) throws Exception {
     final ReportPrinter reportPrinter;
-    if (cmd.hasOption('w')) {
-      reportPrinter = createHtmlReportPrinter(cmd, format);
+
+    if (cmd.hasOption('p')) {
+      BeanBuilder<ReportPrinter> builder = createServiceBuilder(ReportPrinter.class);
+
+      reportPrinter = builder.create(cmd.getOptionValue('p'));
     } else {
-      reportPrinter = createAnsiReportPrinter(cmd, format);
+      reportPrinter = new AnsiReportPrinter();
     }
+
+    reportPrinter.initialise(format);
+
     return reportPrinter;
   }
 
@@ -138,7 +141,9 @@ public class ReportRunnerMain {
     ReportEngineFactory reportEngineFactory;
 
     if (cmd.hasOption('g')) {
-      reportEngineFactory = createReportEngineFactory(cmd.getOptionValue('g'));
+      BeanBuilder<ReportEngineFactory> builder = createServiceBuilder(ReportEngineFactory.class);
+
+      reportEngineFactory = builder.create(cmd.getOptionValue('g'));
     } else {
       reportEngineFactory = new DefaultReportEngineFactory();
     }
@@ -150,51 +155,9 @@ public class ReportRunnerMain {
     return reportEngine;
   }
 
-  @SuppressWarnings("unchecked")
-  private static ReportEngineFactory createReportEngineFactory(String clazz) throws Exception {
-    if (clazz.indexOf('.') == -1) {
-      Iterator<ReportEngineFactory> providers = Service.providers(ReportEngineFactory.class);
-
-      while (providers.hasNext()) {
-        ReportEngineFactory provider = providers.next();
-
-        if (provider.getName().equals(clazz)) {
-          return provider;
-        }
-      }
-
-      throw new IllegalStateException("not registered factory '" + clazz + "'");
-    } else {
-      return (ReportEngineFactory) ClassUtils.forName(clazz).newInstance();
-    }
-  }
-
-  private static ReportPrinter createHtmlReportPrinter(CommandLine cmd, LogFormat format) {
-    HtmlReportPrinter htmlReportRunner = new HtmlReportPrinter();
-
-    htmlReportRunner.setRenderer(format.getLineRenderer());
-    htmlReportRunner.setRequestRenderer(format.getRequestRenderer());
-
-    return htmlReportRunner;
-  }
-
-  private static ReportPrinter createAnsiReportPrinter(CommandLine cmd, LogFormat format) {
-    final AnsiReportPrinter reportRunner = new AnsiReportPrinter();
-
-    boolean ansi = !cmd.hasOption("a");
-    boolean fixedWidth = cmd.hasOption("f");
-    boolean interactive = cmd.hasOption("i");
-
-    reportRunner.setInteractive(interactive);
-
-    Renderer<Line> renderer = format.getLineRenderer();
-    ConsoleRenderer<Line> lineRenderer = createRenderer(renderer, ansi, fixedWidth);
-    reportRunner.setLineRenderer(lineRenderer);
-
-    renderer = format.getRequestRenderer();
-    ConsoleRenderer<Line> requestRenderer = createRenderer(renderer, ansi, fixedWidth);
-    reportRunner.setRequestRenderer(requestRenderer);
-    return reportRunner;
+  private static <T extends NamedService> BeanBuilder<T> createServiceBuilder(Class<T> type) {
+    PropertyEditorRegistrar propertyEditorRegistrar = new KoljaPropertyEditorRegistrar();
+    return new BeanBuilder<T>(propertyEditorRegistrar, new ServiceFactory<T>(type));
   }
 
   private static List<String> unfutzArgs(List<String> v) {
@@ -219,13 +182,6 @@ public class ReportRunnerMain {
     return files;
   }
 
-  private static ConsoleRenderer<Line> createRenderer(Renderer<Line> renderer, boolean ansi, boolean fixedWidth) {
-    renderer.setWidth(Terminal.getTerminal().getTerminalWidth());
-    TailRenderer tr = new TailRenderer(renderer, ansi);
-    tr.setFixedWidth(fixedWidth);
-    return tr;
-  }
-
   private static List<TextReport<?>> createReports(ReportBuilder builder, List<String> v) throws Exception {
     List<TextReport<?>> reports = new ArrayList<TextReport<?>>();
 
@@ -238,7 +194,6 @@ public class ReportRunnerMain {
     return reports;
   }
 
-  @SuppressWarnings("unchecked")
   private static List<File> commandFiles(List<String> filenames) {
     List<File> files = new ArrayList<File>();
 
@@ -277,7 +232,8 @@ public class ReportRunnerMain {
 
     options.addOption(OptionBuilder.hasArg(false).withDescription("Interactive").withLongOpt("interactive").create('i'));
 
-    options.addOption(OptionBuilder.hasArg(false).withDescription("Generate HTML Page").withLongOpt("html").create('w'));
+    options.addOption(OptionBuilder.withArgName("printer").hasArgs().withDescription("Report Printer").withLongOpt("printer")
+        .create('p'));
 
     return options;
   }

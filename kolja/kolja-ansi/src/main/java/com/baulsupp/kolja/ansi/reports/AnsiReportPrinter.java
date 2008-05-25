@@ -20,18 +20,21 @@ package com.baulsupp.kolja.ansi.reports;
 import java.io.IOException;
 
 import jline.ANSIBuffer;
+import jline.Terminal;
 
 import com.baulsupp.kolja.ansi.AnsiUtils;
 import com.baulsupp.kolja.ansi.ConsoleRenderer;
+import com.baulsupp.kolja.ansi.TailRenderer;
 import com.baulsupp.kolja.ansi.progress.ProgressBar;
 import com.baulsupp.kolja.ansi.reports.engine.ReportEngine;
 import com.baulsupp.kolja.log.line.Line;
+import com.baulsupp.kolja.log.viewer.importing.LogFormat;
+import com.baulsupp.kolja.log.viewer.renderer.Renderer;
 import com.baulsupp.kolja.log.viewer.request.RequestLine;
 import com.baulsupp.kolja.util.colours.MultiColourString;
 
 // TODO implement progress
 public class AnsiReportPrinter implements ReportPrinter {
-  protected boolean ansi;
 
   protected ConsoleRenderer<Line> lineRenderer;
 
@@ -41,14 +44,27 @@ public class AnsiReportPrinter implements ReportPrinter {
 
   private boolean interactive = false;
 
-  @SuppressWarnings("unused")
-  private ReportEngine reportEngine;
+  protected boolean ansi = true;
+
+  private boolean fixedWidth = false;
 
   public AnsiReportPrinter() {
   }
 
+  public String getName() {
+    return "console";
+  }
+
   public void setInteractive(boolean interactive) {
     this.interactive = interactive;
+  }
+
+  public void setAnsi(boolean ansi) {
+    this.ansi = ansi;
+  }
+
+  public void setFixedWidth(boolean fixedWidth) {
+    this.fixedWidth = fixedWidth;
   }
 
   public void setLineRenderer(ConsoleRenderer<Line> lineRenderer) {
@@ -59,8 +75,23 @@ public class AnsiReportPrinter implements ReportPrinter {
     this.requestRenderer = requestRenderer;
   }
 
-  public void initialise() throws IOException {
+  public void initialise(LogFormat format) throws IOException {
+    Renderer<Line> renderer = format.getLineRenderer();
+    ConsoleRenderer<Line> lineRenderer = createRenderer(renderer, ansi, fixedWidth);
+    setLineRenderer(lineRenderer);
+
+    renderer = format.getRequestRenderer();
+    ConsoleRenderer<Line> requestRenderer = createRenderer(renderer, ansi, fixedWidth);
+    setRequestRenderer(requestRenderer);
+
     progress = AnsiUtils.getProgressBar(interactive);
+  }
+
+  private static ConsoleRenderer<Line> createRenderer(Renderer<Line> renderer, boolean ansi, boolean fixedWidth) {
+    renderer.setWidth(Terminal.getTerminal().getTerminalWidth());
+    TailRenderer tr = new TailRenderer(renderer, ansi);
+    tr.setFixedWidth(fixedWidth);
+    return tr;
   }
 
   // @Override
@@ -119,7 +150,6 @@ public class AnsiReportPrinter implements ReportPrinter {
   }
 
   public void setReportEngine(ReportEngine reportEngine) {
-    this.reportEngine = reportEngine;
   }
 
   public void completed() throws IOException {

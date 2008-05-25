@@ -22,6 +22,7 @@ import java.io.IOException;
 import com.baulsupp.kolja.ansi.reports.ReportPrinter;
 import com.baulsupp.kolja.ansi.reports.engine.ReportEngine;
 import com.baulsupp.kolja.log.line.Line;
+import com.baulsupp.kolja.log.viewer.importing.LogFormat;
 import com.baulsupp.kolja.log.viewer.request.RequestLine;
 import com.baulsupp.kolja.util.colours.MultiColourString;
 
@@ -30,11 +31,14 @@ import com.baulsupp.kolja.util.colours.MultiColourString;
  * 
  */
 public class NullReportPrinter implements ReportPrinter {
+  public String getName() {
+    return "null";
+  }
 
   public void completed() throws IOException {
   }
 
-  public void initialise() throws IOException {
+  public void initialise(LogFormat format) throws IOException {
   }
 
   public void printLine(Line line) {

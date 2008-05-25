@@ -15,16 +15,35 @@
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-package com.baulsupp.kolja.ansi.reports.engine;
+package com.baulsupp.kolja.util.services;
 
-import com.baulsupp.kolja.util.services.NamedService;
+import java.util.Iterator;
+
+import sun.misc.Service;
 
 /**
  * @author Yuri Schimke
  * 
  */
-public interface ReportEngineFactory extends NamedService {
-  ReportEngine createEngine();
+public class ServiceFactory<T extends NamedService> implements BeanFactory<T> {
+  private Class<T> type;
 
-  String getName();
+  public ServiceFactory(Class<T> type) {
+    this.type = type;
+  }
+
+  @SuppressWarnings("unchecked")
+  public T create(String name) throws Exception {
+    Iterator<T> providers = Service.providers(type);
+
+    while (providers.hasNext()) {
+      T provider = providers.next();
+
+      if (provider.getName().equals(name)) {
+        return provider;
+      }
+    }
+
+    throw new IllegalStateException("not registered factory '" + name + "'");
+  }
 }

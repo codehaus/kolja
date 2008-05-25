@@ -23,6 +23,7 @@ import java.util.List;
 
 import com.baulsupp.kolja.ansi.reports.engine.ReportEngine;
 import com.baulsupp.kolja.log.line.Line;
+import com.baulsupp.kolja.log.viewer.importing.LogFormat;
 import com.baulsupp.kolja.log.viewer.renderer.Renderer;
 import com.baulsupp.kolja.log.viewer.request.RequestLine;
 import com.baulsupp.kolja.util.colours.Colour;
@@ -42,6 +43,10 @@ public class HtmlReportPrinter implements ReportPrinter {
   @SuppressWarnings("unused")
   private ReportEngine reportEngine;
 
+  public String getName() {
+    return "html";
+  }
+
   public void setRequestRenderer(Renderer<Line> requestRenderer) {
     this.requestRenderer = requestRenderer;
   }
@@ -50,7 +55,10 @@ public class HtmlReportPrinter implements ReportPrinter {
     this.renderer = renderer;
   }
 
-  public void initialise() throws IOException {
+  public void initialise(LogFormat format) throws IOException {
+    setRequestRenderer(format.getRequestRenderer());
+    setRenderer(format.getLineRenderer());
+
     fw = new FileWriter("./out.html");
 
     fw.write("<html><head><title>Kolja Report</title></head><body>");
