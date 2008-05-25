@@ -27,6 +27,7 @@ import com.baulsupp.kolja.log.util.IntRange;
 import com.baulsupp.kolja.log.util.WrappedCharBuffer;
 import com.baulsupp.kolja.log.viewer.io.fast.ChunkedFileSequence;
 import com.baulsupp.kolja.log.viewer.io.fast.FastLineIterator;
+import com.baulsupp.kolja.log.viewer.io.fast.GzipFileSequence;
 
 /**
  * @author Yuri Schimke
@@ -48,8 +49,19 @@ public class DefaultLineIndexFactory implements LineIndexFactory {
       from = intRange.getFrom() - 1;
     }
 
-    CharSequence content = new ChunkedFileSequence(file, ChunkedFileSequence.MB, Charset.forName("US-ASCII"), from);
+    CharSequence content;
+
+    if (isGzip(file)) {
+      content = GzipFileSequence.create(file, Charset.forName("US-ASCII"));
+    } else {
+      content = ChunkedFileSequence.create(file, Charset.forName("US-ASCII"), from);
+    }
+
     return new FastLineIterator(format.getEntryPattern(), content, format.getLineParser(), intRange);
+  }
+
+  private boolean isGzip(File file) {
+    return file.getName().endsWith(".gz");
   }
 
 }

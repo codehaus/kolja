@@ -26,11 +26,9 @@ public class NewLineEntryMatcher implements EntryMatcher {
   private CharSequence text;
   private int lastMatch = -1;
   private int from = 0;
-  private int length;
 
   public NewLineEntryMatcher(CharSequence text) {
     this.text = text;
-    this.length = text.length();
   }
 
   public boolean find(int from) {
@@ -47,6 +45,7 @@ public class NewLineEntryMatcher implements EntryMatcher {
       return true;
     }
 
+    int length = text.length();
     for (int i = from; i < length; i++) {
       if (text.charAt(i - 1) == '\n') {
         lastMatch = i;
@@ -60,7 +59,6 @@ public class NewLineEntryMatcher implements EntryMatcher {
 
   public void reset(CharSequence text) {
     this.text = text;
-    this.length = text.length();
 
     this.from = 0;
     this.lastMatch = -1;

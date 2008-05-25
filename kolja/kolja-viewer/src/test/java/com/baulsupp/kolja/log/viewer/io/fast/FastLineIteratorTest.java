@@ -22,12 +22,16 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.regex.Pattern;
 
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -47,11 +51,20 @@ public class FastLineIteratorTest {
   private Mockery context = new Mockery();
   private EntryPattern pattern;
   private EntryMatcher matcher;
+  private FileInputStream is;
 
   @Before
-  public void setup() {
+  public void setup() throws FileNotFoundException {
     pattern = context.mock(EntryPattern.class);
     matcher = context.mock(EntryMatcher.class);
+
+    File file = new File("src/test/logs/test.txt");
+    is = new FileInputStream(file);
+  }
+
+  @After
+  public void tearDown() throws IOException {
+    is.close();
   }
 
   @Test
@@ -140,22 +153,21 @@ public class FastLineIteratorTest {
 
   @Test
   public void testWorksThroughFile() throws Exception {
-    File file = new File("src/test/logs/test.txt");
-    ChunkedFileSequence seq = new ChunkedFileSequence(file, 10, Charset.forName("US-ASCII"));
+    ChunkedFileSequence seq = new ChunkedFileSequence(is, 100, Charset.forName("US-ASCII"), 0);
 
     pattern = new RegexEntryPattern(Pattern.compile("^", Pattern.MULTILINE));
 
     FastLineIterator li = new FastLineIterator(pattern, seq, new PlainTextLineParser());
 
     while (li.hasNext()) {
-      assertEquals("012345678\n", li.next().toString());
+      Line line = li.next();
+      assertEquals("012345678\n", line.toString());
     }
   }
 
   @Test
   public void testWorksThroughFileWithOffset() throws Exception {
-    File file = new File("src/test/logs/test.txt");
-    ChunkedFileSequence seq = new ChunkedFileSequence(file, 10, Charset.forName("US-ASCII"), 9);
+    ChunkedFileSequence seq = new ChunkedFileSequence(is, 100, Charset.forName("US-ASCII"), 9);
 
     pattern = new RegexEntryPattern(Pattern.compile("^", Pattern.MULTILINE));
 

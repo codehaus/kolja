@@ -20,9 +20,13 @@ package com.baulsupp.kolja.log.viewer.io.fast;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.nio.charset.Charset;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.baulsupp.kolja.log.util.IntRange;
 
@@ -30,6 +34,8 @@ import com.baulsupp.kolja.log.util.IntRange;
  * @author Yuri Schimke
  */
 public class ChunkedFileSequence implements CharSequence {
+  private static final Logger log = LoggerFactory.getLogger(ChunkedFileSequence.class);
+
   public static final int MB = 1024 * 1024;
 
   private int chunkSize;
@@ -46,21 +52,46 @@ public class ChunkedFileSequence implements CharSequence {
   private int chunkThreeAvailable = 0;
   private boolean finished;
 
-  private int length;
-
-  public ChunkedFileSequence(File file, int chunkSize, Charset cs) throws Exception {
-    this(file, chunkSize, cs, 0);
+  public static ChunkedFileSequence create(File file, Charset cs) throws Exception {
+    return create(file, cs, 0);
   }
 
-  public ChunkedFileSequence(File file, int chunkSize, Charset cs, int initialOffset) throws Exception {
-    this.chunkSize = chunkSize;
-    this.fileReader = new InputStreamReader(new FileInputStream(file), cs);
-    this.offset = initialOffset;
-    this.length = (int) file.length();
+  public static ChunkedFileSequence create(File file, Charset cs, int initialOffset) throws Exception {
+    return create(file, ChunkedFileSequence.MB, cs, initialOffset);
+  }
 
-    fileReader.skip(initialOffset);
+  public static ChunkedFileSequence create(File file, int chunkSize, Charset cs, int initialOffset) throws Exception {
+    FileInputStream fileInputStream = new FileInputStream(file);
+
+    return new ChunkedFileSequence(fileInputStream, chunkSize, cs, initialOffset);
+  }
+
+  public ChunkedFileSequence(InputStream inputStream, int chunkSize, Charset cs, int initialOffset) throws Exception {
+    this.chunkSize = chunkSize;
+
+    boolean skipReader = false;
+    if (initialOffset != 0) {
+      if (isSingleByteEncoding(cs)) {
+        inputStream.skip(initialOffset);
+      } else {
+        skipReader = true;
+      }
+    }
+
+    this.fileReader = new InputStreamReader(inputStream, cs);
+
+    if (skipReader) {
+      log.warn("skipping bytes of a Decoded Reader");
+      this.fileReader.skip(initialOffset);
+    }
+
+    this.offset = initialOffset;
 
     readInitialChunks();
+  }
+
+  private boolean isSingleByteEncoding(Charset cs) {
+    return cs.newDecoder().averageCharsPerByte() == 1;
   }
 
   public char charAt(int index) {
@@ -88,7 +119,7 @@ public class ChunkedFileSequence implements CharSequence {
   }
 
   public int length() {
-    return length;
+    return chunkThreeAvailable;
   }
 
   public CharSequence subSequence(int start, int end) {

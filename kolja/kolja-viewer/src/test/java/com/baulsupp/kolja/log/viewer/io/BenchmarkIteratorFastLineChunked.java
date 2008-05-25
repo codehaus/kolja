@@ -35,7 +35,7 @@ public class BenchmarkIteratorFastLineChunked extends BenchmarkIterator {
   }
 
   protected LineIterator createIterator() throws Exception {
-    CharSequence content = new ChunkedFileSequence(file, ChunkedFileSequence.MB, Charset.forName("US-ASCII"));
+    CharSequence content = ChunkedFileSequence.create(file, Charset.forName("US-ASCII"));
     return new FastLineIterator(pattern, content, lineParser);
   }
 }

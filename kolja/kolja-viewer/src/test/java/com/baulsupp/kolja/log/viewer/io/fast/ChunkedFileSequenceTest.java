@@ -38,7 +38,7 @@ public class ChunkedFileSequenceTest {
   @Before
   public void setup() throws Exception {
     File file = new File("src/test/logs/test.txt");
-    seq = new ChunkedFileSequence(file, 10, Charset.forName("US-ASCII"));
+    seq = ChunkedFileSequence.create(file, 10, Charset.forName("US-ASCII"), 0);
   }
 
   @Test

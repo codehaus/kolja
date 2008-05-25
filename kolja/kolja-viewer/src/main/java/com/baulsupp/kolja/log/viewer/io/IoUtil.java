@@ -109,10 +109,10 @@ public class IoUtil {
     throw new UnsupportedOperationException();
   }
 
-  private static int count;
-
   public static void writeContent(File file, String... strings) throws IOException {
     FileWriter fw = new FileWriter(file, true);
+
+    int count = 0;
 
     try {
       for (String string : strings) {

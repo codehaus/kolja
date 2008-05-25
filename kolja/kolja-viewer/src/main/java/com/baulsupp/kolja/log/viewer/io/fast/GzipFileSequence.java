@@ -15,48 +15,35 @@
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-package com.baulsupp.kolja.log.line.matcher;
+package com.baulsupp.kolja.log.viewer.io.fast;
 
-import java.util.regex.Matcher;
+import java.io.File;
+import java.io.FileInputStream;
+import java.nio.charset.Charset;
+import java.util.zip.GZIPInputStream;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Yuri Schimke
- * 
  */
-public class RegexEntryMatcher implements EntryMatcher {
+public class GzipFileSequence {
+  private static final Logger log = LoggerFactory.getLogger(GzipFileSequence.class);
 
-  private Matcher matcher;
-
-  public RegexEntryMatcher(Matcher matcher) {
-    this.matcher = matcher;
+  public static ChunkedFileSequence create(File file, Charset cs) throws Exception {
+    return create(file, cs, 0);
   }
 
-  public boolean find(int from) {
-    return matcher.find(from);
-  }
+  public static ChunkedFileSequence create(File file, Charset cs, int initialOffset) throws Exception {
+    FileInputStream fileInputStream = new FileInputStream(file);
+    GZIPInputStream is = new GZIPInputStream(fileInputStream);
 
-  public boolean find() {
-    int from = matcher.end() + 1;
-
-    boolean find = matcher.find();
-
-    if (!find) {
-      find = matcher.find(from);
+    if (initialOffset != 0) {
+      log.warn("skipping bytes of a GZip stream");
     }
 
-    return find;
-  }
-
-  public void reset(CharSequence subSequence) {
-    matcher.reset(subSequence);
-  }
-
-  public int start() {
-    return matcher.start();
-  }
-
-  public Matcher getMatcher() {
-    return matcher;
+    return new ChunkedFileSequence(is, ChunkedFileSequence.MB, cs, initialOffset);
   }
 
 }
