@@ -17,6 +17,9 @@
  */
 package com.baulsupp.kolja.log.viewer.format;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+
 /**
  * User Agent Format
  * 
@@ -29,7 +32,15 @@ public class BytesFormat implements OutputFormat {
   public static final long MB = KB * KB;
   public static final long GB = KB * KB * KB;
 
+  private DecimalFormat format;
+
   public BytesFormat() {
+    this(0);
+  }
+
+  public BytesFormat(int i) {
+    format = new DecimalFormat();
+    format.setMaximumFractionDigits(1);
   }
 
   public String format(Object value) {
@@ -37,10 +48,10 @@ public class BytesFormat implements OutputFormat {
       return null;
     }
 
-    return formatBytes(((Number) value).longValue());
+    return formatBytes(((Number) value).longValue(), format);
   }
 
-  public static String formatBytes(Long value) {
+  public static String formatBytes(Long value, NumberFormat format) {
     if (value == null) {
       return null;
     }
@@ -48,17 +59,29 @@ public class BytesFormat implements OutputFormat {
     long bytes = ((Number) value).longValue();
 
     if (bytes >= GB) {
-      return (bytes / GB) + "GB";
+      return div(bytes, GB, format) + "GB";
     }
 
     if (bytes >= MB) {
-      return (bytes / MB) + "MB";
+      return div(bytes, MB, format) + "MB";
     }
 
     if (bytes >= KB) {
-      return (bytes / KB) + "KB";
+      return div(bytes, KB, format) + "KB";
     }
 
     return bytes + "b";
+  }
+
+  public static String formatBytes(Long value) {
+    return formatBytes(value, null);
+  }
+
+  private static String div(long bytes, long size, NumberFormat format) {
+    if (format == null) {
+      return String.valueOf(bytes / size);
+    } else {
+      return format.format((double) bytes / size);
+    }
   }
 }

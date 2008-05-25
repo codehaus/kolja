@@ -44,4 +44,10 @@ http://baulsupp.com/schema/kolja-reports http://baulsupp.com/schema/kolja-report
   
   <r:report id="types" class="com.baulsupp.kolja.widefinder.categories.CategorisationReport"/>
   
+  <r:report id="wfi" class="com.baulsupp.kolja.widefinder.report.WFI"/>
+  
+  <r:report id="wfii" class="com.baulsupp.kolja.widefinder.report.WFII"/>
+  
+  <r:report id="wfiityped" class="com.baulsupp.kolja.widefinder.report.WFIITyped"/>
+  
 </beans:beans>

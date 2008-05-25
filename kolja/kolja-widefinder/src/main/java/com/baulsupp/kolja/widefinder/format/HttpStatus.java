@@ -28,6 +28,7 @@ public class HttpStatus implements Comparable<HttpStatus> {
   public static final HttpStatus SUCCESS_OK = new HttpStatus("200");
   public static final HttpStatus CLIENT_ERROR_NOT_FOUND = new HttpStatus("404");
   public static final HttpStatus SERVER_ERROR_INTERNAL = new HttpStatus("500");
+  public static final HttpStatus REDIRECT_NOT_MODIFIED = new HttpStatus("304");
 
   private String code = null;
 
@@ -59,6 +60,10 @@ public class HttpStatus implements Comparable<HttpStatus> {
 
   public boolean isServerError() {
     return code.startsWith("5");
+  }
+
+  public boolean isHit() {
+    return equals(HttpStatus.SUCCESS_OK) || equals(HttpStatus.REDIRECT_NOT_MODIFIED);
   }
 
   @Override

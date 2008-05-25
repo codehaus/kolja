@@ -15,21 +15,37 @@
  * along with this library; if not, write to the Free Software Foundation, Inc.,
  * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
-package com.baulsupp.kolja.widefinder;
+package com.baulsupp.kolja.widefinder.format;
+
+import java.text.DecimalFormat;
+
+import com.baulsupp.kolja.log.viewer.format.OutputFormat;
 
 /**
- * Field Name Constants
+ * User Agent Format
  * 
  * @author Yuri Schimke
  */
-public class WideFinderConstants {
-  public static final String STATUS = "status";
-  public static final String URL = "url";
-  public static final String IPADDRESS = "ipaddress";
-  public static final String DATE = "date";
-  public static final String ACTION = "action";
-  public static final String SIZE = "size";
-  public static final String USER_AGENT = "useragent";
-  public static final String REFERRER = "referrer";
-  public static final String USER = "user";
+public class MegaBytesFormat implements OutputFormat {
+  private static final long serialVersionUID = -2166842740967293740L;
+
+  public static final long MB = 1024 * 1024;
+
+  private DecimalFormat format;
+
+  public MegaBytesFormat() {
+    format = new DecimalFormat();
+    format.setMaximumFractionDigits(1);
+    format.setMinimumFractionDigits(1);
+  }
+
+  public String format(Object value) {
+    if (value == null) {
+      return null;
+    }
+
+    double bytes = ((Number) value).doubleValue();
+
+    return format.format(bytes / MB) + "M";
+  }
 }

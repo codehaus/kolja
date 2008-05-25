@@ -58,6 +58,8 @@ public class WideFinderLineParserTest {
     set.add(WideFinderConstants.URL);
     set.add(WideFinderConstants.STATUS);
     set.add(WideFinderConstants.USER_AGENT);
+    set.add(WideFinderConstants.REFERRER);
+    set.add(WideFinderConstants.USER);
 
     assertEquals(set, parser.getNames());
   }

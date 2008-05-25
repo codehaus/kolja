@@ -42,6 +42,8 @@ public class WideFinderLine implements Line {
   private HttpStatus status;
   private Long size;
   private UserAgent userAgent;
+  private String referrer;
+  private Object user;
 
   private static DateTimeFormatter DATE_FORMAT = DateTimeFormat.forPattern("dd/MMM/yyyy:HH:mm:ss");
 
@@ -61,13 +63,36 @@ public class WideFinderLine implements Line {
 
       ipaddress = content.subSequence(0, pos).toString();
 
-      pos += 6;
+      pos += 1;
+
+      int i;
+      for (i = 0; true; i++) {
+        char c = content.charAt(i + pos);
+        if (c == ' ') {
+          break;
+        }
+      }
+
+      pos += i + 1;
+
+      for (i = 0; true; i++) {
+        char c = content.charAt(i + pos);
+        if (c == ' ') {
+          break;
+        }
+      }
+
+      user = content.subSequence(pos, pos + i).toString();
+      if (user.equals("-")) {
+        user = null;
+      }
+
+      pos += i + 2;
 
       dateString = content.subSequence(pos, pos + 20).toString();
 
       pos += 29;
 
-      int i;
       for (i = 0; i < 5; i++) {
         char c = content.charAt(i + pos);
         if (c < 'A' || c > 'Z') {
@@ -119,16 +144,21 @@ public class WideFinderLine implements Line {
 
       size = BytesType.parseBytes(content.subSequence(pos, pos + i).toString());
 
-      pos += 1 + i;
+      pos += 2 + i;
 
       for (i = 0; true; i++) {
         char c = content.charAt(i + pos);
-        if (c == ' ') {
+        if (c == '"') {
           break;
         }
       }
 
-      pos += 2 + i;
+      referrer = content.subSequence(pos, pos + i).toString();
+      if (referrer.equals("-")) {
+        referrer = null;
+      }
+
+      pos += 3 + i;
 
       for (i = 0; true; i++) {
         char c = content.charAt(i + pos);
@@ -168,17 +198,53 @@ public class WideFinderLine implements Line {
       return size;
     } else if (name.equals(WideFinderConstants.USER_AGENT)) {
       return userAgent;
+    } else if (name.equals(WideFinderConstants.REFERRER)) {
+      return referrer;
+    } else if (name.equals(WideFinderConstants.USER)) {
+      return user;
     }
 
     return null;
   }
 
-  private DateTime getDate() {
+  public DateTime getDate() {
     if (date == null) {
       date = DATE_FORMAT.parseDateTime(dateString);
     }
 
     return date;
+  }
+
+  public String getIpaddress() {
+    return ipaddress;
+  }
+
+  public String getMethod() {
+    return method;
+  }
+
+  public String getReferrer() {
+    return referrer;
+  }
+
+  public Long getSize() {
+    return size;
+  }
+
+  public HttpStatus getStatus() {
+    return status;
+  }
+
+  public String getUrl() {
+    return url;
+  }
+
+  public Object getUser() {
+    return user;
+  }
+
+  public UserAgent getUserAgent() {
+    return userAgent;
   }
 
   public Map<String, Object> getValues() {
@@ -208,5 +274,13 @@ public class WideFinderLine implements Line {
   @Override
   public String toString() {
     return content.toString();
+  }
+
+  public boolean isHitCounted() {
+    return !failed && status.isHit();
+  }
+
+  public boolean isExternalReferrer() {
+    return referrer != null && !referrer.equals("-") && !referrer.startsWith("http://www.tbray.org/ongoing/");
   }
 }

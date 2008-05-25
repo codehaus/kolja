@@ -15,21 +15,34 @@
  * along with this library; if not, write to the Free Software Foundation, Inc.,
  * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
-package com.baulsupp.kolja.widefinder;
+package com.baulsupp.kolja.widefinder.format;
+
+import com.baulsupp.kolja.log.viewer.format.OutputFormat;
 
 /**
- * Field Name Constants
+ * User Agent Format
  * 
  * @author Yuri Schimke
  */
-public class WideFinderConstants {
-  public static final String STATUS = "status";
-  public static final String URL = "url";
-  public static final String IPADDRESS = "ipaddress";
-  public static final String DATE = "date";
-  public static final String ACTION = "action";
-  public static final String SIZE = "size";
-  public static final String USER_AGENT = "useragent";
-  public static final String REFERRER = "referrer";
-  public static final String USER = "user";
+public class TruncatedFormat implements OutputFormat {
+  private static final long serialVersionUID = -2166842740967293740L;
+  private int length;
+
+  public TruncatedFormat(int length) {
+    this.length = length;
+  }
+
+  public String format(Object value) {
+    if (value == null) {
+      return null;
+    }
+
+    String s = value.toString();
+
+    if (s.length() > length) {
+      s = s.substring(0, length - 3) + "...";
+    }
+
+    return s;
+  }
 }

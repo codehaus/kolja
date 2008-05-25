@@ -34,6 +34,8 @@ import com.baulsupp.kolja.widefinder.WideFinderConstants;
 public class WideFinderLineTest {
   String line1 = "72-48-42-121.dyn.grandenetworks.net - - [01/Oct/2006:06:33:45 -0700] \"GET /ongoing/ongoing.atom HTTP/1.1\" 200 44877 \"-\" \"Onfolio/2.02\"\n";
 
+  String line1WithUser = "72-48-42-121.dyn.grandenetworks.net - tbray [01/Oct/2006:06:33:45 -0700] \"GET /ongoing/ongoing.atom HTTP/1.1\" 200 44877 \"-\" \"Onfolio/2.02\"\n";
+
   @Test
   public void testHandlesFailedLines() {
     Line line = new WideFinderLine("abc");
@@ -50,12 +52,26 @@ public class WideFinderLineTest {
     assertFalse(line.isFailed());
 
     assertEquals("72-48-42-121.dyn.grandenetworks.net", line.getValue(WideFinderConstants.IPADDRESS));
+    assertEquals(null, line.getValue(WideFinderConstants.USER));
     DateTime dateTime = new DateTime(2006, 10, 1, 6, 33, 45, 0);
     assertEquals(dateTime, line.getValue(WideFinderConstants.DATE));
     assertEquals("GET", line.getValue(WideFinderConstants.ACTION));
     assertEquals("/ongoing/ongoing.atom", line.getValue(WideFinderConstants.URL));
     assertEquals(HttpStatus.SUCCESS_OK, line.getValue(WideFinderConstants.STATUS));
     assertEquals(44877l, line.getValue(WideFinderConstants.SIZE));
+    assertEquals(null, line.getValue(WideFinderConstants.REFERRER));
     assertEquals(new UserAgent("Onfolio/2.02"), line.getValue(WideFinderConstants.USER_AGENT));
+  }
+
+  @Test
+  public void parsesLineWithUser() {
+    Line line = new WideFinderLine(line1WithUser);
+
+    assertEquals(line1WithUser, line.toString());
+    assertFalse(line.isFailed());
+
+    assertEquals("tbray", line.getValue(WideFinderConstants.USER));
+    assertEquals(new UserAgent("Onfolio/2.02"), line.getValue(WideFinderConstants.USER_AGENT));
+
   }
 }

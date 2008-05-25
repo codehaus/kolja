@@ -13,9 +13,10 @@ http://baulsupp.com/schema/kolja-reports http://baulsupp.com/schema/kolja-report
         <pattern>^</pattern>
       </regex-entry-pattern>
       <regex-line-parser>
-        <field-pattern>([^ ]+) - - \[(.*?) .\d{4}\] "([A-Z]+) (.*?) HTTP.*?" (\d+) ([^ ]+) "[^"]*" "([^"]*)".*</field-pattern>
+        <field-pattern>([^ ]+) - ([^ ]+) \[(.*?) .\d{4}\] "([A-Z]+) (.*?) HTTP.*?" (\d+) ([^ ]+) "([^"]*)" "([^"]*)".*</field-pattern>
         <types>
           <name-type name="ipaddress" />
+          <name-type name="user" />
           <date-type name="date">
             <pattern>dd/MMM/yyyy:HH:mm:ss</pattern>
           </date-type>
@@ -23,6 +24,7 @@ http://baulsupp.com/schema/kolja-reports http://baulsupp.com/schema/kolja-report
           <name-type name="url" />
           <custom-type name="status" class="com.baulsupp.kolja.widefinder.format.StatusType" />
           <custom-type name="size" class="com.baulsupp.kolja.log.line.type.BytesType" />
+          <name-type name="referrer" />
           <custom-type name="useragent" class="com.baulsupp.kolja.widefinder.format.UserAgentType" />
         </types>
       </regex-line-parser>
@@ -58,5 +60,9 @@ http://baulsupp.com/schema/kolja-reports http://baulsupp.com/schema/kolja-report
   <r:report id="bytes" class="com.baulsupp.kolja.widefinder.TotalBytesReport"/>
   
   <r:report id="types" class="com.baulsupp.kolja.widefinder.categories.CategorisationReport"/>
+  
+  <r:report id="wfi" class="com.baulsupp.kolja.widefinder.report.WFI"/>
+  
+  <r:report id="wfii" class="com.baulsupp.kolja.widefinder.report.WFII"/>
   
 </beans:beans>

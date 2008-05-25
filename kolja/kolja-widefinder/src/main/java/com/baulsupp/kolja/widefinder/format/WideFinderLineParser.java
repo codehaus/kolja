@@ -28,26 +28,6 @@ import com.baulsupp.kolja.widefinder.WideFinderConstants;
  * @author Yuri Schimke
  */
 public class WideFinderLineParser implements LineParser {
-
-  // <regex-line-parser>
-  // <field-pattern>([^ ]+) - - \[(.*?) .\d{4}\] "([A-Z]+) (.*?) HTTP.*?" (\d+)
-  // ([^ ]+) "[^"]*" "([^"]*)".*</field-pattern>
-  // <types>
-  // <name-type name="ipaddress" />
-  // <date-type name="date">
-  // <pattern>dd/MMM/yyyy:HH:mm:ss</pattern>
-  // </date-type>
-  // <name-type name="action" />
-  // <name-type name="url" />
-  // <custom-type name="status"
-  // class="com.baulsupp.kolja.widefinder.format.StatusType" />
-  // <custom-type name="size" class="com.baulsupp.kolja.log.line.type.BytesType"
-  // />
-  // <custom-type name="useragent"
-  // class="com.baulsupp.kolja.widefinder.format.UserAgentType" />
-  // </types>
-  // </regex-line-parser>
-
   private static final long serialVersionUID = 1L;
   private static final Set<String> NAMES = getColumnNames();
 
@@ -64,6 +44,8 @@ public class WideFinderLineParser implements LineParser {
     set.add(WideFinderConstants.URL);
     set.add(WideFinderConstants.STATUS);
     set.add(WideFinderConstants.USER_AGENT);
+    set.add(WideFinderConstants.REFERRER);
+    set.add(WideFinderConstants.USER);
 
     return set;
   }

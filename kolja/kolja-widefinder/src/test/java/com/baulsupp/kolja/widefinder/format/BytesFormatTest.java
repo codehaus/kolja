@@ -31,6 +31,12 @@ public class BytesFormatTest {
   }
 
   @Test
+  public void testSupportsDecimalPlaces() {
+    format = new BytesFormat(1);
+    assertEquals("1.1MB", format.format(BytesFormat.MB * 1.1));
+  }
+
+  @Test
   public void testGigaBytes() {
     assertEquals("1GB", format.format(BytesFormat.GB));
   }

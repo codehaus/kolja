@@ -28,6 +28,8 @@ import java.util.TreeMap;
 
 import org.apache.commons.collections.ComparatorUtils;
 
+import com.baulsupp.kolja.log.viewer.format.OutputFormat;
+
 /**
  * Frequency Counting of Strings.
  * 
@@ -62,7 +64,7 @@ public class Frequencies<T> implements Iterable<Frequencies.Count<T>> {
     incrementBy(url, 1);
   }
 
-  private void incrementBy(T url, int by) {
+  public void incrementBy(T url, long by) {
     Count<T> count = counts.get(url);
 
     if (count == null) {
@@ -76,14 +78,14 @@ public class Frequencies<T> implements Iterable<Frequencies.Count<T>> {
     private static final long serialVersionUID = -6312937012496559725L;
 
     private S url;
-    private int i;
+    private long i;
 
-    public Count(S url, int i) {
+    public Count(S url, long i) {
       this.url = url;
       this.i = i;
     }
 
-    public void increment(int by) {
+    public void increment(long by) {
       this.i += by;
     }
 
@@ -96,11 +98,16 @@ public class Frequencies<T> implements Iterable<Frequencies.Count<T>> {
       return i + " " + url;
     }
 
+    public String toString(OutputFormat format) {
+      String count = format != null ? format.format(i) : String.valueOf(i);
+      return count + " " + url;
+    }
+
     public S getItem() {
       return url;
     }
 
-    public int getCount() {
+    public long getCount() {
       return i;
     }
   }
@@ -128,7 +135,7 @@ public class Frequencies<T> implements Iterable<Frequencies.Count<T>> {
     return counts.size();
   }
 
-  public int get(T string) {
+  public long get(T string) {
     Count<T> c = counts.get(string);
     return c != null ? c.getCount() : 0;
   }
