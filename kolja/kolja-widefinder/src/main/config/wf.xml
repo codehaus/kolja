@@ -50,4 +50,9 @@ http://baulsupp.com/schema/kolja-reports http://baulsupp.com/schema/kolja-report
   
   <r:report id="wfiityped" class="com.baulsupp.kolja.widefinder.report.WFIITyped"/>
   
+  <r:report id="wfarticles" class="com.baulsupp.kolja.widefinder.report.WFIIArticles"/>
+  <r:report id="wfbytes" class="com.baulsupp.kolja.widefinder.report.WFIIBytes"/>
+  <r:report id="wfclient" class="com.baulsupp.kolja.widefinder.report.WFIIClient"/>
+  <r:report id="wfreferrer" class="com.baulsupp.kolja.widefinder.report.WFIIReferrer"/>
+  <r:report id="wf404" class="com.baulsupp.kolja.widefinder.report.WFII404"/>
 </beans:beans>

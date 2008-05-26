@@ -37,8 +37,6 @@ public interface ReportPrinter extends NamedService {
 
   void printRequest(RequestLine request);
 
-  // void initialise() throws IOException;
-
   void setReportEngine(ReportEngine reportEngine);
 
   void completed() throws IOException;

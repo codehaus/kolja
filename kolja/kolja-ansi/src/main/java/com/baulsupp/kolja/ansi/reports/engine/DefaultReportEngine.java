@@ -188,6 +188,10 @@ public class DefaultReportEngine implements ReportEngine, ReportContext {
         first = false;
       }
 
+      if (reports.size() > 1) {
+        reportPrinter.printTitle(r.describe());
+      }
+
       r.completed();
     }
 

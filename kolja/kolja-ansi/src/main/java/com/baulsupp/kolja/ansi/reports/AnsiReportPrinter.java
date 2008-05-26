@@ -119,7 +119,6 @@ public class AnsiReportPrinter implements ReportPrinter {
     progress.clear();
 
     System.out.println(title);
-    System.out.println("");
   }
 
   public void println(MultiColourString string) {
