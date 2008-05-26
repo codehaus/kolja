@@ -18,6 +18,11 @@
     </dependency>
     <dependency>
       <groupId>com.baulsupp.kolja</groupId>
+      <artifactId>kolja-reports</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.baulsupp.kolja</groupId>
       <artifactId>kolja-ansi</artifactId>
       <version>${project.version}</version>
     </dependency>

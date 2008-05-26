@@ -17,6 +17,11 @@
       <artifactId>junit</artifactId>
     </dependency>
     <dependency>
+      <groupId>com.baulsupp.kolja</groupId>
+      <artifactId>kolja-reports</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
       <groupId>joda-time</groupId>
       <artifactId>joda-time</artifactId>
     </dependency>

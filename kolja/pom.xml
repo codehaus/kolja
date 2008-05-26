@@ -49,14 +49,15 @@
   <modules>
     <module>gloogy</module>
     <module>curses-list</module>
+    <module>kolja-util</module>
     <module>kolja-curses</module>
     <module>kolja-viewer</module>
     <module>kolja-ansi</module>
-    <module>kolja-util</module>
-    <module>kolja-assembly</module>
+    <module>kolja-reports</module>
     <module>kolja-widefinder</module>
     <module>kolja-bank</module>
     <module>kolja-jez</module>
+    <module>kolja-assembly</module>
     <!--
     <module>kolja-gridgain</module>
     -->
