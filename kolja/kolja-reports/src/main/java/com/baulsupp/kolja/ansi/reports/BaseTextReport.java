@@ -23,6 +23,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 
 import org.springframework.util.Assert;
+import org.springframework.util.ClassUtils;
 
 import com.baulsupp.kolja.log.line.Line;
 import com.baulsupp.kolja.log.viewer.event.Event;
@@ -34,16 +35,18 @@ import com.baulsupp.kolja.util.colours.MultiColourString;
  * 
  * @author Yuri Schimke
  */
-public abstract class AbstractTextReport<T extends AbstractTextReport<T>> implements TextReport<T>, Cloneable, Serializable {
+public class BaseTextReport<T extends BaseTextReport<T>> implements TextReport<T>, Cloneable, Serializable {
+  private static final long serialVersionUID = -415375410477390374L;
+
   protected ReportPrinter reportPrinter;
   private HashSet<Detail> details;
   private ReportContext reportContext;
 
-  public AbstractTextReport() {
+  public BaseTextReport() {
     this(Detail.LINES);
   }
 
-  public AbstractTextReport(Detail... selected) {
+  public BaseTextReport(Detail... selected) {
     this.details = new HashSet<Detail>(Arrays.asList(selected));
   }
 
@@ -137,5 +140,9 @@ public abstract class AbstractTextReport<T extends AbstractTextReport<T>> implem
   }
 
   public void merge(T partReport) {
+  }
+
+  public String describe() {
+    return ClassUtils.getShortName(getClass());
   }
 }

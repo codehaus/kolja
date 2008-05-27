@@ -15,49 +15,25 @@
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-package com.baulsupp.kolja.ansi.reports.basic;
+package wfi;
 
-import java.io.File;
+import org.springframework.util.StopWatch;
 
-import com.baulsupp.kolja.ansi.reports.BaseTextReport;
-import com.baulsupp.kolja.log.line.Line;
+import com.baulsupp.kolja.ansi.reports.ReportRunnerMain;
 
 /**
  * @author Yuri Schimke
  * 
  */
-public final class FailureReport extends BaseTextReport<FailureReport> {
-  private static final long serialVersionUID = 6089075160216434619L;
+public class WFIIScript {
+  public static void main(String[] args) {
+    StopWatch sw = new StopWatch("Frequency - o1000k.ap");
+    sw.start();
 
-  private int count;
+    ReportRunnerMain.main("-x", "src/main/config/wf.xml", "-r", "src/test/script/wfii.groovy", "src/test/logs/O.100k");
 
-  public FailureReport() {
-  }
+    sw.stop();
 
-  public String describe() {
-    return "Failed Log Lines";
-  }
-
-  @Override
-  public void beforeFile(File file) {
-    super.beforeFile(file);
-
-    count = 0;
-  }
-
-  @Override
-  public void processLine(Line line) {
-    if (line.isFailed()) {
-      count++;
-
-      printLine(line);
-    }
-  }
-
-  @Override
-  public void afterFile(File file) {
-    super.afterFile(file);
-
-    println("" + count + " failures");
+    System.out.println(sw.shortSummary());
   }
 }

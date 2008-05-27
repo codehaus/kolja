@@ -15,49 +15,24 @@
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-package com.baulsupp.kolja.ansi.reports.basic;
+package com.baulsupp.kolja.ansi.reports.groovy;
 
-import java.io.File;
+import groovy.lang.GroovyClassLoader;
 
-import com.baulsupp.kolja.ansi.reports.BaseTextReport;
-import com.baulsupp.kolja.log.line.Line;
+import org.springframework.core.io.Resource;
+
+import com.baulsupp.kolja.ansi.reports.TextReport;
 
 /**
  * @author Yuri Schimke
- * 
  */
-public final class FailureReport extends BaseTextReport<FailureReport> {
-  private static final long serialVersionUID = 6089075160216434619L;
+public class GroovyReportFactory {
+  private static final long serialVersionUID = -6048626637734368371L;
 
-  private int count;
+  public TextReport<?> buildReport(Resource resource) throws Exception {
+    GroovyClassLoader gcl = new GroovyClassLoader();
 
-  public FailureReport() {
-  }
-
-  public String describe() {
-    return "Failed Log Lines";
-  }
-
-  @Override
-  public void beforeFile(File file) {
-    super.beforeFile(file);
-
-    count = 0;
-  }
-
-  @Override
-  public void processLine(Line line) {
-    if (line.isFailed()) {
-      count++;
-
-      printLine(line);
-    }
-  }
-
-  @Override
-  public void afterFile(File file) {
-    super.afterFile(file);
-
-    println("" + count + " failures");
+    Class<?> clazz = gcl.parseClass(resource.getInputStream());
+    return (TextReport<?>) clazz.newInstance();
   }
 }

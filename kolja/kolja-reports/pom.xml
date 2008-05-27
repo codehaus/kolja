@@ -1,15 +1,16 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	
-	<artifactId>kolja-reports</artifactId>
-	<packaging>jar</packaging>
-	<name>Kolja Reports</name>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
 
-	<parent>
-		<groupId>com.baulsupp.kolja</groupId>
-		<artifactId>kolja</artifactId>
-		<version>1.0.0-SNAPSHOT</version>
-	</parent>
+  <artifactId>kolja-reports</artifactId>
+  <packaging>jar</packaging>
+  <name>Kolja Reports</name>
+
+  <parent>
+    <groupId>com.baulsupp.kolja</groupId>
+    <artifactId>kolja</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+  </parent>
 
   <dependencies>
     <dependency>
@@ -30,6 +31,16 @@
       <groupId>com.baulsupp.kolja</groupId>
       <artifactId>kolja-ansi</artifactId>
       <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.groovy</groupId>
+      <artifactId>groovy-all-minimal</artifactId>
+      <version>1.5.6</version>
+    </dependency>
+    <dependency>
+      <groupId>org.jruby</groupId>
+      <artifactId>jruby</artifactId>
+      <version>1.1.1</version>
     </dependency>
   </dependencies>
 </project>

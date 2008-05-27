@@ -21,7 +21,7 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.Map.Entry;
 
-import com.baulsupp.kolja.ansi.reports.AbstractTextReport;
+import com.baulsupp.kolja.ansi.reports.BaseTextReport;
 import com.baulsupp.kolja.jez.JezConstants;
 import com.baulsupp.kolja.log.line.Line;
 
@@ -29,7 +29,7 @@ import com.baulsupp.kolja.log.line.Line;
  * @author Yuri Schimke
  * 
  */
-public final class DurationByUser extends AbstractTextReport<DurationByUser> {
+public final class DurationByUser extends BaseTextReport<DurationByUser> {
   private static final long serialVersionUID = 5136930933855032187L;
 
   private Map<String, Long> times = new TreeMap<String, Long>();

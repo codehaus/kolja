@@ -15,49 +15,21 @@
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-package com.baulsupp.kolja.ansi.reports.basic;
-
-import java.io.File;
-
-import com.baulsupp.kolja.ansi.reports.BaseTextReport;
-import com.baulsupp.kolja.log.line.Line;
+package com.baulsupp.kolja.util.services;
 
 /**
  * @author Yuri Schimke
  * 
  */
-public final class FailureReport extends BaseTextReport<FailureReport> {
-  private static final long serialVersionUID = 6089075160216434619L;
+public class SpringFactory<T> implements BeanFactory<T> {
+  private org.springframework.beans.factory.BeanFactory context;
 
-  private int count;
-
-  public FailureReport() {
+  public SpringFactory(org.springframework.beans.factory.BeanFactory appCtxt) {
+    this.context = appCtxt;
   }
 
-  public String describe() {
-    return "Failed Log Lines";
-  }
-
-  @Override
-  public void beforeFile(File file) {
-    super.beforeFile(file);
-
-    count = 0;
-  }
-
-  @Override
-  public void processLine(Line line) {
-    if (line.isFailed()) {
-      count++;
-
-      printLine(line);
-    }
-  }
-
-  @Override
-  public void afterFile(File file) {
-    super.afterFile(file);
-
-    println("" + count + " failures");
+  @SuppressWarnings("unchecked")
+  public T create(String name) throws Exception {
+    return (T) context.getBean(name);
   }
 }

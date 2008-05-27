@@ -19,10 +19,10 @@ package com.baulsupp.kolja.ansi.reports.basic;
 
 import java.util.Arrays;
 
-import com.baulsupp.kolja.ansi.reports.AbstractTextReport;
+import com.baulsupp.kolja.ansi.reports.BaseTextReport;
 import com.baulsupp.kolja.log.line.Line;
 
-public final class TsvReport extends AbstractTextReport<TsvReport> {
+public final class TsvReport extends BaseTextReport<TsvReport> {
   private static final long serialVersionUID = 1585931861594446683L;
 
   private String[] fields;

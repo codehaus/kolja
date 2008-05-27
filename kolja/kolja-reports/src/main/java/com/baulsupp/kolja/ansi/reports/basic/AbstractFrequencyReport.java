@@ -20,11 +20,11 @@ package com.baulsupp.kolja.ansi.reports.basic;
 import java.util.List;
 import java.util.SortedMap;
 
-import com.baulsupp.kolja.ansi.reports.AbstractTextReport;
+import com.baulsupp.kolja.ansi.reports.BaseTextReport;
 import com.baulsupp.kolja.ansi.reports.basic.Frequencies.Count;
 import com.baulsupp.kolja.log.line.Line;
 
-public abstract class AbstractFrequencyReport<S, T extends AbstractFrequencyReport<S, T>> extends AbstractTextReport<T> {
+public abstract class AbstractFrequencyReport<S, T extends AbstractFrequencyReport<S, T>> extends BaseTextReport<T> {
   private Frequencies<S> counts;
   protected Integer count = null;
 

@@ -25,11 +25,11 @@ import org.joda.time.DateTime;
 import org.joda.time.Interval;
 import org.joda.time.LocalTime;
 
-import com.baulsupp.kolja.ansi.reports.AbstractTextReport;
+import com.baulsupp.kolja.ansi.reports.BaseTextReport;
 import com.baulsupp.kolja.log.LogConstants;
 import com.baulsupp.kolja.log.viewer.request.RequestLine;
 
-public class ActiveRequests extends AbstractTextReport<ActiveRequests> {
+public class ActiveRequests extends BaseTextReport<ActiveRequests> {
   private static final long serialVersionUID = -6837582094819173737L;
 
   private LocalTime from;

@@ -48,6 +48,7 @@ import com.baulsupp.kolja.log.viewer.importing.SpringBeanLogFormatLoader;
 import com.baulsupp.kolja.util.services.BeanBuilder;
 import com.baulsupp.kolja.util.services.NamedService;
 import com.baulsupp.kolja.util.services.ServiceFactory;
+import com.baulsupp.kolja.util.services.SpringFactory;
 
 public class ReportRunnerMain {
   private static final Logger log = LoggerFactory.getLogger(ReportRunnerMain.class);
@@ -110,7 +111,7 @@ public class ReportRunnerMain {
     log.info("reports " + v);
     log.info("files " + filenames);
 
-    reportEngine.setReports(createReports(new ReportBuilder(appCtxt), v));
+    reportEngine.setReports(createReports(createReportBuilder(appCtxt), v));
 
     List<File> commandFiles = commandFiles(filenames);
 
@@ -119,6 +120,14 @@ public class ReportRunnerMain {
     reportEngine.process(commandFiles);
 
     reportEngine.completed();
+  }
+
+  private static BeanBuilder<TextReport<?>> createReportBuilder(ConfigurableListableBeanFactory appCtxt) {
+    PropertyEditorRegistrar propertyEditorRegistrar = new KoljaPropertyEditorRegistrar();
+
+    SpringFactory<TextReport<?>> reportBuilder = new SpringFactory<TextReport<?>>(appCtxt);
+
+    return new BeanBuilder<TextReport<?>>(propertyEditorRegistrar, new ScriptReportFactory(reportBuilder));
   }
 
   private static ReportPrinter createReportPrinter(CommandLine cmd, LogFormat format) throws Exception {
@@ -182,11 +191,11 @@ public class ReportRunnerMain {
     return files;
   }
 
-  private static List<TextReport<?>> createReports(ReportBuilder builder, List<String> v) throws Exception {
+  private static List<TextReport<?>> createReports(BeanBuilder<TextReport<?>> builder, List<String> v) throws Exception {
     List<TextReport<?>> reports = new ArrayList<TextReport<?>>();
 
     for (String string : v) {
-      reports.add(builder.buildReport(string));
+      reports.add(builder.create(string));
     }
 
     log.info("" + reports);

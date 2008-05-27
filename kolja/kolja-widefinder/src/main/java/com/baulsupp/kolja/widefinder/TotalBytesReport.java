@@ -2,11 +2,11 @@ package com.baulsupp.kolja.widefinder;
 
 import java.util.concurrent.atomic.AtomicLong;
 
-import com.baulsupp.kolja.ansi.reports.AbstractTextReport;
+import com.baulsupp.kolja.ansi.reports.BaseTextReport;
 import com.baulsupp.kolja.log.line.Line;
 import com.baulsupp.kolja.log.viewer.format.BytesFormat;
 
-public class TotalBytesReport extends AbstractTextReport<TotalBytesReport> {
+public class TotalBytesReport extends BaseTextReport<TotalBytesReport> {
   private static final long serialVersionUID = 3736367542519968003L;
 
   private AtomicLong total = new AtomicLong();

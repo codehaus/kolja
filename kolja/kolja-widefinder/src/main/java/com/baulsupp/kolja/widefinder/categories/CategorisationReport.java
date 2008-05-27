@@ -5,11 +5,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeSet;
 
-import com.baulsupp.kolja.ansi.reports.AbstractTextReport;
+import com.baulsupp.kolja.ansi.reports.BaseTextReport;
 import com.baulsupp.kolja.log.line.Line;
 import com.baulsupp.kolja.widefinder.WideFinderConstants;
 
-public class CategorisationReport extends AbstractTextReport<CategorisationReport> {
+public class CategorisationReport extends BaseTextReport<CategorisationReport> {
   private static final long serialVersionUID = 8104789163998408401L;
 
   private FileTypeCategoriser categoriser = new WideFinderTypeCategoriser();

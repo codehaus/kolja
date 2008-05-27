@@ -20,7 +20,7 @@ package com.baulsupp.kolja.widefinder.report;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.baulsupp.kolja.ansi.reports.AbstractTextReport;
+import com.baulsupp.kolja.ansi.reports.BaseTextReport;
 import com.baulsupp.kolja.ansi.reports.basic.Frequencies;
 import com.baulsupp.kolja.ansi.reports.basic.Frequencies.Count;
 import com.baulsupp.kolja.log.line.Line;
@@ -35,7 +35,7 @@ import com.baulsupp.kolja.widefinder.format.WideFinderLine;
  * @author Yuri Schimke
  * 
  */
-public class WFIITyped extends AbstractTextReport<WFIITyped> {
+public class WFIITyped extends BaseTextReport<WFIITyped> {
   private static final long serialVersionUID = 5637074836971432761L;
 
   public static final MegaBytesFormat MB = new MegaBytesFormat();
