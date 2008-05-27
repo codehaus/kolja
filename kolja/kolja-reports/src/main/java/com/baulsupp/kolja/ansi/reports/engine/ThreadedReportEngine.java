@@ -175,8 +175,6 @@ public class ThreadedReportEngine implements ReportEngine {
 
     reportEngine.process(fileSection.getFile(), fileSection.getIntRange());
 
-    reportEngine.completed();
-
     return reportsCopy;
   }
 }

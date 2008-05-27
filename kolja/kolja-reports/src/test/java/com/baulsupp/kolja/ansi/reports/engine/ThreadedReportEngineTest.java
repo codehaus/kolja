@@ -143,8 +143,6 @@ public class ThreadedReportEngineTest {
 
         one(report).completed();
 
-        exactly(2).of(localReportEngine).completed();
-
         one(executor).shutdown();
         one(executor).awaitTermination(10, TimeUnit.SECONDS);
       }

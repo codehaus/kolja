@@ -38,6 +38,10 @@ public class HttpStatus implements Comparable<HttpStatus> {
     this.code = code;
   }
 
+  public boolean is(String code) {
+    return this.code.equals(code);
+  }
+
   public String getCode() {
     return code;
   }

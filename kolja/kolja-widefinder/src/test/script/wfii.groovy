@@ -2,13 +2,16 @@ import com.baulsupp.kolja.widefinder.format.*;
 import com.baulsupp.kolja.widefinder.report.*;
 import com.baulsupp.kolja.ansi.reports.basic.*;
 import com.baulsupp.kolja.ansi.reports.*;
+import com.baulsupp.kolja.ansi.reports.script.*;
 import com.baulsupp.kolja.log.line.*;
 import java.util.regex.*;
 
-class WFIIArticles extends BaseTextReport {
-  def MB = new MegaBytesFormat()
-  def NUMBER = new SimpleFormat()
-  def TruncatedFormat ITEM = new TruncatedFormat(60)
+class WFIIArticles extends ScriptReport {
+  static MB = new MegaBytesFormat()
+  static NUMBER = new SimpleFormat()
+  static ITEM = new TruncatedFormat(60)
+  
+  static pattern = ~/\/ongoing\/When\/\d\d\dx\/\d\d\d\d\/\d\d\/\d\d\/[^ .]+/
   
   def articles = new Frequencies()
   def bytes = new Frequencies()
@@ -16,11 +19,26 @@ class WFIIArticles extends BaseTextReport {
   def client = new Frequencies()
   def referrer = new Frequencies()
   
-  transient Matcher matcher;
-
   void processLine(Line line) {
-    if (matchArticle(line.url) && line.status.isHit()) {
+    if (!line.method.equals("GET")) {
+      return
+    }
+  
+    if (line.status.isHit() && pattern.matcher(line.url).matches()) {
       articles.increment(line.url)
+      client.increment(line.ipaddress)
+      
+      if (line.referrer && !line.referrer.startsWith("http://www.tbray.org/ongoing/")) {
+          referrer.increment(line.referrer)
+      }  
+    }
+    
+    if (line.size && line.status.is("200")) {
+      bytes.incrementBy(line.url, line.size)
+    }
+    
+    if (line.status.is("404")) {
+      _404.increment(line.url)
     }
   }
   
@@ -33,24 +51,14 @@ class WFIIArticles extends BaseTextReport {
   }
 
   void printSection(title, frequencies, format, itemFormat) {
-    println(title);
+    println(title)
     for (count in frequencies.getMostFrequent(10)) {
-      println(count, format, itemFormat);
+      println(count, format, itemFormat)
     }
-    println("");
+    println("")
   }
 
   void println(count, format, itemFormat) {
-    println(String.format(" %10s: %s", format.format(count.count), itemFormat.format(count.item)));
-  }
-
-  protected boolean matchArticle(String url) {
-    if (matcher == null) {
-      matcher = Pattern.compile("/ongoing/When/\\d\\d\\dx/\\d\\d\\d\\d/\\d\\d/\\d\\d/[^ .]+").matcher(url);
-    } else {
-      matcher.reset(url);
-    }
-
-    return matcher.matches();
+    println(String.format(" %10s: %s", format.format(count.count), itemFormat.format(count.item)))
   }
 }

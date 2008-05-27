@@ -8,6 +8,22 @@
       <directory>../kolja-curses/src/main/scripts</directory>
       <outputDirectory>/</outputDirectory>
       <includes>
+        <include>*.bat</include>
+      </includes>
+      <lineEnding>dos</lineEnding>
+    </fileSet>
+    <fileSet>
+      <directory>../kolja-ansi/src/main/scripts</directory>
+      <outputDirectory>/</outputDirectory>
+      <includes>
+        <include>*.bat</include>
+      </includes>
+      <lineEnding>dos</lineEnding>
+    </fileSet>
+    <fileSet>
+      <directory>../kolja-curses/src/main/scripts</directory>
+      <outputDirectory>/</outputDirectory>
+      <includes>
         <include>*.sh</include>
       </includes>
       <lineEnding>unix</lineEnding>
