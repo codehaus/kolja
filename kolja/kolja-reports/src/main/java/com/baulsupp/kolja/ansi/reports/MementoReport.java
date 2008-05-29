@@ -15,10 +15,14 @@
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-package com.baulsupp.kolja.util;
+package com.baulsupp.kolja.ansi.reports;
 
-public interface Mergeable<T extends Mergeable<T>> {
-  void merge(T other) throws Exception;
+/**
+ * @author Yuri Schimke
+ * 
+ */
+public interface MementoReport<T> {
+  T getMemento() throws Exception;
 
-  T newInstance();
+  void setMemento(T memento) throws Exception;
 }

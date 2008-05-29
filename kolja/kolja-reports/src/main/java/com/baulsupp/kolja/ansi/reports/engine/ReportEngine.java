@@ -32,7 +32,7 @@ import com.baulsupp.kolja.log.viewer.importing.LogFormat;
 public interface ReportEngine {
   void initialise() throws Exception;
 
-  void setReports(List<TextReport<?>> createReports);
+  void setReportDescriptions(List<String> v) throws Exception;
 
   void setReportPrinter(ReportPrinter reportPrinter);
 
@@ -43,4 +43,6 @@ public interface ReportEngine {
   void completed() throws Exception;
 
   void process(File file, IntRange intRange) throws Exception;
+
+  void setReports(List<TextReport<?>> reports);
 }

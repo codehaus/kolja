@@ -46,9 +46,9 @@ import com.baulsupp.kolja.log.viewer.importing.LogFormat;
 import com.baulsupp.kolja.log.viewer.importing.SavedLogFormatLoader;
 import com.baulsupp.kolja.log.viewer.importing.SpringBeanLogFormatLoader;
 import com.baulsupp.kolja.util.services.BeanBuilder;
+import com.baulsupp.kolja.util.services.BeanFactory;
 import com.baulsupp.kolja.util.services.NamedService;
 import com.baulsupp.kolja.util.services.ServiceFactory;
-import com.baulsupp.kolja.util.services.SpringFactory;
 
 public class ReportRunnerMain {
   private static final Logger log = LoggerFactory.getLogger(ReportRunnerMain.class);
@@ -111,7 +111,7 @@ public class ReportRunnerMain {
     log.info("reports " + v);
     log.info("files " + filenames);
 
-    reportEngine.setReports(createReports(createReportBuilder(appCtxt), v));
+    reportEngine.setReportDescriptions(v);
 
     List<File> commandFiles = commandFiles(filenames);
 
@@ -122,19 +122,11 @@ public class ReportRunnerMain {
     reportEngine.completed();
   }
 
-  private static BeanBuilder<TextReport<?>> createReportBuilder(ConfigurableListableBeanFactory appCtxt) {
-    PropertyEditorRegistrar propertyEditorRegistrar = new KoljaPropertyEditorRegistrar();
-
-    SpringFactory<TextReport<?>> reportBuilder = new SpringFactory<TextReport<?>>(appCtxt);
-
-    return new BeanBuilder<TextReport<?>>(propertyEditorRegistrar, new ScriptReportFactory(reportBuilder));
-  }
-
   private static ReportPrinter createReportPrinter(CommandLine cmd, LogFormat format) throws Exception {
     final ReportPrinter reportPrinter;
 
     if (cmd.hasOption('p')) {
-      BeanBuilder<ReportPrinter> builder = createServiceBuilder(ReportPrinter.class);
+      BeanFactory<ReportPrinter> builder = createServiceBuilder(ReportPrinter.class);
 
       reportPrinter = builder.create(cmd.getOptionValue('p'));
     } else {
@@ -150,7 +142,7 @@ public class ReportRunnerMain {
     ReportEngineFactory reportEngineFactory;
 
     if (cmd.hasOption('g')) {
-      BeanBuilder<ReportEngineFactory> builder = createServiceBuilder(ReportEngineFactory.class);
+      BeanFactory<ReportEngineFactory> builder = createServiceBuilder(ReportEngineFactory.class);
 
       reportEngineFactory = builder.create(cmd.getOptionValue('g'));
     } else {
@@ -164,7 +156,7 @@ public class ReportRunnerMain {
     return reportEngine;
   }
 
-  private static <T extends NamedService> BeanBuilder<T> createServiceBuilder(Class<T> type) {
+  private static <T extends NamedService> BeanFactory<T> createServiceBuilder(Class<T> type) {
     PropertyEditorRegistrar propertyEditorRegistrar = new KoljaPropertyEditorRegistrar();
     return new BeanBuilder<T>(propertyEditorRegistrar, new ServiceFactory<T>(type));
   }
@@ -189,18 +181,6 @@ public class ReportRunnerMain {
     }
 
     return files;
-  }
-
-  private static List<TextReport<?>> createReports(BeanBuilder<TextReport<?>> builder, List<String> v) throws Exception {
-    List<TextReport<?>> reports = new ArrayList<TextReport<?>>();
-
-    for (String string : v) {
-      reports.add(builder.create(string));
-    }
-
-    log.info("" + reports);
-
-    return reports;
   }
 
   private static List<File> commandFiles(List<String> filenames) {

@@ -99,7 +99,7 @@ public abstract class AbstractFrequencyReport<S, T extends AbstractFrequencyRepo
   }
 
   @Override
-  public void merge(T partReport) {
+  public void merge(T partReport) throws Exception {
     super.merge(partReport);
 
     counts.merge(partReport.counts);

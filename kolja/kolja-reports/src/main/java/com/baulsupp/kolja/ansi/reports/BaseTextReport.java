@@ -139,10 +139,14 @@ public class BaseTextReport<T extends BaseTextReport<T>> implements TextReport<T
     }
   }
 
-  public void merge(T partReport) {
+  public void merge(T partReport) throws Exception {
   }
 
   public String describe() {
     return ClassUtils.getShortName(getClass());
+  }
+
+  public String getName() {
+    return null;
   }
 }

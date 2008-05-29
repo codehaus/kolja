@@ -36,6 +36,7 @@ import com.baulsupp.kolja.ansi.reports.engine.file.NullReportContext;
 import com.baulsupp.kolja.ansi.reports.engine.file.NullReportPrinter;
 import com.baulsupp.kolja.log.util.IntRange;
 import com.baulsupp.kolja.log.viewer.importing.LogFormat;
+import com.baulsupp.kolja.util.services.BeanFactory;
 
 /**
  * @author Yuri Schimke
@@ -47,6 +48,7 @@ public class ThreadedReportEngine implements ReportEngine {
   private ExecutorService executor;
   private FileDivider fileDivider;
   private ReportEngineFactory reportEngineFactory;
+  private BeanFactory<TextReport<?>> reportBuilder;
 
   public void setLogFormat(LogFormat format) {
     this.format = format;
@@ -58,6 +60,18 @@ public class ThreadedReportEngine implements ReportEngine {
 
   public void setReportPrinter(ReportPrinter reportPrinter) {
     this.reportPrinter = reportPrinter;
+  }
+
+  public void setReportBuilder(BeanFactory<TextReport<?>> reportBuilder) {
+    this.reportBuilder = reportBuilder;
+  }
+
+  public void setReportDescriptions(List<String> v) throws Exception {
+    if (reportBuilder == null) {
+      reportBuilder = ReportUtils.createReportBuilder();
+    }
+
+    setReports(ReportUtils.createReports(reportBuilder, v));
   }
 
   public void setReports(List<TextReport<?>> reports) {

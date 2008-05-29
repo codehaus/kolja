@@ -31,28 +31,4 @@ http://baulsupp.com/schema/kolja-reports http://baulsupp.com/schema/kolja-report
       <custom-events class="com.baulsupp.kolja.widefinder.format.HttpStatusEvents" />
     </events>
   </format>
-  
-  <r:report id="freq" class="com.baulsupp.kolja.ansi.reports.basic.FrequencyReport"/>
-  
-  <r:report id="time" class="com.baulsupp.kolja.widefinder.TimeReport"/>
-  
-  <r:report id="events" class="com.baulsupp.kolja.ansi.reports.basic.DumpEvents"/>
-  
-  <r:report id="tsv" class="com.baulsupp.kolja.ansi.reports.basic.TsvReport"/>
-  
-  <r:report id="bytes" class="com.baulsupp.kolja.widefinder.TotalBytesReport"/>
-  
-  <r:report id="types" class="com.baulsupp.kolja.widefinder.categories.CategorisationReport"/>
-  
-  <r:report id="wfi" class="com.baulsupp.kolja.widefinder.report.WFI"/>
-  
-  <r:report id="wfii" class="com.baulsupp.kolja.widefinder.report.WFII"/>
-  
-  <r:report id="wfiityped" class="com.baulsupp.kolja.widefinder.report.WFIITyped"/>
-  
-  <r:report id="wfarticles" class="com.baulsupp.kolja.widefinder.report.WFIIArticles"/>
-  <r:report id="wfbytes" class="com.baulsupp.kolja.widefinder.report.WFIIBytes"/>
-  <r:report id="wfclient" class="com.baulsupp.kolja.widefinder.report.WFIIClient"/>
-  <r:report id="wfreferrer" class="com.baulsupp.kolja.widefinder.report.WFIIReferrer"/>
-  <r:report id="wf404" class="com.baulsupp.kolja.widefinder.report.WFII404"/>
 </beans:beans>

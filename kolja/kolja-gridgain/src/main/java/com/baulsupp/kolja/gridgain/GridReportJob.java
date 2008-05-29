@@ -19,12 +19,15 @@ package com.baulsupp.kolja.gridgain;
 
 import java.io.File;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.gridgain.grid.GridException;
 import org.gridgain.grid.GridJob;
 
+import com.baulsupp.kolja.ansi.reports.MementoReport;
 import com.baulsupp.kolja.ansi.reports.ReportPrinter;
+import com.baulsupp.kolja.ansi.reports.ReportUtils;
 import com.baulsupp.kolja.ansi.reports.TextReport;
 import com.baulsupp.kolja.ansi.reports.engine.DefaultReportEngineFactory;
 import com.baulsupp.kolja.ansi.reports.engine.ReportEngine;
@@ -32,6 +35,7 @@ import com.baulsupp.kolja.ansi.reports.engine.ReportEngineFactory;
 import com.baulsupp.kolja.ansi.reports.engine.file.NullReportPrinter;
 import com.baulsupp.kolja.log.util.IntRange;
 import com.baulsupp.kolja.log.viewer.importing.LogFormat;
+import com.baulsupp.kolja.util.services.BeanFactory;
 
 /**
  * @author Yuri Schimke
@@ -44,16 +48,18 @@ public class GridReportJob implements GridJob {
 
   private File file;
 
-  private List<TextReport<?>> reports;
-
   private IntRange intRange;
 
   private ReportEngineFactory reportEngineFactory = new DefaultReportEngineFactory();
 
-  public GridReportJob(LogFormat logFormat, File file, List<TextReport<?>> reports, IntRange intRange) {
+  private List<String> reportDescriptions;
+
+  private BeanFactory<TextReport<?>> reportBuilder;
+
+  public GridReportJob(LogFormat logFormat, File file, List<String> reportDescriptions, IntRange intRange) {
     this.logFormat = logFormat;
     this.file = file;
-    this.reports = reports;
+    this.reportDescriptions = reportDescriptions;
     this.intRange = intRange;
   }
 
@@ -61,11 +67,18 @@ public class GridReportJob implements GridJob {
     this.reportEngineFactory = reportEngineFactory;
   }
 
+  public void setReportBuilder(BeanFactory<TextReport<?>> reportBuilder) {
+    this.reportBuilder = reportBuilder;
+  }
+
   public void cancel() {
   }
 
   public Serializable execute() throws GridException {
+    List<TextReport<?>> reports;
     try {
+      reports = createReports();
+
       ReportEngine reportEngine = createLocalReportEngine();
       reportEngine.setLogFormat(logFormat);
 
@@ -81,15 +94,37 @@ public class GridReportJob implements GridJob {
       reportEngine.process(file, intRange);
 
       reportEngine.completed();
+
+      for (TextReport<?> report : reports) {
+        report.cleanup();
+      }
+
+      return (Serializable) getResult(reports);
     } catch (Exception e) {
       throw new GridException(e);
     }
+  }
+
+  private List<Object> getResult(List<TextReport<?>> reports) throws Exception {
+    List<Object> result = new ArrayList<Object>();
 
     for (TextReport<?> report : reports) {
-      report.cleanup();
+      if (report instanceof MementoReport) {
+        result.add(((MementoReport<?>) report).getMemento());
+      } else {
+        result.add(report);
+      }
     }
 
-    return (Serializable) reports;
+    return result;
+  }
+
+  private List<TextReport<?>> createReports() throws Exception {
+    if (reportBuilder == null) {
+      reportBuilder = ReportUtils.createReportBuilder();
+    }
+
+    return ReportUtils.createReports(reportBuilder, reportDescriptions);
   }
 
   private ReportEngine createLocalReportEngine() {

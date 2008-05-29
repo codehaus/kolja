@@ -56,4 +56,9 @@ public final class FrequencyReport<S> extends AbstractFrequencyReport<S, Frequen
   public String describe() {
     return "Frequency: " + field;
   }
+
+  @Override
+  public String getName() {
+    return "freq";
+  }
 }

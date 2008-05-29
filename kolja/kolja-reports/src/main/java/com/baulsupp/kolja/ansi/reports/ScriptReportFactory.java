@@ -35,6 +35,9 @@ public class ScriptReportFactory implements BeanFactory<TextReport<?>> {
     this.delegate = delegate;
   }
 
+  public ScriptReportFactory() {
+  }
+
   public TextReport<?> create(String name) throws Exception {
     if (name.endsWith(".groovy")) {
       return createGroovyReport(name);
@@ -42,7 +45,11 @@ public class ScriptReportFactory implements BeanFactory<TextReport<?>> {
       return createRubyReport(name);
     }
 
-    return delegate.create(name);
+    if (delegate == null) {
+      throw new IllegalArgumentException("unknown report");
+    } else {
+      return delegate.create(name);
+    }
   }
 
   private TextReport<?> createRubyReport(String name) throws Exception {

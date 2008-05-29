@@ -20,11 +20,22 @@ package com.baulsupp.kolja.ansi.reports;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.PropertyEditorRegistrar;
+
+import com.baulsupp.kolja.log.viewer.importing.KoljaPropertyEditorRegistrar;
+import com.baulsupp.kolja.util.Mergeable;
+import com.baulsupp.kolja.util.services.BeanBuilder;
+import com.baulsupp.kolja.util.services.BeanFactory;
+import com.baulsupp.kolja.util.services.ServiceFactory;
+
 /**
  * @author Yuri Schimke
  * 
  */
 public class ReportUtils {
+  private static final Logger log = LoggerFactory.getLogger(ReportUtils.class);
 
   public static List<TextReport<?>> getReportsCopy(List<TextReport<?>> reports) {
     ArrayList<TextReport<?>> copy = new ArrayList<TextReport<?>>(reports.size());
@@ -37,13 +48,41 @@ public class ReportUtils {
   }
 
   @SuppressWarnings("unchecked")
-  public static void mergeReports(List<TextReport<?>> finalReports, List<TextReport<?>> partReports) {
+  public static void mergeReports(List<TextReport<?>> finalReports, List<?> partReports) throws Exception {
     for (int i = 0; i < finalReports.size(); i++) {
       TextReport finalReport = finalReports.get(i);
-      TextReport partReport = partReports.get(i);
+      Object partReport = partReports.get(i);
 
-      finalReport.merge(partReport);
+      if (partReport instanceof TextReport) {
+        finalReport.merge((Mergeable) partReport);
+      } else if (finalReport instanceof MementoReport) {
+        MementoReport newReport = (MementoReport) finalReport.newInstance();
+        newReport.setMemento(partReport);
+        finalReport.merge((Mergeable) newReport);
+      } else {
+        throw new IllegalStateException("cannot merge result " + partReport);
+      }
     }
   }
 
+  public static List<TextReport<?>> createReports(BeanFactory<TextReport<?>> builder, List<String> v) throws Exception {
+    List<TextReport<?>> reports = new ArrayList<TextReport<?>>();
+
+    for (String string : v) {
+      reports.add(builder.create(string));
+    }
+
+    log.info("" + reports);
+
+    return reports;
+  }
+
+  @SuppressWarnings("unchecked")
+  public static BeanFactory<TextReport<?>> createReportBuilder() {
+    PropertyEditorRegistrar propertyEditorRegistrar = new KoljaPropertyEditorRegistrar();
+
+    ServiceFactory<TextReport<?>> serviceFactory = new ServiceFactory(TextReport.class);
+    ScriptReportFactory factory = new ScriptReportFactory(serviceFactory);
+    return new BeanBuilder<TextReport<?>>(propertyEditorRegistrar, factory);
+  }
 }

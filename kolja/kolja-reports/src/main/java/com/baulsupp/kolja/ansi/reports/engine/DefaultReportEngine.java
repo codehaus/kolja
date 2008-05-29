@@ -27,6 +27,7 @@ import org.slf4j.LoggerFactory;
 
 import com.baulsupp.kolja.ansi.reports.ReportContext;
 import com.baulsupp.kolja.ansi.reports.ReportPrinter;
+import com.baulsupp.kolja.ansi.reports.ReportUtils;
 import com.baulsupp.kolja.ansi.reports.TextReport;
 import com.baulsupp.kolja.ansi.reports.TextReport.Detail;
 import com.baulsupp.kolja.log.line.BasicLineIterator;
@@ -42,6 +43,7 @@ import com.baulsupp.kolja.log.viewer.importing.LogFormat;
 import com.baulsupp.kolja.log.viewer.request.RequestDetector;
 import com.baulsupp.kolja.log.viewer.request.RequestIndex;
 import com.baulsupp.kolja.log.viewer.request.RequestLine;
+import com.baulsupp.kolja.util.services.BeanFactory;
 
 /**
  * @author Yuri Schimke
@@ -67,11 +69,25 @@ public class DefaultReportEngine implements ReportEngine, ReportContext {
 
   private LineIndexFactory lineIndexFactory = new DefaultLineIndexFactory();
 
+  private BeanFactory<TextReport<?>> reportBuilder;
+
   public DefaultReportEngine() {
   }
 
   public void setReportPrinter(ReportPrinter reportPrinter) {
     this.reportPrinter = reportPrinter;
+  }
+
+  public void setReportBuilder(BeanFactory<TextReport<?>> reportBuilder) {
+    this.reportBuilder = reportBuilder;
+  }
+
+  public void setReportDescriptions(List<String> v) throws Exception {
+    if (reportBuilder == null) {
+      reportBuilder = ReportUtils.createReportBuilder();
+    }
+
+    setReports(ReportUtils.createReports(reportBuilder, v));
   }
 
   public void setReports(java.util.List<TextReport<?>> reports) {

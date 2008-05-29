@@ -17,19 +17,24 @@
  */
 package gg;
 
-import org.gridgain.grid.GridConfigurationAdapter;
-import org.gridgain.grid.GridFactory;
+import org.springframework.util.StopWatch;
+
+import com.baulsupp.kolja.ansi.reports.ReportRunnerMain;
 
 /**
  * @author Yuri Schimke
  * 
  */
-public class GridNode {
+public class GridWFII {
   public static void main(String[] args) throws Exception {
-    GridConfigurationAdapter conf = GridConfigFactory.getConfiguration();
+    StopWatch sw = new StopWatch("Frequency - o1000k.ap");
+    sw.start();
 
-    GridFactory.start(conf);
+    ReportRunnerMain.main("-x", "../kolja-widefinder/src/main/config/wf.xml", "-g", "gridgain", "-r",
+        "../kolja-widefinder/src/test/script/wfii.groovy", "../kolja-widefinder/src/test/logs/O.100k");
 
-    GridFactory.getGrid();
+    sw.stop();
+
+    System.out.println(sw.shortSummary());
   }
 }

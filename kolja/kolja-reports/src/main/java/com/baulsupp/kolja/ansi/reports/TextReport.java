@@ -22,13 +22,15 @@ import java.io.File;
 import com.baulsupp.kolja.log.line.Line;
 import com.baulsupp.kolja.log.viewer.event.Event;
 import com.baulsupp.kolja.log.viewer.request.RequestLine;
+import com.baulsupp.kolja.util.Mergeable;
+import com.baulsupp.kolja.util.services.NamedService;
 
 /**
  * Text Report for running a calculation.
  * 
  * @author Yuri Schimke
  */
-public interface TextReport<T extends TextReport<T>> {
+public interface TextReport<T extends TextReport<T>> extends Mergeable<T>, NamedService {
   enum Detail {
     LINES, REQUESTS, EVENTS;
   }
@@ -50,10 +52,6 @@ public interface TextReport<T extends TextReport<T>> {
   void completed();
 
   String describe();
-
-  T newInstance();
-
-  void merge(T partReport);
 
   void cleanup();
 }

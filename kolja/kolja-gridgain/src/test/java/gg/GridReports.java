@@ -31,7 +31,7 @@ public class GridReports {
     sw.start();
 
     ReportRunnerMain.main("-x", "../kolja-widefinder/src/main/config/wf.xml", "-g", "gridgain", "-r", "freq?q=url&count=10",
-        "../kolja-widefinder/src/test/logs/o1000k.ap");
+        "../kolja-widefinder/src/test/logs/O.100k");
 
     sw.stop();
 

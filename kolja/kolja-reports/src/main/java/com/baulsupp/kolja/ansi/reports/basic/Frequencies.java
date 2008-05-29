@@ -29,13 +29,14 @@ import java.util.TreeMap;
 import org.apache.commons.collections.ComparatorUtils;
 
 import com.baulsupp.kolja.log.viewer.format.OutputFormat;
+import com.baulsupp.kolja.util.Mergeable;
 
 /**
  * Frequency Counting of Strings.
  * 
  * @author Yuri Schimke
  */
-public class Frequencies<T> implements Iterable<Frequencies.Count<T>> {
+public final class Frequencies<T> implements Iterable<Frequencies.Count<T>>, Mergeable<Frequencies<T>> {
   private SortedMap<T, Count<T>> counts;
 
   public static final Comparator<Count<?>> COUNT_COMPARATOR = new Comparator<Count<?>>() {
@@ -144,5 +145,14 @@ public class Frequencies<T> implements Iterable<Frequencies.Count<T>> {
     for (Count<T> count : other.counts.values()) {
       incrementBy(count.url, count.i);
     }
+  }
+
+  @Override
+  public String toString() {
+    return "Counts " + counts.size();
+  }
+
+  public Frequencies<T> newInstance() {
+    return new Frequencies<T>();
   }
 }

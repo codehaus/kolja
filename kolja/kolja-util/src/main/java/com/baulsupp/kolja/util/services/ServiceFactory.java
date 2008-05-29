@@ -39,7 +39,8 @@ public class ServiceFactory<T extends NamedService> implements BeanFactory<T> {
     while (providers.hasNext()) {
       T provider = providers.next();
 
-      if (provider.getName().equals(name)) {
+      String providerName = provider.getName();
+      if (providerName != null && providerName.equals(name)) {
         return provider;
       }
     }

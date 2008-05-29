@@ -17,40 +17,19 @@
  */
 package com.baulsupp.kolja.gridgain;
 
-import java.io.File;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-
-import junit.framework.Assert;
-
-import org.junit.Before;
-import org.junit.Test;
-
-import com.baulsupp.kolja.log.viewer.importing.LogFormat;
-import com.baulsupp.kolja.log.viewer.importing.PlainTextLogFormat;
+import org.gridgain.grid.GridConfigurationAdapter;
+import org.gridgain.grid.GridFactory;
 
 /**
  * @author Yuri Schimke
  * 
  */
-public class ReportBatchTest {
-  private LogFormat format;
-  private List<File> files;
+public class GridNode {
+  public static void main(String[] args) throws Exception {
+    GridConfigurationAdapter conf = GridConfigFactory.getConfiguration();
 
-  private List<String> reportDescriptions;
+    GridFactory.start(conf);
 
-  @Before
-  public void setup() {
-    format = new PlainTextLogFormat();
-    files = Collections.singletonList(new File("a.txt"));
-    reportDescriptions = Arrays.asList("report");
-  }
-
-  @Test
-  public void testBatch() {
-    ReportBatch batch = new ReportBatch(format, files, reportDescriptions);
-
-    Assert.assertEquals(reportDescriptions, batch.getReportDescriptions());
+    GridFactory.getGrid();
   }
 }

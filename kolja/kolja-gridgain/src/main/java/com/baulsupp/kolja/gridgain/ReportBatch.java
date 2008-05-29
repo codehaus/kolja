@@ -20,8 +20,6 @@ package com.baulsupp.kolja.gridgain;
 import java.io.File;
 import java.util.List;
 
-import com.baulsupp.kolja.ansi.reports.ReportUtils;
-import com.baulsupp.kolja.ansi.reports.TextReport;
 import com.baulsupp.kolja.log.viewer.importing.LogFormat;
 
 /**
@@ -32,12 +30,12 @@ public class ReportBatch {
 
   private List<File> files;
   private LogFormat format;
-  private List<TextReport<?>> reports;
+  private List<String> reportDescriptions;
 
-  public ReportBatch(LogFormat format, List<File> files, List<TextReport<?>> report) {
+  public ReportBatch(LogFormat format, List<File> files, List<String> reportDescriptions) {
     this.format = format;
     this.files = files;
-    this.reports = report;
+    this.reportDescriptions = reportDescriptions;
   }
 
   public List<File> getFiles() {
@@ -48,11 +46,7 @@ public class ReportBatch {
     return format;
   }
 
-  public List<TextReport<?>> getReportsCopy() {
-    return ReportUtils.getReportsCopy(reports);
-  }
-
-  public List<TextReport<?>> getReports() {
-    return reports;
+  public List<String> getReportDescriptions() {
+    return reportDescriptions;
   }
 }

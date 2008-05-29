@@ -17,8 +17,6 @@
  */
 package com.baulsupp.kolja.gridgain;
 
-import gg.GridConfigFactory;
-
 import java.io.File;
 import java.util.List;
 
@@ -37,13 +35,15 @@ import com.baulsupp.kolja.log.viewer.importing.LogFormat;
  * @author Yuri Schimke
  */
 public class GridGainReportEngine implements ReportEngine {
-  protected List<TextReport<?>> reports;
-
   protected ReportPrinter reportPrinter;
 
   private LogFormat format;
 
   private Grid grid;
+
+  private List<String> reportDescriptions;
+
+  private List<TextReport<?>> reports;
 
   public GridGainReportEngine() {
   }
@@ -52,8 +52,14 @@ public class GridGainReportEngine implements ReportEngine {
     this.reportPrinter = reportPrinter;
   }
 
-  public void setReports(java.util.List<TextReport<?>> reports) {
-    this.reports = reports;
+  public void setReportDescriptions(List<String> v) throws Exception {
+    this.reportDescriptions = v;
+    // setReports(ReportUtils.createReports(ReportUtils.createReportBuilder(),
+    // v));
+  }
+
+  public void setReports(List<TextReport<?>> reports) {
+    // this.reports = reports;
   }
 
   public void initialise() throws Exception {
@@ -85,7 +91,7 @@ public class GridGainReportEngine implements ReportEngine {
   }
 
   public void process(List<File> commandFiles) throws Exception {
-    ReportBatch batch = new ReportBatch(format, commandFiles, reports);
+    ReportBatch batch = new ReportBatch(format, commandFiles, reportDescriptions);
 
     reports = grid.execute(new GridReportSplitter(), batch).get();
   }

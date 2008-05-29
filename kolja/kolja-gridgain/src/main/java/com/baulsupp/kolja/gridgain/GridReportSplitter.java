@@ -31,6 +31,7 @@ import com.baulsupp.kolja.ansi.reports.TextReport;
 import com.baulsupp.kolja.ansi.reports.engine.file.DefaultFileDivider;
 import com.baulsupp.kolja.ansi.reports.engine.file.FileDivider;
 import com.baulsupp.kolja.ansi.reports.engine.file.FileSection;
+import com.baulsupp.kolja.util.services.BeanFactory;
 
 /**
  * @author Yuri Schimke
@@ -38,27 +39,28 @@ import com.baulsupp.kolja.ansi.reports.engine.file.FileSection;
  */
 public class GridReportSplitter extends GridTaskSplitAdapter<ReportBatch, List<TextReport<?>>> {
   private static final long serialVersionUID = -9046190661906193862L;
-  private List<TextReport<?>> reports;
   private FileDivider fileDivider = new DefaultFileDivider();
+  private List<TextReport<?>> reports;
+  private BeanFactory<TextReport<?>> reportBuilder;
 
   public void setFileDivider(FileDivider fileDivider) {
     this.fileDivider = fileDivider;
-  }
-
-  public void setReports(List<TextReport<?>> reports) {
-    this.reports = reports;
   }
 
   @Override
   protected Collection<? extends GridJob> split(int gridSize, ReportBatch job) throws GridException {
     List<GridReportJob> result = new ArrayList<GridReportJob>();
 
-    reports = job.getReportsCopy();
-
     List<FileSection> sections = fileDivider.split(job.getFiles(), gridSize);
 
     for (FileSection fileSection : sections) {
-      result.add(new GridReportJob(job.getFormat(), fileSection.getFile(), job.getReportsCopy(), fileSection.getIntRange()));
+      result.add(new GridReportJob(job.getFormat(), fileSection.getFile(), job.getReportDescriptions(), fileSection.getIntRange()));
+    }
+
+    try {
+      reports = createReports(job);
+    } catch (Exception e) {
+      throw new GridException(e);
     }
 
     return result;
@@ -66,13 +68,27 @@ public class GridReportSplitter extends GridTaskSplitAdapter<ReportBatch, List<T
 
   @SuppressWarnings("unchecked")
   public List<TextReport<?>> reduce(List<GridJobResult> parts) throws GridException {
-    for (GridJobResult gridJobResult : parts) {
-      List<TextReport<?>> partReports = gridJobResult.getData();
+    try {
+      for (GridJobResult gridJobResult : parts) {
+        List<?> partReports = gridJobResult.getData();
 
-      ReportUtils.mergeReports(reports, partReports);
+        ReportUtils.mergeReports(reports, partReports);
+      }
+
+    } catch (GridException e) {
+      throw e;
+    } catch (Exception e) {
+      throw new GridException(e);
     }
 
     return reports;
   }
 
+  private List<TextReport<?>> createReports(ReportBatch job) throws Exception {
+    if (reportBuilder == null) {
+      reportBuilder = ReportUtils.createReportBuilder();
+    }
+
+    return ReportUtils.createReports(reportBuilder, job.getReportDescriptions());
+  }
 }

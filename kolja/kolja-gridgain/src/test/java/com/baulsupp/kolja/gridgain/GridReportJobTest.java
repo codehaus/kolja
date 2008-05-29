@@ -17,10 +17,10 @@
  */
 package com.baulsupp.kolja.gridgain;
 
-import static org.junit.Assert.assertTrue;
+import static junit.framework.Assert.assertEquals;
 
 import java.io.File;
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.List;
 
 import org.jmock.Expectations;
@@ -36,6 +36,7 @@ import com.baulsupp.kolja.ansi.reports.engine.ReportEngineFactory;
 import com.baulsupp.kolja.ansi.reports.engine.file.NullReportPrinter;
 import com.baulsupp.kolja.log.util.IntRange;
 import com.baulsupp.kolja.log.viewer.importing.LogFormat;
+import com.baulsupp.kolja.util.services.BeanFactory;
 
 /**
  * @author Yuri Schimke
@@ -48,18 +49,23 @@ public class GridReportJobTest {
   private File fileA = new File("a.txt");
 
   private LogFormat format;
-  private List<TextReport<?>> reports;
 
   private ReportEngineFactory reportEngineFactory;
   private ReportEngine reportEngine;
+  private BeanFactory<TextReport<?>> reportBuilder;
 
   private TextReport<?> report;
 
+  private List<String> reportDescriptions;
+
+  @SuppressWarnings("unchecked")
   @Before
   public void setup() {
     format = context.mock(LogFormat.class);
     report = context.mock(TextReport.class);
-    reports = Collections.<TextReport<?>> singletonList(report);
+    reportBuilder = context.mock(BeanFactory.class);
+
+    reportDescriptions = Arrays.asList("report");
 
     reportEngineFactory = context.mock(ReportEngineFactory.class);
     reportEngine = context.mock(ReportEngine.class);
@@ -78,12 +84,14 @@ public class GridReportJobTest {
 
     checkCompletion();
 
-    GridReportJob job = new GridReportJob(format, fileA, reports, null);
+    GridReportJob job = new GridReportJob(format, fileA, reportDescriptions, null);
+    job.setReportBuilder(reportBuilder);
     job.setReportEngineFactory(reportEngineFactory);
 
     List<TextReport<?>> results = (List<TextReport<?>>) job.execute();
 
-    assertTrue(results == reports);
+    assertEquals(1, results.size());
+    assertEquals(report, results.get(0));
   }
 
   @SuppressWarnings("unchecked")
@@ -99,12 +107,14 @@ public class GridReportJobTest {
 
     checkCompletion();
 
-    GridReportJob job = new GridReportJob(format, fileA, reports, new IntRange(10000, 20000));
+    GridReportJob job = new GridReportJob(format, fileA, reportDescriptions, new IntRange(10000, 20000));
+    job.setReportBuilder(reportBuilder);
     job.setReportEngineFactory(reportEngineFactory);
 
     List<TextReport<?>> results = (List<TextReport<?>>) job.execute();
 
-    assertTrue(results == reports);
+    assertEquals(1, results.size());
+    assertEquals(report, results.get(0));
   }
 
   private void checkCompletion() throws Exception {
@@ -126,7 +136,10 @@ public class GridReportJobTest {
 
         one(reportEngine).setReportPrinter(with(aNonNull(NullReportPrinter.class)));
 
-        one(reportEngine).setReports(reports);
+        one(reportBuilder).create("report");
+        will(returnValue(report));
+
+        one(reportEngine).setReports(Arrays.<TextReport<?>> asList(report));
 
         one(reportEngine).initialise();
       }

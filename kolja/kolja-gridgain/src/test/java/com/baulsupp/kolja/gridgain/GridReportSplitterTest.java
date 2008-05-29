@@ -18,12 +18,10 @@
 package com.baulsupp.kolja.gridgain;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertSame;
 
 import java.io.File;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -57,9 +55,8 @@ public class GridReportSplitterTest {
 
   private GridReportSplitter splitter;
   private PlainTextLogFormat format;
-  private List<TextReport<?>> reports;
 
-  private TextReport<?> report;
+  private List<String> reportDescriptions;
 
   private FileDivider fileDivider;
 
@@ -70,10 +67,9 @@ public class GridReportSplitterTest {
     fileDivider = context.mock(FileDivider.class);
     splitter.setFileDivider(fileDivider);
 
-    report = context.mock(TextReport.class);
+    reportDescriptions = Arrays.asList("report");
 
     format = new PlainTextLogFormat();
-    reports = Collections.<TextReport<?>> singletonList(report);
   }
 
   @Test
@@ -83,19 +79,14 @@ public class GridReportSplitterTest {
     final List<FileSection> sections = Arrays.asList(new FileSection(fileA, null), new FileSection(fileB, new IntRange(0, 10000)),
         new FileSection(fileB, new IntRange(10000, 20000)));
 
-    final TextReport<?> reportCopy = context.mock(TextReport.class, "copy");
-
     context.checking(new Expectations() {
       {
-        exactly(4).of(report).newInstance();
-        will(returnValue(reportCopy));
-
         one(fileDivider).split(files, 10);
         will(returnValue(sections));
       }
     });
 
-    ReportBatch batch = new ReportBatch(format, files, reports);
+    ReportBatch batch = new ReportBatch(format, files, reportDescriptions);
 
     Collection<? extends GridJob> jobs = splitter.split(10, batch);
 
@@ -117,7 +108,7 @@ public class GridReportSplitterTest {
 
   @SuppressWarnings("unchecked")
   @Test
-  public void testMergesResults() throws GridException {
+  public void testMergesResults() throws Exception {
     final GridJobResult result1 = context.mock(GridJobResult.class, "result1");
     final TextReport<?> reportResult1 = context.mock(TextReport.class, "report1");
 
@@ -131,17 +122,15 @@ public class GridReportSplitterTest {
         one(result2).getData();
         will(returnValue(Arrays.<TextReport<?>> asList(reportResult2)));
 
-        one((TextReport) report).merge(reportResult1);
-        one((TextReport) report).merge(reportResult2);
+        one((TextReport) reportResult1).merge(reportResult2);
       }
     });
 
     List<GridJobResult> parts = Arrays.asList(result1, result2);
 
-    splitter.setReports(reports);
-
     List<TextReport<?>> result = splitter.reduce(parts);
 
-    assertSame(reports, result);
+    assertEquals(1, result.size());
+    assertEquals(reportResult1, result.get(0));
   }
 }
