@@ -17,28 +17,21 @@
  */
 package com.baulsupp.kolja.ansi.reports.groovy;
 
-import groovy.lang.GroovyClassLoader;
-import groovy.lang.GroovySystem;
-import groovy.lang.MetaClass;
+import groovy.lang.DelegatingMetaClass;
 
-import org.springframework.core.io.Resource;
-
-import com.baulsupp.kolja.ansi.reports.TextReport;
 import com.baulsupp.kolja.log.line.BasicLine;
 
 /**
  * @author Yuri Schimke
+ * 
  */
-public class GroovyReportFactory {
-  private static final long serialVersionUID = -6048626637734368371L;
+public class LineMetaClass extends DelegatingMetaClass {
+  public LineMetaClass() {
+    super(BasicLine.class);
+  }
 
-  public TextReport<?> buildReport(Resource resource) throws Exception {
-    GroovyClassLoader gcl = new GroovyClassLoader();
-
-    MetaClass metaClass = new LineMetaClass();
-    GroovySystem.getMetaClassRegistry().setMetaClass(BasicLine.class, metaClass);
-
-    Class<?> clazz = gcl.parseClass(resource.getInputStream());
-    return (TextReport<?>) clazz.newInstance();
+  @Override
+  public Object getProperty(Object object, String property) {
+    return ((BasicLine) object).getValue(property);
   }
 }

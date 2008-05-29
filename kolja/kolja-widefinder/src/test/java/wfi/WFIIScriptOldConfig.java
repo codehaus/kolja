@@ -15,30 +15,25 @@
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-package com.baulsupp.kolja.ansi.reports.groovy;
+package wfi;
 
-import groovy.lang.GroovyClassLoader;
-import groovy.lang.GroovySystem;
-import groovy.lang.MetaClass;
+import org.springframework.util.StopWatch;
 
-import org.springframework.core.io.Resource;
-
-import com.baulsupp.kolja.ansi.reports.TextReport;
-import com.baulsupp.kolja.log.line.BasicLine;
+import com.baulsupp.kolja.ansi.reports.ReportRunnerMain;
 
 /**
  * @author Yuri Schimke
+ * 
  */
-public class GroovyReportFactory {
-  private static final long serialVersionUID = -6048626637734368371L;
+public class WFIIScriptOldConfig {
+  public static void main(String[] args) {
+    StopWatch sw = new StopWatch("Frequency - o1000k.ap");
+    sw.start();
 
-  public TextReport<?> buildReport(Resource resource) throws Exception {
-    GroovyClassLoader gcl = new GroovyClassLoader();
+    ReportRunnerMain.main("-x", "src/main/config/wf1.xml", "-r", "src/test/script/wfii.groovy", "src/test/logs/O.100k");
 
-    MetaClass metaClass = new LineMetaClass();
-    GroovySystem.getMetaClassRegistry().setMetaClass(BasicLine.class, metaClass);
+    sw.stop();
 
-    Class<?> clazz = gcl.parseClass(resource.getInputStream());
-    return (TextReport<?>) clazz.newInstance();
+    System.out.println(sw.shortSummary());
   }
 }

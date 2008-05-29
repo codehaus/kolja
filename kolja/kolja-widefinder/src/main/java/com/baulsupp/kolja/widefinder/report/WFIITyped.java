@@ -58,7 +58,7 @@ public class WFIITyped extends BaseTextReport<WFIITyped> {
   public void processLine(Line l) {
     WideFinderLine line = (WideFinderLine) l;
 
-    if ("GET".equals(line.getMethod())) {
+    if ("GET".equals(line.getAction())) {
       String url = line.getUrl();
 
       boolean isArticle = matchArticle(url);

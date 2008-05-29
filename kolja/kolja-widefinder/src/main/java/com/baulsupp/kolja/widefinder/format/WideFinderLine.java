@@ -36,7 +36,7 @@ public class WideFinderLine implements Line {
   private String ipaddress;
   private boolean failed;
   private String dateString;
-  private String method;
+  private String action;
   private transient DateTime date;
   private String url;
   private HttpStatus status;
@@ -100,7 +100,7 @@ public class WideFinderLine implements Line {
         }
       }
 
-      method = content.subSequence(pos, pos + i).toString();
+      action = content.subSequence(pos, pos + i).toString();
 
       pos += 1 + i;
 
@@ -189,7 +189,7 @@ public class WideFinderLine implements Line {
     } else if (name.equals(WideFinderConstants.DATE)) {
       return getDate();
     } else if (name.equals(WideFinderConstants.ACTION)) {
-      return method;
+      return action;
     } else if (name.equals(WideFinderConstants.URL)) {
       return url;
     } else if (name.equals(WideFinderConstants.STATUS)) {
@@ -219,8 +219,8 @@ public class WideFinderLine implements Line {
     return ipaddress;
   }
 
-  public String getMethod() {
-    return method;
+  public String getAction() {
+    return action;
   }
 
   public String getReferrer() {
