@@ -55,6 +55,11 @@ public class WFII extends BaseTextReport<WFII> {
   }
 
   @Override
+  public String getName() {
+    return "wfii";
+  }
+
+  @Override
   public void processLine(Line line) {
     if ("GET".equals(line.getValue(WideFinderConstants.ACTION))) {
       String url = (String) line.getValue(WideFinderConstants.URL);

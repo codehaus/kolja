@@ -43,7 +43,10 @@ public class JRubyReportFactory {
 
     String script = getContent(resource);
     IRubyObject eval = evaler.eval(runtime, script);
-    return (TextReport<?>) JavaEmbedUtils.rubyToJava(runtime, eval, TextReport.class);
+
+    TextReport<?> textReport = (TextReport<?>) JavaEmbedUtils.rubyToJava(runtime, eval, TextReport.class);
+
+    return textReport;
   }
 
   private String getContent(Resource resource) throws IOException {
