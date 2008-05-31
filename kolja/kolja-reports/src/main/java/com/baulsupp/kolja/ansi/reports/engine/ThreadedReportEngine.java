@@ -111,9 +111,6 @@ public class ThreadedReportEngine implements ReportEngine {
 
       r.completed();
     }
-
-    executor.shutdown();
-    executor.awaitTermination(10, TimeUnit.SECONDS);
   }
 
   public void process(List<File> files) throws Exception {
@@ -135,14 +132,19 @@ public class ThreadedReportEngine implements ReportEngine {
   private void processParts(List<FileSection> sections) throws Exception {
     ExecutorCompletionService<List<TextReport<?>>> service = new ExecutorCompletionService<List<TextReport<?>>>(executor);
 
-    for (FileSection fileSection : sections) {
-      Callable<List<TextReport<?>>> task = createReportRun(fileSection);
-      service.submit(task);
-    }
+    try {
+      for (FileSection fileSection : sections) {
+        Callable<List<TextReport<?>>> task = createReportRun(fileSection);
+        service.submit(task);
+      }
 
-    for (int i = 0; i < sections.size(); i++) {
-      List<TextReport<?>> partReports = getNextResult(service);
-      ReportUtils.mergeReports(reports, partReports);
+      for (int i = 0; i < sections.size(); i++) {
+        List<TextReport<?>> partReports = getNextResult(service);
+        ReportUtils.mergeReports(reports, partReports);
+      }
+    } finally {
+      executor.shutdown();
+      executor.awaitTermination(10, TimeUnit.SECONDS);
     }
   }
 

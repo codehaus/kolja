@@ -46,6 +46,10 @@ public class JRubyReportFactory {
 
     TextReport<?> textReport = (TextReport<?>) JavaEmbedUtils.rubyToJava(runtime, eval, TextReport.class);
 
+    if (textReport instanceof RbReport) {
+      ((RbReport) textReport).setRuntime(runtime);
+    }
+
     return textReport;
   }
 

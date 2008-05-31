@@ -54,6 +54,7 @@ public class ReportUtils {
       Object partReport = partReports.get(i);
 
       if (partReport instanceof TextReport) {
+        System.out.println(partReport + " " + finalReport);
         finalReport.merge((Mergeable) partReport);
       } else if (finalReport instanceof MementoReport) {
         MementoReport newReport = (MementoReport) finalReport.newInstance();

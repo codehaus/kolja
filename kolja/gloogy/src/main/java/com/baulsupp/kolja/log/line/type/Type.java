@@ -7,6 +7,7 @@ import java.io.Serializable;
  */
 public abstract class Type implements Serializable {
   private String name;
+  protected String nullValue;
 
   public Type() {
   }
@@ -14,7 +15,12 @@ public abstract class Type implements Serializable {
   public Type(String name) {
     this.name = name;
   }
-  
+
+  public Type(String name, String nullValue) {
+    this.name = name;
+    this.nullValue = nullValue;
+  }
+
   public String getName() {
     return name;
   }
@@ -24,6 +30,14 @@ public abstract class Type implements Serializable {
   }
 
   public Object parse(String string) {
+    if (isNull(string)) {
+      return null;
+    }
+
     return string;
+  }
+
+  protected boolean isNull(String string) {
+    return string.equals(nullValue);
   }
 }

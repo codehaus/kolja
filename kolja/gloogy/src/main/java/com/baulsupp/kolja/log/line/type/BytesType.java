@@ -25,20 +25,24 @@ package com.baulsupp.kolja.log.line.type;
 public class BytesType extends Type {
   private static final long serialVersionUID = -469580635494842870L;
 
-  public BytesType() {
+  public BytesType(String string, String nullValue) {
+    super(string, nullValue);
   }
 
   public BytesType(String string) {
     super(string);
   }
 
-  @Override
-  public Object parse(String string) {
-    return parseBytes(string);
+  public BytesType() {
   }
 
-  public static Long parseBytes(String string) {
-    if (string.equals("-")) {
+  @Override
+  public Object parse(String string) {
+    return parseBytes(string, nullValue);
+  }
+
+  public static Long parseBytes(String string, String nullValue) {
+    if (string.equals(nullValue)) {
       return null;
     }
 

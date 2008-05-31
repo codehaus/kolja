@@ -134,11 +134,16 @@ public class IndividualLineParser {
   }
 
   private BytesType parseLongType(Element e) {
-    return new BytesType(e.getAttribute("name"));
+    return new BytesType(e.getAttribute("name"), getNullValue(e));
   }
 
   private NameType parseNameType(Element e) {
-    return new NameType(e.getAttribute("name"));
+    return new NameType(e.getAttribute("name"), getNullValue(e));
+  }
+
+  private String getNullValue(Element e) {
+    String attribute = e.getAttribute("null-value");
+    return attribute.length() == 0 ? null : attribute;
   }
 
   @SuppressWarnings("unchecked")

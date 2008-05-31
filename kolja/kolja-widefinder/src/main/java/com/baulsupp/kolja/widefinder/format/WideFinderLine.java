@@ -142,7 +142,7 @@ public class WideFinderLine implements Line {
         }
       }
 
-      size = BytesType.parseBytes(content.subSequence(pos, pos + i).toString());
+      size = BytesType.parseBytes(content.subSequence(pos, pos + i).toString(), "-");
 
       pos += 2 + i;
 

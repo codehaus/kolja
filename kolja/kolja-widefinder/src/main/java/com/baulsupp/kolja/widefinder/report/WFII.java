@@ -90,7 +90,7 @@ public class WFII extends BaseTextReport<WFII> {
   }
 
   private boolean isExternalReferrer(String referrer) {
-    return referrer != null && !referrer.equals("-") && !referrer.startsWith("http://www.tbray.org/ongoing/");
+    return referrer != null && !referrer.startsWith("http://www.tbray.org/ongoing/");
   }
 
   @Override

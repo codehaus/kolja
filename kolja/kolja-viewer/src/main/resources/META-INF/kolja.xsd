@@ -195,7 +195,9 @@
   <xsd:element name="name-type" substitutionGroup="input-type">
     <xsd:complexType>
       <xsd:complexContent>
-        <xsd:extension base="input-type"></xsd:extension>
+        <xsd:extension base="input-type">
+          <xsd:attribute name="null-value" type="xsd:string" />
+        </xsd:extension>
       </xsd:complexContent>
     </xsd:complexType>
   </xsd:element>
@@ -219,7 +221,9 @@
   <xsd:element name="long-type" substitutionGroup="input-type">
     <xsd:complexType>
       <xsd:complexContent>
-        <xsd:extension base="input-type"></xsd:extension>
+        <xsd:extension base="input-type">
+          <xsd:attribute name="null-value" type="xsd:string" />
+        </xsd:extension>
       </xsd:complexContent>
     </xsd:complexType>
   </xsd:element>

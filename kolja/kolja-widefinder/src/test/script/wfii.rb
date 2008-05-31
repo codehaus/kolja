@@ -1,8 +1,10 @@
 require 'java'
 
-include_class 'com.baulsupp.kolja.ansi.reports.script.ScriptReport'
+include_class 'com.baulsupp.kolja.ansi.reports.ruby.RbReport'
 
-class WFIIArticles < ScriptReport
+class WFIIArticles < RbReport
+  attr_accessor :u_hits, :u_bytes, :s404s, :clients, :refs
+
   def initialize
     @u_hits = {}
     @u_bytes = {}
@@ -13,12 +15,28 @@ class WFIIArticles < ScriptReport
     @u_hits.default = @u_bytes.default = @s404s.default = @clients.default = @refs.default = 0
   end
   
+  def getMemento
+    [@u_hits, @u_bytes, @s404s, @clients, @refs]
+  end
+  
+  def setMemento(m)
+    @u_hits, @u_bytes, @s404s, @clients, @refs = *m
+  end
+  
+  def merge(report)
+    @u_hits.merge(report.u_hits)
+    @u_bytes.merge(report.u_bytes)
+    @s404s.merge(report.s404s)
+    @clients.merge(report.clients)
+    @refs.merge(report.refs)    
+  end
+  
   def record(client, u, bytes, ref)  
     @u_bytes[u] += bytes
     if u =~  %r{^/ongoing/When/\d\d\dx/\d\d\d\d/\d\d/\d\d/[^ .]+$}
       @u_hits[u] += 1
       @clients[client] += 1
-      unless (ref == nil || ref == '-' || ref =~ %r{^http://www.tbray.org/ongoing/})
+      unless (ref.nil? || ref =~ %r{^http://www.tbray.org/ongoing/})
         @refs[ref] += 1 
       end
     end
