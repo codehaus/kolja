@@ -47,6 +47,10 @@ public class GridReportSplitter extends GridTaskSplitAdapter<ReportBatch, List<T
     this.fileDivider = fileDivider;
   }
 
+  public void setReportBuilder(BeanFactory<TextReport<?>> reportBuilder) {
+    this.reportBuilder = reportBuilder;
+  }
+
   @Override
   protected Collection<? extends GridJob> split(int gridSize, ReportBatch job) throws GridException {
     List<GridReportJob> result = new ArrayList<GridReportJob>();

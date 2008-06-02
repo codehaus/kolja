@@ -13,7 +13,7 @@ public class BytesTypeTest {
 
   @Before
   public void setup() {
-    type = new BytesType();
+    type = new BytesType("size", "-");
   }
 
   @Test

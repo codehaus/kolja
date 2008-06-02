@@ -25,7 +25,6 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
-import org.gridgain.grid.GridException;
 import org.gridgain.grid.GridJob;
 import org.gridgain.grid.GridJobResult;
 import org.jmock.Expectations;
@@ -41,6 +40,7 @@ import com.baulsupp.kolja.ansi.reports.engine.file.FileDivider;
 import com.baulsupp.kolja.ansi.reports.engine.file.FileSection;
 import com.baulsupp.kolja.log.util.IntRange;
 import com.baulsupp.kolja.log.viewer.importing.PlainTextLogFormat;
+import com.baulsupp.kolja.util.services.BeanFactory;
 
 /**
  * @author Yuri Schimke
@@ -60,9 +60,25 @@ public class GridReportSplitterTest {
 
   private FileDivider fileDivider;
 
+  private BeanFactory<TextReport<?>> reportBuilder;
+
+  private TextReport<?> report;
+
+  private GridJobResult result1;
+
+  private GridJobResult result2;
+
+  private TextReport<?> report1;
+
+  private TextReport<?> report2;
+
+  @SuppressWarnings("unchecked")
   @Before
   public void setup() {
     splitter = new GridReportSplitter();
+
+    reportBuilder = context.mock(BeanFactory.class);
+    splitter.setReportBuilder(reportBuilder);
 
     fileDivider = context.mock(FileDivider.class);
     splitter.setFileDivider(fileDivider);
@@ -70,10 +86,20 @@ public class GridReportSplitterTest {
     reportDescriptions = Arrays.asList("report");
 
     format = new PlainTextLogFormat();
+
+    report = context.mock(TextReport.class, "report");
+
+    result1 = context.mock(GridJobResult.class, "result1");
+
+    result2 = context.mock(GridJobResult.class, "result2");
+
+    report1 = context.mock(TextReport.class, "report1");
+    report2 = context.mock(TextReport.class, "report2");
   }
 
+  @SuppressWarnings("unchecked")
   @Test
-  public void testSplitsFilesIntoJobs() throws GridException {
+  public void testSplitsFilesIntoJobs() throws Exception {
     final List<File> files = Arrays.asList(fileA, fileB);
 
     final List<FileSection> sections = Arrays.asList(new FileSection(fileA, null), new FileSection(fileB, new IntRange(0, 10000)),
@@ -83,6 +109,17 @@ public class GridReportSplitterTest {
       {
         one(fileDivider).split(files, 10);
         will(returnValue(sections));
+
+        one(reportBuilder).create("report");
+        will(returnValue(report));
+
+        one(result1).getData();
+        will(returnValue(Arrays.<TextReport<?>> asList(report1)));
+        one(result2).getData();
+        will(returnValue(Arrays.<TextReport<?>> asList(report2)));
+
+        one((TextReport) report).merge(report1);
+        one((TextReport) report).merge(report2);
       }
     });
 
@@ -104,33 +141,12 @@ public class GridReportSplitterTest {
     GridReportJob job3 = (GridReportJob) i.next();
     assertEquals(fileB, job3.getFile());
     assertEquals(new IntRange(10000, 20000), job3.getIntRange());
-  }
-
-  @SuppressWarnings("unchecked")
-  @Test
-  public void testMergesResults() throws Exception {
-    final GridJobResult result1 = context.mock(GridJobResult.class, "result1");
-    final TextReport<?> reportResult1 = context.mock(TextReport.class, "report1");
-
-    final GridJobResult result2 = context.mock(GridJobResult.class, "result2");
-    final TextReport<?> reportResult2 = context.mock(TextReport.class, "report2");
-
-    context.checking(new Expectations() {
-      {
-        one(result1).getData();
-        will(returnValue(Arrays.<TextReport<?>> asList(reportResult1)));
-        one(result2).getData();
-        will(returnValue(Arrays.<TextReport<?>> asList(reportResult2)));
-
-        one((TextReport) reportResult1).merge(reportResult2);
-      }
-    });
 
     List<GridJobResult> parts = Arrays.asList(result1, result2);
 
     List<TextReport<?>> result = splitter.reduce(parts);
 
     assertEquals(1, result.size());
-    assertEquals(reportResult1, result.get(0));
+    assertEquals(report, result.get(0));
   }
 }

@@ -44,7 +44,7 @@ public class JRubyReportFactory {
     String script = getContent(resource);
     IRubyObject eval = evaler.eval(runtime, script);
 
-    TextReport<?> textReport = (TextReport<?>) JavaEmbedUtils.rubyToJava(runtime, eval, TextReport.class);
+    TextReport textReport = (TextReport) JavaEmbedUtils.rubyToJava(runtime, eval, TextReport.class);
 
     if (textReport instanceof RbReport) {
       ((RbReport) textReport).setRuntime(runtime);
