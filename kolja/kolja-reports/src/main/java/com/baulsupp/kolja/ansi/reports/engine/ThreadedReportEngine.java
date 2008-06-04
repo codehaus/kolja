@@ -18,14 +18,14 @@
 package com.baulsupp.kolja.ansi.reports.engine;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorCompletionService;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.Future;
 
 import com.baulsupp.kolja.ansi.reports.ReportPrinter;
 import com.baulsupp.kolja.ansi.reports.ReportUtils;
@@ -49,9 +49,14 @@ public class ThreadedReportEngine implements ReportEngine {
   private FileDivider fileDivider;
   private ReportEngineFactory reportEngineFactory;
   private BeanFactory<TextReport<?>> reportBuilder;
+  private Integer count;
 
   public void setLogFormat(LogFormat format) {
     this.format = format;
+  }
+
+  public void setCount(Integer count) {
+    this.count = count;
   }
 
   public void setReportEngineFactory(ReportEngineFactory reportEngineFactory) {
@@ -94,7 +99,11 @@ public class ThreadedReportEngine implements ReportEngine {
   }
 
   private int getProcessorCount() {
-    return Runtime.getRuntime().availableProcessors();
+    if (count != null) {
+      return count;
+    } else {
+      return Runtime.getRuntime().availableProcessors();
+    }
   }
 
   public void completed() throws Exception {
@@ -130,27 +139,25 @@ public class ThreadedReportEngine implements ReportEngine {
   }
 
   private void processParts(List<FileSection> sections) throws Exception {
-    ExecutorCompletionService<List<TextReport<?>>> service = new ExecutorCompletionService<List<TextReport<?>>>(executor);
+    List<Future<Void>> futures = new ArrayList<Future<Void>>();
 
     try {
       for (FileSection fileSection : sections) {
-        Callable<List<TextReport<?>>> task = createReportRun(fileSection);
-        service.submit(task);
+        Callable<Void> task = createReportRun(fileSection);
+        futures.add(executor.submit(task));
       }
 
-      for (int i = 0; i < sections.size(); i++) {
-        List<TextReport<?>> partReports = getNextResult(service);
-        ReportUtils.mergeReports(reports, partReports);
+      for (Future<?> future : futures) {
+        getNextResult(future);
       }
     } finally {
-      executor.shutdown();
-      executor.awaitTermination(10, TimeUnit.SECONDS);
+      executor.shutdownNow();
     }
   }
 
-  private List<TextReport<?>> getNextResult(ExecutorCompletionService<List<TextReport<?>>> service) throws Exception {
+  private void getNextResult(Future<?> future) throws Exception {
     try {
-      return service.take().get();
+      future.get();
     } catch (InterruptedException e) {
       throw e;
     } catch (ExecutionException e) {
@@ -166,15 +173,16 @@ public class ThreadedReportEngine implements ReportEngine {
     }
   }
 
-  private Callable<List<TextReport<?>>> createReportRun(final FileSection fileSection) {
-    return new Callable<List<TextReport<?>>>() {
-      public List<TextReport<?>> call() throws Exception {
-        return processFileSection(fileSection);
+  private Callable<Void> createReportRun(final FileSection fileSection) {
+    return new Callable<Void>() {
+      public Void call() throws Exception {
+        processFileSection(fileSection);
+        return null;
       }
     };
   }
 
-  protected List<TextReport<?>> processFileSection(FileSection fileSection) throws Exception {
+  protected void processFileSection(FileSection fileSection) throws Exception {
     List<TextReport<?>> reportsCopy = ReportUtils.getReportsCopy(reports);
 
     ReportEngine reportEngine = reportEngineFactory.createEngine();
@@ -191,6 +199,6 @@ public class ThreadedReportEngine implements ReportEngine {
 
     reportEngine.process(fileSection.getFile(), fileSection.getIntRange());
 
-    return reportsCopy;
+    ReportUtils.mergeReports(reports, reportsCopy);
   }
 }

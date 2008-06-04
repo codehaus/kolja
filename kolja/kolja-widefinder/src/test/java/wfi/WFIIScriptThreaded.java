@@ -30,7 +30,7 @@ public class WFIIScriptThreaded {
     StopWatch sw = new StopWatch("Frequency - o1000k.ap");
     sw.start();
 
-    ReportRunnerMain.main("-x", "src/main/config/wf.xml", "-g", "threaded", "-r", "src/test/script/wfii.groovy",
+    ReportRunnerMain.main("-x", "src/main/config/wf.xml", "-g", "threaded?count=5", "-r", "src/test/script/wfii.groovy",
         "src/test/logs/O.100k");
 
     sw.stop();

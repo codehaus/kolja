@@ -18,7 +18,6 @@
 package com.baulsupp.kolja.ansi.reports.basic;
 
 import java.util.List;
-import java.util.SortedMap;
 
 import com.baulsupp.kolja.ansi.reports.BaseTextReport;
 import com.baulsupp.kolja.ansi.reports.basic.Frequencies.Count;
@@ -30,10 +29,6 @@ public abstract class AbstractFrequencyReport<S, T extends AbstractFrequencyRepo
 
   public AbstractFrequencyReport() {
     counts = new Frequencies<S>();
-  }
-
-  public AbstractFrequencyReport(SortedMap<S, Count<S>> map) {
-    counts = new Frequencies<S>(map);
   }
 
   @Override
@@ -61,7 +56,7 @@ public abstract class AbstractFrequencyReport<S, T extends AbstractFrequencyRepo
   }
 
   public void displayFrequencies() {
-    for (Count<S> c : getFrequencies()) {
+    for (Count<S> c : counts.getSortedFrequencies()) {
       println(toString(c.getItem()) + " " + c.getCount());
     }
   }

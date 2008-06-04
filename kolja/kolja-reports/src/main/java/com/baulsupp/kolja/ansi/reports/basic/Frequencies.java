@@ -23,8 +23,10 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
-import java.util.SortedMap;
-import java.util.TreeMap;
+import java.util.SortedSet;
+import java.util.TreeSet;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 import org.apache.commons.collections.ComparatorUtils;
 
@@ -37,7 +39,7 @@ import com.baulsupp.kolja.util.Mergeable;
  * @author Yuri Schimke
  */
 public final class Frequencies<T> implements Iterable<Frequencies.Count<T>>, Mergeable<Frequencies<T>> {
-  private SortedMap<T, Count<T>> counts;
+  private ConcurrentMap<T, Count<T>> counts;
 
   public static final Comparator<Count<?>> COUNT_COMPARATOR = new Comparator<Count<?>>() {
     public int compare(Count<?> c1, Count<?> c2) {
@@ -53,11 +55,10 @@ public final class Frequencies<T> implements Iterable<Frequencies.Count<T>>, Mer
 
   @SuppressWarnings("unchecked")
   public Frequencies() {
-    Comparator<T> comp = ComparatorUtils.nullLowComparator(ComparatorUtils.naturalComparator());
-    counts = new TreeMap<T, Count<T>>(comp);
+    counts = new ConcurrentHashMap<T, Count<T>>();
   }
 
-  public Frequencies(SortedMap<T, Count<T>> map) {
+  public Frequencies(ConcurrentMap<T, Count<T>> map) {
     counts = map;
   }
 
@@ -69,13 +70,19 @@ public final class Frequencies<T> implements Iterable<Frequencies.Count<T>>, Mer
     Count<T> count = counts.get(url);
 
     if (count == null) {
-      counts.put(url, new Count<T>(url, by));
+      Count<T> newCount = new Count<T>(url, by);
+
+      Count<T> existing = counts.putIfAbsent(url, newCount);
+
+      if (existing != null) {
+        count.increment(by);
+      }
     } else {
       count.increment(by);
     }
   }
 
-  public static class Count<S> implements Serializable {
+  public static class Count<S> implements Serializable, Comparable<Count<S>> {
     private static final long serialVersionUID = -6312937012496559725L;
 
     private S url;
@@ -86,16 +93,16 @@ public final class Frequencies<T> implements Iterable<Frequencies.Count<T>>, Mer
       this.i = i;
     }
 
-    public void increment(long by) {
+    public synchronized void increment(long by) {
       this.i += by;
     }
 
-    public void increment() {
+    public synchronized void increment() {
       this.i++;
     }
 
     @Override
-    public String toString() {
+    public synchronized String toString() {
       return i + " " + url;
     }
 
@@ -108,8 +115,13 @@ public final class Frequencies<T> implements Iterable<Frequencies.Count<T>>, Mer
       return url;
     }
 
-    public long getCount() {
+    public synchronized long getCount() {
       return i;
+    }
+
+    @SuppressWarnings("unchecked")
+    public int compareTo(Count<S> o) {
+      return ((Comparable) url).compareTo(o.url);
     }
   }
 
@@ -154,5 +166,9 @@ public final class Frequencies<T> implements Iterable<Frequencies.Count<T>>, Mer
 
   public Frequencies<T> newInstance() {
     return new Frequencies<T>();
+  }
+
+  public SortedSet<Count<T>> getSortedFrequencies() {
+    return new TreeSet<Count<T>>(counts.values());
   }
 }

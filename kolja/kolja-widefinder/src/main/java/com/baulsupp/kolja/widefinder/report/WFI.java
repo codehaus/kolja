@@ -41,6 +41,11 @@ public class WFI extends BaseTextReport<WFI> {
   }
 
   @Override
+  public String getName() {
+    return "wfi";
+  }
+
+  @Override
   public void merge(WFI partReport) {
     counts.merge(counts);
   }

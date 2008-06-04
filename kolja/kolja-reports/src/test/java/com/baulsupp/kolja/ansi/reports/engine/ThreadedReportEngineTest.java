@@ -22,9 +22,9 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.FutureTask;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.Future;
 
 import org.jmock.Expectations;
 import org.jmock.Mockery;
@@ -65,6 +65,7 @@ public class ThreadedReportEngineTest {
   protected ReportEngine localReportEngine;
   private IntRange range1;
   private IntRange range2;
+  private Future<?> future;
 
   @Before
   public void setup() {
@@ -79,6 +80,8 @@ public class ThreadedReportEngineTest {
     fileDivider = context.mock(FileDivider.class);
     reportEngineFactory = context.mock(ReportEngineFactory.class);
     localReportEngine = context.mock(ReportEngine.class);
+
+    future = context.mock(Future.class);
 
     engine.setLogFormat(format);
     engine.setReportPrinter(reportPrinter);
@@ -104,12 +107,12 @@ public class ThreadedReportEngineTest {
         one(fileDivider).split(Collections.singletonList(fileA), Runtime.getRuntime().availableProcessors());
         will(returnValue(sections));
 
-        exactly(2).of(executor).execute(with(aNonNull(FutureTask.class)));
+        exactly(2).of(executor).submit(with(aNonNull(Callable.class)));
         will(new CustomAction("execute future") {
           public Object invoke(Invocation invocation) throws Throwable {
-            FutureTask<?> task = (FutureTask<?>) invocation.getParameter(0);
-            task.run();
-            return null;
+            Callable<?> task = (Callable<?>) invocation.getParameter(0);
+            task.call();
+            return future;
           }
         });
 
@@ -139,12 +142,13 @@ public class ThreadedReportEngineTest {
         one((TextReport) report).merge((TextReport) reportCopy1);
         one((TextReport) report).merge((TextReport) reportCopy2);
 
+        exactly(2).of(future).get();
+
         one(report).initialise(with(equal(reportPrinter)), with(aNonNull(NullReportContext.class)));
 
         one(report).completed();
 
-        one(executor).shutdown();
-        one(executor).awaitTermination(10, TimeUnit.SECONDS);
+        one(executor).shutdownNow();
       }
     });
 

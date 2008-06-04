@@ -23,13 +23,23 @@ import com.baulsupp.kolja.ansi.reports.engine.file.DefaultFileDivider;
  * @author Yuri Schimke
  */
 public class ThreadedReportEngineFactory implements ReportEngineFactory {
+  private Integer count;
+
   public ThreadedReportEngine createEngine() {
     ThreadedReportEngine engine = new ThreadedReportEngine();
 
     engine.setFileDivider(new DefaultFileDivider());
     engine.setReportEngineFactory(new DefaultReportEngineFactory());
 
+    if (count != null) {
+      engine.setCount(count);
+    }
+
     return engine;
+  }
+
+  public void setCount(Integer count) {
+    this.count = count;
   }
 
   public String getName() {
