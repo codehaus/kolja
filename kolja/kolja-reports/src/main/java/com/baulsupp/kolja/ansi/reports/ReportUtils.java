@@ -49,12 +49,12 @@ public class ReportUtils {
 
   @SuppressWarnings("unchecked")
   public static void mergeReports(List<TextReport<?>> finalReports, List<?> partReports) throws Exception {
+    log.info("Merging results");
     for (int i = 0; i < finalReports.size(); i++) {
       TextReport finalReport = finalReports.get(i);
       Object partReport = partReports.get(i);
 
       if (partReport instanceof TextReport) {
-        System.out.println(partReport + " " + finalReport);
         finalReport.merge((Mergeable) partReport);
       } else if (finalReport instanceof MementoReport) {
         MementoReport newReport = (MementoReport) finalReport.newInstance();
@@ -64,6 +64,7 @@ public class ReportUtils {
         throw new IllegalStateException("cannot merge result " + partReport);
       }
     }
+    log.info("Finished merging results");
   }
 
   public static List<TextReport<?>> createReports(BeanFactory<TextReport<?>> builder, List<String> v) throws Exception {

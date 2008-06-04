@@ -221,7 +221,7 @@ public class DefaultReportEngine implements ReportEngine, ReportContext {
   }
 
   public void process(File file, IntRange intRange) throws Exception {
-    log.info(Thread.currentThread() + " " + intRange);
+    log.info("Processing file " + intRange);
 
     LineIterator lineIterator;
     if (requiresRandomAccess()) {
@@ -244,7 +244,7 @@ public class DefaultReportEngine implements ReportEngine, ReportContext {
 
     run(file, lineIterator);
 
-    log.info(lineIterator + " " + intRange);
+    log.info("Finished file ");
   }
 
   private boolean requiresRandomAccess() {
