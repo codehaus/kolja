@@ -44,9 +44,15 @@ public class ScriptReport extends BaseTextReport<ScriptReport> implements Clonea
           Object thisValue = field.get(this);
           Object partValue = field.get(partReport);
 
-          Object mergedValue = merge(thisValue, partValue);
-          if (mergedValue != thisValue) {
-            field.set(this, mergedValue);
+          if (thisValue instanceof Mergeable) {
+            ((Mergeable) thisValue).merge((Mergeable) partValue);
+          } else {
+            synchronized (this) {
+              Object mergedValue = merge(thisValue, partValue);
+              if (mergedValue != thisValue) {
+                field.set(this, mergedValue);
+              }
+            }
           }
         }
       }
@@ -55,9 +61,7 @@ public class ScriptReport extends BaseTextReport<ScriptReport> implements Clonea
 
   @SuppressWarnings("unchecked")
   private Object merge(Object thisValue, Object partValue) throws Exception {
-    if (thisValue instanceof Mergeable) {
-      ((Mergeable) thisValue).merge((Mergeable) partValue);
-    } else if (thisValue instanceof Integer) {
+    if (thisValue instanceof Integer) {
       return ((Integer) thisValue).intValue() + ((Integer) partValue).intValue();
     } else if (thisValue instanceof Long) {
       return ((Long) thisValue).longValue() + ((Long) partValue).longValue();

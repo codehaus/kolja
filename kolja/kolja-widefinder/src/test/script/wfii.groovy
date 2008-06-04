@@ -20,7 +20,7 @@ class WFIIArticles extends ScriptReport {
   def referrer = new Frequencies()
   
   void processLine(Line line) {
-    if (line.action != "GET") {
+    if (!line.action.equals("GET")) {
       return
     }
   
