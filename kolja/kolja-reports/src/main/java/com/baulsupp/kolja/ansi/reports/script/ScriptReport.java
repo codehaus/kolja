@@ -81,10 +81,15 @@ public class ScriptReport extends BaseTextReport<ScriptReport> implements Clonea
 
       for (Class<?> c = report.getClass(); c != Object.class; c = c.getSuperclass()) {
         for (Field field : c.getDeclaredFields()) {
-          if (isMergeable(field)) {
-            field.setAccessible(true);
-            Object newValue = ((Mergeable<?>) field.get(report)).newInstance();
-            field.set(report, newValue);
+          field.setAccessible(true);
+
+          if (isPersisted(field)) {
+            Object value = field.get(report);
+
+            if (isMergeable(value)) {
+              Object newValue = ((Mergeable<?>) value).newInstance();
+              field.set(report, newValue);
+            }
           }
         }
       }
@@ -125,8 +130,8 @@ public class ScriptReport extends BaseTextReport<ScriptReport> implements Clonea
     }
   }
 
-  private boolean isMergeable(Field field) {
-    return field.getType().isAssignableFrom(Mergeable.class) && isPersisted(field);
+  private boolean isMergeable(Object value) {
+    return value instanceof Mergeable;
   }
 
   private boolean isPersisted(Field field) {

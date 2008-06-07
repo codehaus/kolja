@@ -18,11 +18,8 @@
 package com.baulsupp.kolja.ansi.reports.basic;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
-import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.concurrent.ConcurrentHashMap;
@@ -41,25 +38,31 @@ import com.baulsupp.kolja.util.Mergeable;
 public final class Frequencies<T> implements Iterable<Frequencies.Count<T>>, Mergeable<Frequencies<T>> {
   private ConcurrentMap<T, Count<T>> counts;
 
-  public static final Comparator<Count<?>> COUNT_COMPARATOR = new Comparator<Count<?>>() {
-    public int compare(Count<?> c1, Count<?> c2) {
-      if (c1.getCount() < c2.getCount()) {
-        return -1;
-      } else if (c1.getCount() == c2.getCount()) {
-        return 0;
-      } else {
-        return 1;
+  private Comparator<Count<T>> itemComparator;
+
+  public Comparator<Count<T>> comparator() {
+    return new Comparator<Count<T>>() {
+
+      public int compare(Count<T> c1, Count<T> c2) {
+        if (c1.getCount() < c2.getCount()) {
+          return 1;
+        } else if (c1.getCount() == c2.getCount()) {
+          return itemComparator.compare(c1, c2);
+        } else {
+          return -1;
+        }
       }
-    }
-  };
+    };
+  }
 
   @SuppressWarnings("unchecked")
   public Frequencies() {
-    counts = new ConcurrentHashMap<T, Count<T>>();
+    this(ComparatorUtils.NATURAL_COMPARATOR);
   }
 
-  public Frequencies(ConcurrentMap<T, Count<T>> map) {
-    counts = map;
+  public Frequencies(Comparator<Count<T>> itemComparator) {
+    counts = new ConcurrentHashMap<T, Count<T>>();
+    this.itemComparator = itemComparator;
   }
 
   public void increment(T url) {
@@ -75,7 +78,7 @@ public final class Frequencies<T> implements Iterable<Frequencies.Count<T>>, Mer
       Count<T> existing = counts.putIfAbsent(url, newCount);
 
       if (existing != null) {
-        count.increment(by);
+        existing.increment(by);
       }
     } else {
       count.increment(by);
@@ -126,15 +129,21 @@ public final class Frequencies<T> implements Iterable<Frequencies.Count<T>>, Mer
   }
 
   @SuppressWarnings("unchecked")
-  public List<Count<T>> getMostFrequent(int top) {
-    List<Count<T>> results = new ArrayList<Count<T>>();
+  public SortedSet<Count<T>> getMostFrequent(int top) {
+    SortedSet<Count<T>> results = new TreeSet<Count<T>>(comparator());
 
-    results.addAll(counts.values());
+    long minimum = 0;
 
-    Collections.sort(results, ComparatorUtils.reversedComparator(COUNT_COMPARATOR));
+    for (Count<T> count : counts.values()) {
+      if (count.i >= minimum) {
+        results.add(count);
+      }
 
-    if (results.size() > top) {
-      results = results.subList(0, top);
+      if (results.size() > top) {
+        Count<T> last = results.last();
+        results.remove(last);
+        minimum = results.last().i;
+      }
     }
 
     return results;

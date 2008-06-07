@@ -20,7 +20,9 @@ package com.baulsupp.kolja.widefinder;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
 
+import java.util.Iterator;
 import java.util.List;
+import java.util.SortedSet;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -90,12 +92,13 @@ public class CommonStatusTest {
 
     pages.completed();
 
-    List<Count<HttpStatus>> mostFreq = pages.getMostFrequent(3);
+    SortedSet<Count<HttpStatus>> mostFreq = pages.getMostFrequent(3);
+    Iterator<Count<HttpStatus>> i = mostFreq.iterator();
 
     assertNotNull(mostFreq);
     assertEquals(2, mostFreq.size());
-    assertEquals("2 200", mostFreq.get(0).toString());
-    assertEquals("1 500", mostFreq.get(1).toString());
+    assertEquals("2 200", i.next().toString());
+    assertEquals("1 500", i.next().toString());
   }
 
   @Test

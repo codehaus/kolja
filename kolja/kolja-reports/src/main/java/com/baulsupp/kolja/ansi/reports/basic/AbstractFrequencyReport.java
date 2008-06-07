@@ -17,7 +17,7 @@
  */
 package com.baulsupp.kolja.ansi.reports.basic;
 
-import java.util.List;
+import java.util.SortedSet;
 
 import com.baulsupp.kolja.ansi.reports.BaseTextReport;
 import com.baulsupp.kolja.ansi.reports.basic.Frequencies.Count;
@@ -79,7 +79,7 @@ public abstract class AbstractFrequencyReport<S, T extends AbstractFrequencyRepo
     return counts;
   }
 
-  public List<Count<S>> getMostFrequent(int urlCount) {
+  public SortedSet<Count<S>> getMostFrequent(int urlCount) {
     return counts.getMostFrequent(urlCount);
   }
 
