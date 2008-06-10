@@ -7,13 +7,13 @@ import java.io.InputStream;
 
 public class NativeLibrary {
   public static void load() {
-    String library = getLibraryName(); 
+    String library = getLibraryName();
 
     if (library != null) {
       try {
-        File dir = getTempLibraryLocation();  
+        File dir = getTempLibraryLocation();
         File f = extractLibrary(library, dir);
-        
+
         if (f != null) {
           System.load(f.getAbsolutePath());
           return;
@@ -22,7 +22,7 @@ public class NativeLibrary {
         e.printStackTrace();
       }
     }
-    
+
     System.loadLibrary("jcurses");
   }
 
@@ -33,13 +33,13 @@ public class NativeLibrary {
       System.err.println("no native library for platform '" + library + "'");
       return null;
     }
-    
+
     String libraryFileName = library.substring(library.lastIndexOf('/'));
     File f = new File(dir, libraryFileName);
-    
+
     if (!f.exists()) {
       FileOutputStream fos = new FileOutputStream(f);
-      
+
       try {
         byte[] buffy = new byte[1024];
         int read = 0;
@@ -50,7 +50,7 @@ public class NativeLibrary {
         fos.close();
       }
     }
-    
+
     return f;
   }
 
@@ -65,8 +65,12 @@ public class NativeLibrary {
     }
     return library;
   }
-  
+
   private static File getTempLibraryLocation() {
-    return new File(System.getProperty("java.io.tmpdir"));
+    if (System.getProperty("jcurses.lib.dir") != null) {
+      return new File(System.getProperty("jcurses.lib.dir"));
+    } else {
+      return new File(System.getProperty("java.io.tmpdir"));
+    }
   }
 }
