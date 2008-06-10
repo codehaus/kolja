@@ -8,7 +8,7 @@ import com.baulsupp.kolja.log.line.Line;
 
 public class BasicSearch implements Search {
   private Pattern pattern;
-  
+
   private transient Matcher matcher;
 
   private ItemModel model;
@@ -27,7 +27,7 @@ public class BasicSearch implements Search {
     while (model.hasPrevious()) {
       Line l = (Line) model.previous();
       if (matches(l)) {
-        return l.getOffset();
+        return l.getIntOffset();
       }
     }
     return -1;
@@ -39,7 +39,7 @@ public class BasicSearch implements Search {
     while (model.hasNext()) {
       Line l = (Line) model.next();
       if (matches(l)) {
-        return l.getOffset();
+        return l.getIntOffset();
       }
     }
     return -1;
@@ -51,7 +51,7 @@ public class BasicSearch implements Search {
     } else {
       matcher.reset(l);
     }
-    
+
     return matcher.find();
   }
 }

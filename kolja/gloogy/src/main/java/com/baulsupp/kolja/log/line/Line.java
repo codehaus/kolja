@@ -9,9 +9,11 @@ public interface Line extends CharSequence {
 
   boolean isFailed();
 
-  int getOffset();
+  long getOffset();
 
-  void setOffset(int lineStart);
+  void setOffset(long from);
 
   Map<String, Object> getValues();
+
+  int getIntOffset();
 }

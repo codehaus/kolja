@@ -53,7 +53,7 @@ public class OutputRow implements TextDisplayRow {
   }
 
   public int getOffset() {
-    return line.getOffset();
+    return line.getIntOffset();
   }
 
   public List<MultiColourString> getLines() {

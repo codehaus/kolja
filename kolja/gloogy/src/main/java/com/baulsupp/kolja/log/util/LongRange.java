@@ -1,49 +1,40 @@
 package com.baulsupp.kolja.log.util;
 
-public class IntRange {
-  int from;
+public class LongRange {
+  private long from;
 
-  int to;
+  private long to;
 
-  public IntRange() {
+  public LongRange() {
   }
 
-  public IntRange(IntRange other) {
+  public LongRange(LongRange other) {
     this.from = other.from;
     this.to = other.to;
   }
 
-  public IntRange(int from, int to) {
+  public LongRange(long from, long to) {
     this.from = from;
     this.to = to;
   }
 
-  public IntRange(LongRange intRange) {
-    if (intRange.getTo() > Integer.MAX_VALUE) {
-      throw new IllegalStateException("range " + intRange + "' not supported for indexed reports");
-    }
-
-    this.from = (int) intRange.getFrom();
-    this.to = (int) intRange.getTo();
-  }
-
-  public int getFrom() {
+  public long getFrom() {
     return from;
   }
 
-  public void setFrom(int from) {
+  public void setFrom(long from) {
     this.from = from;
   }
 
-  public int getTo() {
+  public long getTo() {
     return to;
   }
 
-  public void setTo(int to) {
+  public void setTo(long to) {
     this.to = to;
   }
 
-  public int getLength() {
+  public long getLength() {
     ensureValid();
 
     return to - from;
@@ -57,14 +48,14 @@ public class IntRange {
     return (to >= from) && (from >= 0);
   }
 
-  public boolean meets(IntRange other) {
+  public boolean meets(LongRange other) {
     if (other.getLength() == 0 || this.getLength() == 0)
       return false;
 
     return from == other.to || to == other.from;
   }
 
-  public boolean isInclusiveSubsetOf(IntRange other) {
+  public boolean isInclusiveSubsetOf(LongRange other) {
     ensureValid();
     other.ensureValid();
 
@@ -74,15 +65,15 @@ public class IntRange {
     return other.from <= from && to <= other.to;
   }
 
-  public boolean contains(int x) {
+  public boolean contains(long x) {
     return x >= from && x < to;
   }
 
-  private boolean within(int x) {
+  private boolean within(long x) {
     return x > from && x < to - 1;
   }
 
-  public boolean isOverlapping(IntRange other) {
+  public boolean isOverlapping(LongRange other) {
     if (other.getLength() == 0 || this.getLength() == 0)
       return false;
 
@@ -98,7 +89,7 @@ public class IntRange {
     return false;
   }
 
-  public IntRange merge(IntRange other) {
+  public LongRange merge(LongRange other) {
     if (isOverlapping(other))
       throw new IllegalArgumentException("ranges overlap");
 
@@ -108,7 +99,7 @@ public class IntRange {
     if (other.getLength() == 0 || this.getLength() == 0)
       throw new IllegalArgumentException("range is empty");
 
-    IntRange result = new IntRange();
+    LongRange result = new LongRange();
 
     result.from = Math.min(this.from, other.from);
     result.to = Math.max(this.to, other.to);
@@ -120,7 +111,7 @@ public class IntRange {
     return getLength() == 0;
   }
 
-  public boolean isCompletelyBefore(IntRange other) {
+  public boolean isCompletelyBefore(LongRange other) {
     if (other.isEmpty() || this.isEmpty())
       return false;
 
@@ -130,7 +121,7 @@ public class IntRange {
     return (from < other.from);
   }
 
-  public boolean isCompletelyAfter(IntRange other) {
+  public boolean isCompletelyAfter(LongRange other) {
     if (other.isEmpty() || this.isEmpty())
       return false;
 
@@ -141,13 +132,13 @@ public class IntRange {
   }
 
   public boolean equals(Object other) {
-    if (!(other instanceof IntRange))
+    if (!(other instanceof LongRange))
       return false;
 
-    return equals((IntRange) other);
+    return equals((LongRange) other);
   }
 
-  public boolean equals(IntRange other) {
+  public boolean equals(LongRange other) {
     if (getLength() == 0 && other.getLength() == 0)
       return true;
 
@@ -158,17 +149,17 @@ public class IntRange {
     if (getLength() == 0)
       return 0;
 
-    return from ^ to;
+    return (int) from ^ (int) to;
   }
 
-  public boolean isBefore(int point) {
+  public boolean isBefore(long point) {
     if (isEmpty())
       return false;
 
     return to <= point;
   }
 
-  public boolean isAfter(int point) {
+  public boolean isAfter(long point) {
     if (isEmpty())
       return false;
 

@@ -49,7 +49,7 @@ public class LineIndexItemModel implements ItemModel<Line> {
 
   // TODO needs to become position and remain persistant
   public int lastPosition() {
-    return (lastLine != null) ? lastLine.getOffset() : 0;
+    return (lastLine != null) ? lastLine.getIntOffset() : 0;
   }
 
   public void addItemModelListener(ItemModelListener listener) {

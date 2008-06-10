@@ -31,7 +31,7 @@ import com.baulsupp.kolja.widefinder.WideFinderConstants;
  * @author Yuri Schimke
  */
 public class WideFinderLine implements Line {
-  private int offset;
+  private long offset;
   private CharSequence content;
   private String ipaddress;
   private boolean failed;
@@ -175,12 +175,20 @@ public class WideFinderLine implements Line {
     }
   }
 
-  public int getOffset() {
+  public long getOffset() {
     return offset;
   }
 
-  public void setOffset(int lineStart) {
+  public void setOffset(long lineStart) {
     this.offset = lineStart;
+  }
+
+  public int getIntOffset() {
+    if (offset > Integer.MAX_VALUE) {
+      throw new IllegalStateException("too big for int " + offset);
+    }
+
+    return (int) offset;
   }
 
   public Object getValue(String name) {

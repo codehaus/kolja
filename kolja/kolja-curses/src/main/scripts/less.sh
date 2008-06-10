@@ -1,6 +1,10 @@
 #!/bin/sh
 
-export TERM=xterm-color
+TERM=xterm-color
+export TERM
+
+KOLJA_HOME=.
+export KOLJA_HOME
 
 if [ -n "$LESS_CP" ]; then 
 	CP=$LESS_CP
@@ -11,6 +15,6 @@ else
 	done
 fi
 
-java -Djava.awt.headless=true -Djava.library.path=lib/ -cp $CP com.baulsupp.less.LessMain $*
+java -Djava.awt.headless=true -Djava.library.path=$KOLJA_HOME/lib/ -Djcurses.lib.dir=$KOLJA_HOME/lib/ -cp $CP com.baulsupp.less.LessMain $*
 
 stty sane

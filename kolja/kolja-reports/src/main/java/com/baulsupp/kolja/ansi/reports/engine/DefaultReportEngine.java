@@ -35,6 +35,7 @@ import com.baulsupp.kolja.log.line.Line;
 import com.baulsupp.kolja.log.line.LineIndex;
 import com.baulsupp.kolja.log.line.LineIterator;
 import com.baulsupp.kolja.log.util.IntRange;
+import com.baulsupp.kolja.log.util.LongRange;
 import com.baulsupp.kolja.log.viewer.event.Event;
 import com.baulsupp.kolja.log.viewer.event.EventDetector;
 import com.baulsupp.kolja.log.viewer.importing.DefaultLineIndexFactory;
@@ -220,7 +221,7 @@ public class DefaultReportEngine implements ReportEngine, ReportContext {
     }
   }
 
-  public void process(File file, IntRange intRange) throws Exception {
+  public void process(File file, LongRange intRange) throws Exception {
     log.info("Processing file " + intRange);
 
     LineIterator lineIterator;
@@ -237,7 +238,8 @@ public class DefaultReportEngine implements ReportEngine, ReportContext {
         setEventList(eventList);
       }
 
-      lineIterator = new BasicLineIterator(li, intRange);
+      IntRange intRange2 = intRange == null ? null : new IntRange(intRange);
+      lineIterator = new BasicLineIterator(li, intRange2);
     } else {
       lineIterator = lineIndexFactory.buildForwardsLineIterator(file, format, intRange);
     }

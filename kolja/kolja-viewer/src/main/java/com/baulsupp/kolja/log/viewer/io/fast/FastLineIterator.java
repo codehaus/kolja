@@ -24,7 +24,6 @@ import com.baulsupp.kolja.log.line.LineIterator;
 import com.baulsupp.kolja.log.line.LineParser;
 import com.baulsupp.kolja.log.line.matcher.EntryMatcher;
 import com.baulsupp.kolja.log.line.matcher.EntryPattern;
-import com.baulsupp.kolja.log.util.IntRange;
 
 /**
  * @author Yuri Schimke
@@ -38,7 +37,8 @@ public class FastLineIterator implements LineIterator {
   int lastEnd = -1;
   private CharSequence content;
   private boolean finished;
-  private IntRange intRange;
+  private int maximum = Integer.MAX_VALUE;
+  private long offset;
 
   public FastLineIterator(EntryPattern pattern, CharSequence content, LineParser lineParser) {
     this.matcher = pattern.matcher(content);
@@ -46,11 +46,12 @@ public class FastLineIterator implements LineIterator {
     this.lineParser = lineParser;
   }
 
-  public FastLineIterator(EntryPattern pattern, CharSequence content, LineParser lineParser, IntRange intRange) {
+  public FastLineIterator(EntryPattern pattern, CharSequence content, LineParser lineParser, long offset, int maximum) {
     this.matcher = pattern.matcher(content);
     this.content = content;
     this.lineParser = lineParser;
-    this.intRange = intRange;
+    this.maximum = maximum;
+    this.offset = offset;
   }
 
   public boolean hasNext() {
@@ -61,8 +62,7 @@ public class FastLineIterator implements LineIterator {
     }
 
     if (lastEnd == -1) {
-      int from = intRange == null ? 0 : intRange.getFrom();
-      boolean foundNext = matcher.find(from);
+      boolean foundNext = matcher.find(0);
 
       if (!foundNext) {
         finished = true;
@@ -72,7 +72,7 @@ public class FastLineIterator implements LineIterator {
       }
     }
 
-    if (intRange != null && lastEnd >= intRange.getTo()) {
+    if (lastEnd >= maximum) {
       finished = true;
       return false;
     }
@@ -93,7 +93,7 @@ public class FastLineIterator implements LineIterator {
 
   private Line parse(int from, int to) {
     Line line = lineParser.parse(content.subSequence(from, to));
-    line.setOffset(from);
+    line.setOffset(from + offset);
     return line;
   }
 

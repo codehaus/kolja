@@ -43,7 +43,7 @@ public class ValueIndexer implements LineListener, CompletionStatus {
       for (IntRange range : unknown) {
         List<Line> regionLines = new ArrayList<Line>();
         for (Line line : lines) {
-          if (range.contains(line.getOffset())) {
+          if (range.contains(line.getIntOffset())) {
             regionLines.add(line);
           }
         }

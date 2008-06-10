@@ -34,7 +34,7 @@ import com.baulsupp.kolja.ansi.reports.TextReport;
 import com.baulsupp.kolja.ansi.reports.engine.ReportEngine;
 import com.baulsupp.kolja.ansi.reports.engine.ReportEngineFactory;
 import com.baulsupp.kolja.ansi.reports.engine.file.NullReportPrinter;
-import com.baulsupp.kolja.log.util.IntRange;
+import com.baulsupp.kolja.log.util.LongRange;
 import com.baulsupp.kolja.log.viewer.importing.LogFormat;
 import com.baulsupp.kolja.util.services.BeanFactory;
 
@@ -101,13 +101,13 @@ public class GridReportJobTest {
 
     context.checking(new Expectations() {
       {
-        one(reportEngine).process(fileA, new IntRange(10000, 20000));
+        one(reportEngine).process(fileA, new LongRange(10000, 20000));
       }
     });
 
     checkCompletion();
 
-    GridReportJob job = new GridReportJob(format, fileA, reportDescriptions, new IntRange(10000, 20000));
+    GridReportJob job = new GridReportJob(format, fileA, reportDescriptions, new LongRange(10000, 20000));
     job.setReportBuilder(reportBuilder);
     job.setReportEngineFactory(reportEngineFactory);
 

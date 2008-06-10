@@ -38,7 +38,7 @@ import org.junit.runner.RunWith;
 import com.baulsupp.kolja.ansi.reports.TextReport;
 import com.baulsupp.kolja.ansi.reports.engine.file.FileDivider;
 import com.baulsupp.kolja.ansi.reports.engine.file.FileSection;
-import com.baulsupp.kolja.log.util.IntRange;
+import com.baulsupp.kolja.log.util.LongRange;
 import com.baulsupp.kolja.log.viewer.importing.PlainTextLogFormat;
 import com.baulsupp.kolja.util.services.BeanFactory;
 
@@ -102,8 +102,8 @@ public class GridReportSplitterTest {
   public void testSplitsFilesIntoJobs() throws Exception {
     final List<File> files = Arrays.asList(fileA, fileB);
 
-    final List<FileSection> sections = Arrays.asList(new FileSection(fileA, null), new FileSection(fileB, new IntRange(0, 10000)),
-        new FileSection(fileB, new IntRange(10000, 20000)));
+    final List<FileSection> sections = Arrays.asList(new FileSection(fileA, null), new FileSection(fileB, new LongRange(0, 10000)),
+        new FileSection(fileB, new LongRange(10000, 20000)));
 
     context.checking(new Expectations() {
       {
@@ -132,15 +132,15 @@ public class GridReportSplitterTest {
 
     GridReportJob job1 = (GridReportJob) i.next();
     assertEquals(fileA, job1.getFile());
-    Assert.assertNull(job1.getIntRange());
+    Assert.assertNull(job1.getLongRange());
 
     GridReportJob job2 = (GridReportJob) i.next();
     assertEquals(fileB, job2.getFile());
-    assertEquals(new IntRange(0, 10000), job2.getIntRange());
+    assertEquals(new LongRange(0, 10000), job2.getLongRange());
 
     GridReportJob job3 = (GridReportJob) i.next();
     assertEquals(fileB, job3.getFile());
-    assertEquals(new IntRange(10000, 20000), job3.getIntRange());
+    assertEquals(new LongRange(10000, 20000), job3.getLongRange());
 
     List<GridJobResult> parts = Arrays.asList(result1, result2);
 

@@ -28,7 +28,7 @@ import com.baulsupp.kolja.ansi.reports.ReportPrinter;
 import com.baulsupp.kolja.ansi.reports.TextReport;
 import com.baulsupp.kolja.ansi.reports.engine.ReportEngine;
 import com.baulsupp.kolja.ansi.reports.engine.file.NullReportContext;
-import com.baulsupp.kolja.log.util.IntRange;
+import com.baulsupp.kolja.log.util.LongRange;
 import com.baulsupp.kolja.log.viewer.importing.LogFormat;
 
 /**
@@ -96,7 +96,7 @@ public class GridGainReportEngine implements ReportEngine {
     reports = grid.execute(new GridReportSplitter(), batch).get();
   }
 
-  public void process(File file, IntRange intRange) {
+  public void process(File file, LongRange intRange) {
     throw new UnsupportedOperationException();
   }
 

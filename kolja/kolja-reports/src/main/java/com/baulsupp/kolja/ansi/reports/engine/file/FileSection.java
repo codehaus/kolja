@@ -19,7 +19,7 @@ package com.baulsupp.kolja.ansi.reports.engine.file;
 
 import java.io.File;
 
-import com.baulsupp.kolja.log.util.IntRange;
+import com.baulsupp.kolja.log.util.LongRange;
 
 /**
  * @author Yuri Schimke
@@ -27,9 +27,9 @@ import com.baulsupp.kolja.log.util.IntRange;
  */
 public class FileSection {
   private File file;
-  private IntRange intRange;
+  private LongRange intRange;
 
-  public FileSection(File file, IntRange intRange) {
+  public FileSection(File file, LongRange intRange) {
     this.file = file;
     this.intRange = intRange;
   }
@@ -38,7 +38,7 @@ public class FileSection {
     return file;
   }
 
-  public IntRange getIntRange() {
+  public LongRange getLongRange() {
     return intRange;
   }
 }

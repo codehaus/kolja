@@ -42,7 +42,7 @@ import com.baulsupp.kolja.ansi.reports.engine.file.FileDivider;
 import com.baulsupp.kolja.ansi.reports.engine.file.FileSection;
 import com.baulsupp.kolja.ansi.reports.engine.file.NullReportContext;
 import com.baulsupp.kolja.ansi.reports.engine.file.NullReportPrinter;
-import com.baulsupp.kolja.log.util.IntRange;
+import com.baulsupp.kolja.log.util.LongRange;
 import com.baulsupp.kolja.log.viewer.importing.LogFormat;
 
 /**
@@ -63,8 +63,8 @@ public class ThreadedReportEngineTest {
   private FileDivider fileDivider;
   private ReportEngineFactory reportEngineFactory;
   protected ReportEngine localReportEngine;
-  private IntRange range1;
-  private IntRange range2;
+  private LongRange range1;
+  private LongRange range2;
   private Future<?> future;
 
   @Before
@@ -91,8 +91,8 @@ public class ThreadedReportEngineTest {
     engine.setFileDivider(fileDivider);
     engine.setReportEngineFactory(reportEngineFactory);
 
-    range1 = new IntRange(0, 10000);
-    range2 = new IntRange(10000, 20000);
+    range1 = new LongRange(0, 10000);
+    range2 = new LongRange(10000, 20000);
   }
 
   @SuppressWarnings("unchecked")

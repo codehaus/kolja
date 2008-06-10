@@ -37,6 +37,7 @@ import com.baulsupp.kolja.log.line.BasicLine;
 import com.baulsupp.kolja.log.line.Line;
 import com.baulsupp.kolja.log.line.LineIndex;
 import com.baulsupp.kolja.log.util.IntRange;
+import com.baulsupp.kolja.log.util.LongRange;
 import com.baulsupp.kolja.log.viewer.event.EventDetector;
 import com.baulsupp.kolja.log.viewer.importing.LineIndexFactory;
 import com.baulsupp.kolja.log.viewer.importing.LogFormat;
@@ -129,7 +130,7 @@ public class DefaultReportEngineTest {
 
     engine.initialise();
 
-    engine.process(fileA, new IntRange(180000, 190000));
+    engine.process(fileA, new LongRange(180000, 190000));
 
     engine.completed();
   }

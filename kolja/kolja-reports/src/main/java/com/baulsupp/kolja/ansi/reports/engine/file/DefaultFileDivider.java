@@ -21,7 +21,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.baulsupp.kolja.log.util.IntRange;
+import com.baulsupp.kolja.log.util.LongRange;
 
 /**
  * @author Yuri Schimke
@@ -43,20 +43,21 @@ public class DefaultFileDivider implements FileDivider {
         throw new IllegalArgumentException("file missing: " + f);
       }
 
-      int length = (int) f.length();
+      long length = f.length();
 
       if (length <= blockSize) {
         result.add(new FileSection(f, null));
       } else {
-        int offset = 0;
+        long offset = 0;
 
-        int chunkSize = length / workers + 1;
+        long chunkSize = length / workers + 1;
         chunkSize = Math.max(blockSize, chunkSize);
+        chunkSize = Math.min(Integer.MAX_VALUE / 2, chunkSize);
 
         for (int i = 0; i < workers; i++) {
           if (offset < length) {
-            int to = Math.min(offset + chunkSize, length);
-            result.add(new FileSection(f, new IntRange(offset, to)));
+            long to = Math.min(offset + chunkSize, length);
+            result.add(new FileSection(f, new LongRange(offset, to)));
             offset = to;
           }
         }

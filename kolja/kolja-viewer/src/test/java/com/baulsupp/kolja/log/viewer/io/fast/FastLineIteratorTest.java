@@ -40,7 +40,6 @@ import com.baulsupp.kolja.log.line.Line;
 import com.baulsupp.kolja.log.line.matcher.EntryMatcher;
 import com.baulsupp.kolja.log.line.matcher.EntryPattern;
 import com.baulsupp.kolja.log.line.matcher.RegexEntryPattern;
-import com.baulsupp.kolja.log.util.IntRange;
 import com.baulsupp.kolja.log.viewer.importing.PlainTextLineParser;
 
 /**
@@ -124,24 +123,24 @@ public class FastLineIteratorTest {
   public void testCanBeRestrictedToRange() {
     context.checking(new Expectations() {
       {
-        one(pattern).matcher("abc\ndef\nghi\n");
+        one(pattern).matcher("def\nghi\n");
         will(returnValue(matcher));
 
-        one(matcher).find(4);
+        one(matcher).find(0);
         will(returnValue(true));
 
         one(matcher).start();
-        will(returnValue(4));
+        will(returnValue(0));
 
         one(matcher).find();
         will(returnValue(true));
 
         one(matcher).start();
-        will(returnValue(8));
+        will(returnValue(4));
       }
     });
 
-    FastLineIterator li = new FastLineIterator(pattern, "abc\ndef\nghi\n", new PlainTextLineParser(), new IntRange(4, 8));
+    FastLineIterator li = new FastLineIterator(pattern, "def\nghi\n", new PlainTextLineParser(), 4, 4);
 
     assertTrue(li.hasNext());
     Line line = li.next();
@@ -167,11 +166,11 @@ public class FastLineIteratorTest {
 
   @Test
   public void testWorksThroughFileWithOffset() throws Exception {
-    ChunkedFileSequence seq = new ChunkedFileSequence(is, 100, Charset.forName("US-ASCII"), 9);
+    ChunkedFileSequence seq = new ChunkedFileSequence(is, 100, Charset.forName("US-ASCII"), 10);
 
     pattern = new RegexEntryPattern(Pattern.compile("^", Pattern.MULTILINE));
 
-    FastLineIterator li = new FastLineIterator(pattern, seq, new PlainTextLineParser(), new IntRange(10, seq.length()));
+    FastLineIterator li = new FastLineIterator(pattern, seq, new PlainTextLineParser(), 10, seq.length() - 10);
 
     while (li.hasNext()) {
       assertEquals("012345678\n", li.next().toString());

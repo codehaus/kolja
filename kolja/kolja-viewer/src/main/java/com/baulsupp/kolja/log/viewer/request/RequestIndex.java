@@ -106,9 +106,9 @@ public class RequestIndex extends ValueIndexer implements RequestDetector {
     }
 
     requestsById.put(identifier, requestLine);
-    requests.put(line.getOffset(), requestLine);
+    requests.put(line.getIntOffset(), requestLine);
     if (values != null) {
-      values.add(line.getOffset());
+      values.add(line.getIntOffset());
     }
 
     return requestLine;

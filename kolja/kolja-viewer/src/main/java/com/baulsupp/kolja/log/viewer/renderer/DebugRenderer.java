@@ -43,7 +43,7 @@ public class DebugRenderer implements Renderer<Line> {
     return row;
   }
 
-  private String format(int i, Entry<String, Object> e) {
+  private String format(long i, Entry<String, Object> e) {
     return String.format("%s: '%s'", e.getKey(), e.getValue());
   }
 

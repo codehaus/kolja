@@ -56,17 +56,17 @@ public class ChunkedFileSequence implements CharSequence {
     return create(file, cs, 0);
   }
 
-  public static ChunkedFileSequence create(File file, Charset cs, int initialOffset) throws Exception {
-    return create(file, ChunkedFileSequence.MB, cs, initialOffset);
+  public static ChunkedFileSequence create(File file, Charset cs, long from) throws Exception {
+    return create(file, ChunkedFileSequence.MB, cs, from);
   }
 
-  public static ChunkedFileSequence create(File file, int chunkSize, Charset cs, int initialOffset) throws Exception {
+  public static ChunkedFileSequence create(File file, int chunkSize, Charset cs, long initialOffset) throws Exception {
     FileInputStream fileInputStream = new FileInputStream(file);
 
     return new ChunkedFileSequence(fileInputStream, chunkSize, cs, initialOffset);
   }
 
-  public ChunkedFileSequence(InputStream inputStream, int chunkSize, Charset cs, int initialOffset) throws Exception {
+  public ChunkedFileSequence(InputStream inputStream, int chunkSize, Charset cs, long initialOffset) throws Exception {
     this.chunkSize = chunkSize;
 
     boolean skipReader = false;
@@ -84,8 +84,6 @@ public class ChunkedFileSequence implements CharSequence {
       log.warn("skipping bytes of a Decoded Reader");
       this.fileReader.skip(initialOffset);
     }
-
-    this.offset = initialOffset;
 
     readInitialChunks();
   }

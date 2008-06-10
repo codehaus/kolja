@@ -9,33 +9,33 @@ import com.baulsupp.kolja.log.line.LineListener;
 import com.baulsupp.kolja.log.util.IntRange;
 
 class MockLineIndex implements LineIndex {
-    private List<Line> lines = new ArrayList<Line>();
+  private List<Line> lines = new ArrayList<Line>();
 
-    public List<Line> get(IntRange intRange) {
-        List<Line> result = new ArrayList<Line>();
+  public List<Line> get(IntRange intRange) {
+    List<Line> result = new ArrayList<Line>();
 
-        for (Line l: lines) {
-            if (intRange.contains(l.getOffset())) {
-                result.add(l);
-            }
-        }
-
-        return result;
+    for (Line l : lines) {
+      if (intRange.contains(l.getIntOffset())) {
+        result.add(l);
+      }
     }
 
-    public int length() {
-        return lines.isEmpty() ? 0 : (lines.get(lines.size() - 1).getOffset() + 1);
-    }
+    return result;
+  }
 
-    public void addLineListener(LineListener lineListener) {
-    }
+  public int length() {
+    return lines.isEmpty() ? 0 : (lines.get(lines.size() - 1).getIntOffset() + 1);
+  }
 
-    public void addLine(Line line) {
-        lines.add(line);
-    }
+  public void addLineListener(LineListener lineListener) {
+  }
 
-    public void removeLineListener(LineListener listener) {
-      // TODO Auto-generated method stub
-      
-    }
+  public void addLine(Line line) {
+    lines.add(line);
+  }
+
+  public void removeLineListener(LineListener listener) {
+    // TODO Auto-generated method stub
+
+  }
 }

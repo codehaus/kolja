@@ -27,7 +27,7 @@ import com.baulsupp.kolja.log.line.Line;
 import com.baulsupp.kolja.log.util.FastIntList;
 
 public class RequestLine implements Line {
-  private int offset;
+  private long offset;
 
   private boolean foundStart = false;
 
@@ -48,7 +48,7 @@ public class RequestLine implements Line {
     // lineJoiner = null;
 
     // lines.add(line);
-    lineOffsets.add(line.getOffset());
+    lineOffsets.add(line.getIntOffset());
   }
 
   public Object getIdentifier() {
@@ -77,11 +77,19 @@ public class RequestLine implements Line {
     return false;
   }
 
-  public int getOffset() {
+  public long getOffset() {
     return offset;
   }
 
-  public void setOffset(int lineStart) {
+  public int getIntOffset() {
+    if (offset > Integer.MAX_VALUE) {
+      throw new IllegalStateException("too big for int " + offset);
+    }
+
+    return (int) offset;
+  }
+
+  public void setOffset(long lineStart) {
     this.offset = lineStart;
   }
 

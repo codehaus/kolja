@@ -22,7 +22,7 @@ import java.util.List;
 
 import com.baulsupp.kolja.ansi.reports.ReportPrinter;
 import com.baulsupp.kolja.ansi.reports.TextReport;
-import com.baulsupp.kolja.log.util.IntRange;
+import com.baulsupp.kolja.log.util.LongRange;
 import com.baulsupp.kolja.log.viewer.importing.LogFormat;
 
 /**
@@ -42,7 +42,7 @@ public interface ReportEngine {
 
   void completed() throws Exception;
 
-  void process(File file, IntRange intRange) throws Exception;
+  void process(File file, LongRange intRange) throws Exception;
 
   void setReports(List<TextReport<?>> reports);
 }

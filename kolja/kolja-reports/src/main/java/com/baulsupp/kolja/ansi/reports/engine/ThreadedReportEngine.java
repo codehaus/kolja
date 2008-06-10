@@ -34,7 +34,7 @@ import com.baulsupp.kolja.ansi.reports.engine.file.FileDivider;
 import com.baulsupp.kolja.ansi.reports.engine.file.FileSection;
 import com.baulsupp.kolja.ansi.reports.engine.file.NullReportContext;
 import com.baulsupp.kolja.ansi.reports.engine.file.NullReportPrinter;
-import com.baulsupp.kolja.log.util.IntRange;
+import com.baulsupp.kolja.log.util.LongRange;
 import com.baulsupp.kolja.log.viewer.importing.LogFormat;
 import com.baulsupp.kolja.util.services.BeanFactory;
 
@@ -128,7 +128,7 @@ public class ThreadedReportEngine implements ReportEngine {
     processParts(sections);
   }
 
-  public void process(File file, IntRange intRange) throws Exception {
+  public void process(File file, LongRange intRange) throws Exception {
     List<FileSection> sections = split(Collections.singletonList(file));
 
     processParts(sections);
@@ -197,7 +197,7 @@ public class ThreadedReportEngine implements ReportEngine {
 
     reportEngine.initialise();
 
-    reportEngine.process(fileSection.getFile(), fileSection.getIntRange());
+    reportEngine.process(fileSection.getFile(), fileSection.getLongRange());
 
     ReportUtils.mergeReports(reports, reportsCopy);
   }

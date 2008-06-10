@@ -23,7 +23,7 @@ import java.nio.charset.Charset;
 
 import com.baulsupp.kolja.log.line.LineIndex;
 import com.baulsupp.kolja.log.line.LineIterator;
-import com.baulsupp.kolja.log.util.IntRange;
+import com.baulsupp.kolja.log.util.LongRange;
 import com.baulsupp.kolja.log.util.WrappedCharBuffer;
 import com.baulsupp.kolja.log.viewer.io.fast.ChunkedFileSequence;
 import com.baulsupp.kolja.log.viewer.io.fast.FastLineIterator;
@@ -42,11 +42,13 @@ public class DefaultLineIndexFactory implements LineIndexFactory {
     return li;
   }
 
-  public LineIterator buildForwardsLineIterator(File file, LogFormat format, IntRange intRange) throws Exception {
-    int from = 0;
+  public LineIterator buildForwardsLineIterator(File file, LogFormat format, LongRange intRange) throws Exception {
+    long from = 0;
+    int to = Integer.MAX_VALUE;
 
-    if (intRange != null && intRange.getFrom() > 0) {
-      from = intRange.getFrom() - 1;
+    if (intRange != null) {
+      from = intRange.getFrom();
+      to = (int) (intRange.getTo() - from);
     }
 
     CharSequence content;
@@ -57,11 +59,10 @@ public class DefaultLineIndexFactory implements LineIndexFactory {
       content = ChunkedFileSequence.create(file, Charset.forName("US-ASCII"), from);
     }
 
-    return new FastLineIterator(format.getEntryPattern(), content, format.getLineParser(), intRange);
+    return new FastLineIterator(format.getEntryPattern(), content, format.getLineParser(), from, to);
   }
 
   private boolean isGzip(File file) {
     return file.getName().endsWith(".gz");
   }
-
 }

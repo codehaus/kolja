@@ -58,7 +58,8 @@ public class GridReportSplitter extends GridTaskSplitAdapter<ReportBatch, List<T
     List<FileSection> sections = fileDivider.split(job.getFiles(), gridSize);
 
     for (FileSection fileSection : sections) {
-      result.add(new GridReportJob(job.getFormat(), fileSection.getFile(), job.getReportDescriptions(), fileSection.getIntRange()));
+      result
+          .add(new GridReportJob(job.getFormat(), fileSection.getFile(), job.getReportDescriptions(), fileSection.getLongRange()));
     }
 
     try {

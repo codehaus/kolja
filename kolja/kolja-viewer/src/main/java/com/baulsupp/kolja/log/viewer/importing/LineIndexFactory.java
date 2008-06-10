@@ -22,7 +22,7 @@ import java.io.IOException;
 
 import com.baulsupp.kolja.log.line.LineIndex;
 import com.baulsupp.kolja.log.line.LineIterator;
-import com.baulsupp.kolja.log.util.IntRange;
+import com.baulsupp.kolja.log.util.LongRange;
 
 /**
  * @author Yuri Schimke
@@ -31,5 +31,5 @@ import com.baulsupp.kolja.log.util.IntRange;
 public interface LineIndexFactory {
   LineIndex buildLineIndex(File file, LogFormat format) throws IOException;
 
-  LineIterator buildForwardsLineIterator(File file, LogFormat format, IntRange intRange) throws Exception;
+  LineIterator buildForwardsLineIterator(File file, LogFormat format, LongRange intRange) throws Exception;
 }

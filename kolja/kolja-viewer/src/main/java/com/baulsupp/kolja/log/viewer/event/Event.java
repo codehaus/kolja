@@ -16,10 +16,10 @@ public class Event {
   }
 
   public String toString() {
-    return message != null ? message: line.toString();
+    return message != null ? message : line.toString();
   }
 
   public int getOffset() {
-    return line.getOffset();
+    return line.getIntOffset();
   }
 }

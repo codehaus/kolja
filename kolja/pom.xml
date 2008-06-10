@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.baulsupp.kolja</groupId>
@@ -58,11 +59,9 @@
     <module>kolja-bank</module>
     <module>kolja-jez</module>
     <module>kolja-assembly</module>
-    <!--
-    <module>kolja-gridgain</module>
-    -->
+    <!--  <module>kolja-gridgain</module> -->
   </modules>
-  
+
   <build>
     <plugins>
       <plugin>
@@ -74,6 +73,25 @@
       </plugin>
     </plugins>
   </build>
+
+  <profiles>
+    <profile>
+      <id>ci</id>
+      <build>
+        <pluginManagement>
+          <plugins>
+            <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-surefire-plugin</artifactId>
+              <configuration>
+                <testFailureIgnore>true</testFailureIgnore>
+              </configuration>
+            </plugin>
+          </plugins>
+        </pluginManagement>
+      </build>
+    </profile>
+  </profiles>
 
   <dependencyManagement>
     <dependencies>
@@ -148,7 +166,7 @@
       </dependency>
     </dependencies>
   </dependencyManagement>
-  
+
   <repositories>
     <repository>
       <id>codehaus</id>

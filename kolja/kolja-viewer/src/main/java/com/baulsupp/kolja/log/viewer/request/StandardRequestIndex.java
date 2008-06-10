@@ -65,8 +65,8 @@ public class StandardRequestIndex extends RequestIndex {
       unknownLines.add(line.getValue(requestField));
     } else {
       requestLine.setOffset(line.getOffset());
-      requests.put(line.getOffset(), requestLine);
-      values.add(line.getOffset());
+      requests.put(line.getIntOffset(), requestLine);
+      values.add(line.getIntOffset());
     }
 
     return requestLine;
@@ -101,9 +101,9 @@ public class StandardRequestIndex extends RequestIndex {
         requestLine.setValue(dateField + "-end", d);
 
         if (offsetIsEnd) {
-          requests.put(line.getOffset(), requestLine);
+          requests.put(line.getIntOffset(), requestLine);
           if (values != null) {
-            values.add(line.getOffset());
+            values.add(line.getIntOffset());
           }
         }
       }

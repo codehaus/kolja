@@ -33,7 +33,7 @@ import com.baulsupp.kolja.ansi.reports.engine.DefaultReportEngineFactory;
 import com.baulsupp.kolja.ansi.reports.engine.ReportEngine;
 import com.baulsupp.kolja.ansi.reports.engine.ReportEngineFactory;
 import com.baulsupp.kolja.ansi.reports.engine.file.NullReportPrinter;
-import com.baulsupp.kolja.log.util.IntRange;
+import com.baulsupp.kolja.log.util.LongRange;
 import com.baulsupp.kolja.log.viewer.importing.LogFormat;
 import com.baulsupp.kolja.util.services.BeanFactory;
 
@@ -48,7 +48,7 @@ public class GridReportJob implements GridJob {
 
   private File file;
 
-  private IntRange intRange;
+  private LongRange intRange;
 
   private ReportEngineFactory reportEngineFactory = new DefaultReportEngineFactory();
 
@@ -56,11 +56,11 @@ public class GridReportJob implements GridJob {
 
   private BeanFactory<TextReport<?>> reportBuilder;
 
-  public GridReportJob(LogFormat logFormat, File file, List<String> reportDescriptions, IntRange intRange) {
+  public GridReportJob(LogFormat logFormat, File file, List<String> reportDescriptions, LongRange longRange) {
     this.logFormat = logFormat;
     this.file = file;
     this.reportDescriptions = reportDescriptions;
-    this.intRange = intRange;
+    this.intRange = longRange;
   }
 
   public void setReportEngineFactory(ReportEngineFactory reportEngineFactory) {
@@ -135,7 +135,7 @@ public class GridReportJob implements GridJob {
     return file;
   }
 
-  public IntRange getIntRange() {
+  public LongRange getLongRange() {
     return intRange;
   }
 }

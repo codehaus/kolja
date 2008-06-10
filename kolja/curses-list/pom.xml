@@ -27,7 +27,7 @@
     <dependency>
       <groupId>com.baulsupp.kolja</groupId>
       <artifactId>jcurses</artifactId>
-      <version>0.9.5.2</version>
+      <version>0.9.5.3-SNAPSHOT</version>
     </dependency>
   </dependencies>
 </project>

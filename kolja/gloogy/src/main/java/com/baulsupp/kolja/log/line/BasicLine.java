@@ -10,7 +10,7 @@ public class BasicLine implements Line {
 
   private boolean failed;
 
-  private int offset;
+  private long offset;
 
   public BasicLine() {
   }
@@ -69,11 +69,19 @@ public class BasicLine implements Line {
     this.failed = true;
   }
 
-  public int getOffset() {
+  public long getOffset() {
     return offset;
   }
 
-  public void setOffset(int offset) {
+  public int getIntOffset() {
+    if (offset > Integer.MAX_VALUE) {
+      throw new IllegalStateException("too big for int " + offset);
+    }
+
+    return (int) offset;
+  }
+
+  public void setOffset(long offset) {
     this.offset = offset;
   }
 

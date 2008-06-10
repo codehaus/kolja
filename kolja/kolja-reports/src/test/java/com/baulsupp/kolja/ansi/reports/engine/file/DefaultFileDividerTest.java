@@ -28,7 +28,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.baulsupp.kolja.log.util.IntRange;
+import com.baulsupp.kolja.log.util.LongRange;
 
 /**
  * @author Yuri Schimke
@@ -61,11 +61,11 @@ public class DefaultFileDividerTest {
 
     FileSection sectionA = parts.get(0);
     assertEquals(fileA, sectionA.getFile());
-    assertNull(sectionA.getIntRange());
+    assertNull(sectionA.getLongRange());
 
     FileSection sectionB = parts.get(1);
     assertEquals(fileB, sectionB.getFile());
-    assertNull(sectionB.getIntRange());
+    assertNull(sectionB.getLongRange());
   }
 
   @Test
@@ -78,10 +78,10 @@ public class DefaultFileDividerTest {
 
     FileSection sectionA = parts.get(0);
     assertEquals(fileA, sectionA.getFile());
-    assertEquals(new IntRange(0, 400), sectionA.getIntRange());
+    assertEquals(new LongRange(0, 400), sectionA.getLongRange());
 
     FileSection sectionB = parts.get(1);
     assertEquals(fileA, sectionB.getFile());
-    assertEquals(new IntRange(400, 768), sectionB.getIntRange());
+    assertEquals(new LongRange(400, 768), sectionB.getLongRange());
   }
 }
