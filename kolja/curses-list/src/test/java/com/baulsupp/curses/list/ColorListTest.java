@@ -3,12 +3,14 @@ package com.baulsupp.curses.list;
 import static org.junit.Assert.assertEquals;
 import jcurses.system.CharColor;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.baulsupp.kolja.util.colours.ColourPair;
 
 public class ColorListTest {
   @Test
+  @Ignore("Doesn't run on all platforms")
   public void lookupReturnsCorrectColours() {
     assertCharColorEquals(ColorList.blackOnWhite, ColorList.lookup(ColourPair.BLACK_ON_WHITE));
     assertCharColorEquals(ColorList.blueOnBlack, ColorList.lookup(ColourPair.BLUE_ON_BLACK));
