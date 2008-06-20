@@ -150,6 +150,8 @@ public class ThreadedReportEngine implements ReportEngine {
       for (Future<?> future : futures) {
         getNextResult(future);
       }
+    } catch (Exception e) {
+      e.printStackTrace();
     } finally {
       executor.shutdownNow();
     }

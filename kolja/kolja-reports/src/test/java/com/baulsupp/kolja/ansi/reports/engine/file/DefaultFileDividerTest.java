@@ -84,4 +84,39 @@ public class DefaultFileDividerTest {
     assertEquals(fileA, sectionB.getFile());
     assertEquals(new LongRange(400, 768), sectionB.getLongRange());
   }
+
+  @Test
+  public void testDividesOall() {
+    divider = new DefaultFileDivider() {
+      @Override
+      protected long getFileLength(File f) {
+        return 45275432643l;
+      }
+    };
+
+    List<FileSection> parts = divider.split(Arrays.asList(fileA), 32);
+
+    Assert.assertEquals(169, parts.size());
+    Assert.assertEquals(new LongRange(45097156440l, 45275432643l), parts.get(parts.size() - 1).getLongRange());
+
+    System.out.println(parts.get(parts.size() - 1).getLongRange());
+  }
+
+  @Test
+  public void testDividesOallWithMaximum() {
+    divider = new DefaultFileDivider() {
+      @Override
+      protected long getFileLength(File f) {
+        return 45275432643l;
+      }
+    };
+
+    divider.setMaximumBlockSize(100000000l);
+
+    List<FileSection> parts = divider.split(Arrays.asList(fileA), 32);
+
+    Assert.assertEquals(453, parts.size());
+    Assert.assertEquals(new LongRange(45200000000l, 45275432643l), parts.get(parts.size() - 1).getLongRange());
+  }
+
 }

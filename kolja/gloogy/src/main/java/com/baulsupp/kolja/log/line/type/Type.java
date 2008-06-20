@@ -38,6 +38,6 @@ public abstract class Type implements Serializable {
   }
 
   protected boolean isNull(String string) {
-    return string.equals(nullValue);
+    return string == null || string.equals(nullValue);
   }
 }

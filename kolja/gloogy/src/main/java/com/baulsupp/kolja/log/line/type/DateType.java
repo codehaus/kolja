@@ -48,6 +48,10 @@ public class DateType extends Type {
       this.dateFormat = DateTimeFormat.forPattern(pattern);
     }
 
+    if (string == null) {
+      return null;
+    }
+
     try {
       return dateFormat.parseDateTime(string);
     } catch (IllegalArgumentException e) {

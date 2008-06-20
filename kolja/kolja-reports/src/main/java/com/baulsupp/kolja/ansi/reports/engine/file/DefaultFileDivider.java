@@ -30,6 +30,7 @@ import com.baulsupp.kolja.log.util.LongRange;
 public class DefaultFileDivider implements FileDivider {
   // MB
   private int blockSize = 2 * 1024 * 1024;
+  private long maximum = Integer.MAX_VALUE / 8;
 
   public void setBlockSize(int blockSize) {
     this.blockSize = blockSize;
@@ -43,27 +44,38 @@ public class DefaultFileDivider implements FileDivider {
         throw new IllegalArgumentException("file missing: " + f);
       }
 
-      long length = f.length();
+      long length = getFileLength(f);
 
       if (length <= blockSize) {
         result.add(new FileSection(f, null));
       } else {
         long offset = 0;
 
-        long chunkSize = length / workers + 1;
-        chunkSize = Math.max(blockSize, chunkSize);
-        chunkSize = Math.min(Integer.MAX_VALUE / 2, chunkSize);
+        long chunkSize = getChunkSize(workers, length);
 
-        for (int i = 0; i < workers; i++) {
-          if (offset < length) {
-            long to = Math.min(offset + chunkSize, length);
-            result.add(new FileSection(f, new LongRange(offset, to)));
-            offset = to;
-          }
+        while (offset < length) {
+          long to = Math.min(offset + chunkSize, length);
+          result.add(new FileSection(f, new LongRange(offset, to)));
+          offset = to;
         }
       }
     }
 
     return result;
+  }
+
+  private long getChunkSize(int workers, long length) {
+    long chunkSize = length / workers + 1;
+    chunkSize = Math.max(blockSize, chunkSize);
+    chunkSize = Math.min(maximum, chunkSize);
+    return chunkSize;
+  }
+
+  protected long getFileLength(File f) {
+    return f.length();
+  }
+
+  public void setMaximumBlockSize(long l) {
+    this.maximum = l;
   }
 }

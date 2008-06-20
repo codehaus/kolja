@@ -34,8 +34,6 @@ public class RegexLineParser implements LineParser {
 
   private Pattern pattern;
 
-  private transient Matcher matcher;
-
   public RegexLineParser() {
   }
 
@@ -57,11 +55,7 @@ public class RegexLineParser implements LineParser {
 
     row.setContent(c);
 
-    if (matcher == null) {
-      this.matcher = pattern.matcher("");
-    }
-
-    matcher.reset(c);
+    Matcher matcher = pattern.matcher(c);
 
     if (!matcher.matches()) {
       row.setFailed();
