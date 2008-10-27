@@ -7,7 +7,7 @@
   <parent>
     <groupId>com.baulsupp.kolja</groupId>
     <artifactId>kolja</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1-SNAPSHOT</version>
   </parent>
 
   <build>

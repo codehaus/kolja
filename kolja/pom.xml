@@ -15,7 +15,7 @@
     <relativePath>../pom.xml</relativePath>
   </parent>
 
-  <version>1.0.0</version>
+  <version>1.0.1-SNAPSHOT</version>
   <url>http://kolja.codehaus.org/</url>
   <inceptionYear>2002</inceptionYear>
 
@@ -186,10 +186,4 @@
       <url>dav:https://dav.codehaus.org/kolja/</url>
     </site>
   </distributionManagement>
-
-  <scm>
-    <connection>scm:svn:http://svn.codehaus.org/kolja/tags/kolja-1.0.0</connection>
-    <developerConnection>scm:svn:https://svn.codehaus.org/kolja/tags/kolja-1.0.0</developerConnection>
-    <url>http://fisheye.codehaus.org/browse/kolja/tags/kolja-1.0.0</url>
-  </scm>
 </project>
