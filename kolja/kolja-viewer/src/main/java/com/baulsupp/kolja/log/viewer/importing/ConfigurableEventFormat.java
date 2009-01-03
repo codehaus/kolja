@@ -1,14 +1,13 @@
 package com.baulsupp.kolja.log.viewer.importing;
 
+import com.baulsupp.kolja.log.line.LineIndex;
+import com.baulsupp.kolja.log.viewer.event.BasicEventDetector;
+import com.baulsupp.kolja.log.viewer.event.EventList;
+import com.baulsupp.kolja.log.viewer.event.EventMatcher;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-
-import com.baulsupp.kolja.log.line.LineIndex;
-import com.baulsupp.kolja.log.viewer.event.BasicEventDetector;
-import com.baulsupp.kolja.log.viewer.event.EventDetector;
-import com.baulsupp.kolja.log.viewer.event.EventList;
-import com.baulsupp.kolja.log.viewer.event.EventMatcher;
 
 public class ConfigurableEventFormat implements Serializable {
   private static final long serialVersionUID = -1122460693160139708L;
@@ -35,10 +34,10 @@ public class ConfigurableEventFormat implements Serializable {
   }
 
   public EventList getEventList(LineIndex li) {
-    return new EventList(li, new BasicEventDetector(eventMatchers));
+    return new EventList(li, getEventDetector());
   }
 
-  public EventDetector getEventDetector() {
+  public EventMatcher getEventDetector() {
     return new BasicEventDetector(eventMatchers);
   }
 }

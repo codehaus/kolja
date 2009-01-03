@@ -17,18 +17,17 @@
  */
 package com.baulsupp.kolja.log.viewer.spring;
 
-import java.lang.reflect.Constructor;
-import java.util.regex.Pattern;
-
+import com.baulsupp.kolja.log.line.matcher.EntryPattern;
+import com.baulsupp.kolja.log.line.matcher.NewLineEntryPattern;
+import com.baulsupp.kolja.log.line.matcher.RegexEntryPattern;
+import com.baulsupp.kolja.log.viewer.importing.ConfigurableLineFormat;
 import org.springframework.util.ClassUtils;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import com.baulsupp.kolja.log.line.matcher.EntryPattern;
-import com.baulsupp.kolja.log.line.matcher.NewLineEntryPattern;
-import com.baulsupp.kolja.log.line.matcher.RegexEntryPattern;
-import com.baulsupp.kolja.log.viewer.importing.ConfigurableLineFormat;
+import java.lang.reflect.Constructor;
+import java.util.regex.Pattern;
 
 /**
  * Line Parser

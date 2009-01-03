@@ -16,20 +16,20 @@ import com.baulsupp.kolja.log.util.IntRange;
 /**
  * A list of events in a log file.
  */
-public class EventList extends ValueIndexer {
+public class EventList extends ValueIndexer implements EventMatcher {
 
   private SortedSet<Event> events = new TreeSet<Event>(new Comparator<Event>() {
     public int compare(Event event, Event event1) {
       return event.getOffset() - event1.getOffset();
     }
   });
-  private EventDetector eventDetector;
+  private EventMatcher eventDetector;
 
   public EventList(LineIndex lineIndex) {
     super(lineIndex);
   }
 
-  public EventList(LineIndex lineIndex, EventDetector eventDetector) {
+  public EventList(LineIndex lineIndex, EventMatcher eventDetector) {
     super(lineIndex);
     this.eventDetector = eventDetector;
   }
@@ -43,15 +43,17 @@ public class EventList extends ValueIndexer {
   }
 
   public Event processLine(Line l) {
-    Event event = null;
-
-    event = eventDetector.readEvent(l);
+    Event event = match(l);
 
     if (event != null) {
       events.add(event);
     }
 
     return event;
+  }
+
+  public Event match(Line l) {
+    return eventDetector.match(l);
   }
 
   public SortedSet<Event> getEvents() {
@@ -70,8 +72,7 @@ public class EventList extends ValueIndexer {
     return subEvents;
   }
 
-  public void setEventDetector(EventDetector ed) {
+  public void setEventDetector(EventMatcher ed) {
     this.eventDetector = ed;
-
   }
 }

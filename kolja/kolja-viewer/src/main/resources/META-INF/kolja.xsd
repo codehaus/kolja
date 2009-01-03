@@ -370,6 +370,9 @@
   <xsd:element name="failed-highlight" substitutionGroup="highlight">
   </xsd:element>
 
+  <xsd:element name="event-highlight" substitutionGroup="highlight">
+  </xsd:element>
+
   <xsd:element name="custom-highlight" substitutionGroup="highlight">
     <xsd:complexType>
       <xsd:attribute name="class" use="required" />

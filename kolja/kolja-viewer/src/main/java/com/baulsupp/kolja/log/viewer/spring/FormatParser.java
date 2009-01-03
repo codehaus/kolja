@@ -28,6 +28,7 @@ import com.baulsupp.kolja.log.viewer.importing.ConfigurableLineFormat;
 import com.baulsupp.kolja.log.viewer.importing.ConfigurableLogFormat;
 import com.baulsupp.kolja.log.viewer.importing.ConfigurableOutputFormat;
 import com.baulsupp.kolja.log.viewer.importing.ConfigurableRequestFormat;
+import com.baulsupp.kolja.log.viewer.event.EventMatcher;
 
 /**
  * &lt;format&gt; element parser.
@@ -44,18 +45,20 @@ public class FormatParser extends AbstractSingleBeanDefinitionParser {
   protected void doParse(Element element, BeanDefinitionBuilder bean) {
     bean.addPropertyValue("lineFormat", parseLineFormat(element));
 
-    bean.addPropertyValue("outputFormat", parseOutputFormat(element));
+    ConfigurableEventFormat eventFormat = parseEventFormat(element);
+    EventMatcher eventMatcher = null;
+    if (eventFormat != null) {
+      bean.addPropertyValue("eventFormat", eventFormat);
+      eventMatcher = eventFormat.getEventDetector();
+    }
 
-    bean.addPropertyValue("requestOutputFormat", parseRequestOutputFormat(element));
+    bean.addPropertyValue("outputFormat", parseOutputFormat(element, eventMatcher));
+
+    bean.addPropertyValue("requestOutputFormat", parseRequestOutputFormat(element, eventMatcher));
 
     ConfigurableRequestFormat requestFormat = parseRequestFormat(element);
     if (requestFormat != null) {
       bean.addPropertyValue("requestFormat", requestFormat);
-    }
-
-    ConfigurableEventFormat eventFormat = parseEventFormat(element);
-    if (eventFormat != null) {
-      bean.addPropertyValue("eventFormat", eventFormat);
     }
   }
 
@@ -63,13 +66,14 @@ public class FormatParser extends AbstractSingleBeanDefinitionParser {
     return new ConfigurableLineParser(getSingleElement(element, "line-format")).parse();
   }
 
-  private ConfigurableOutputFormat parseOutputFormat(Element element) {
-    return new OutputParser(getSingleElement(element, "output-format")).parse();
+  private ConfigurableOutputFormat parseOutputFormat(Element element, EventMatcher eventMatcher) {
+    Element singleElement = getSingleElement(element, "output-format");
+    return new OutputParser(singleElement, eventMatcher).parse();
   }
 
-  private ConfigurableOutputFormat parseRequestOutputFormat(Element element) {
+  private ConfigurableOutputFormat parseRequestOutputFormat(Element element, EventMatcher eventMatcher) {
     Element singleElement = getSingleElement(element, "request-output-format");
-    return singleElement != null ? new OutputParser(singleElement).parse() : null;
+    return singleElement != null ? new OutputParser(singleElement, eventMatcher).parse() : null;
   }
 
   private ConfigurableEventFormat parseEventFormat(Element element) {

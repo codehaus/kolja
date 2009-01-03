@@ -38,7 +38,7 @@ import com.baulsupp.kolja.log.line.Line;
 import com.baulsupp.kolja.log.line.LineIndex;
 import com.baulsupp.kolja.log.util.IntRange;
 import com.baulsupp.kolja.log.util.LongRange;
-import com.baulsupp.kolja.log.viewer.event.EventDetector;
+import com.baulsupp.kolja.log.viewer.event.EventMatcher;
 import com.baulsupp.kolja.log.viewer.importing.LineIndexFactory;
 import com.baulsupp.kolja.log.viewer.importing.LogFormat;
 
@@ -50,7 +50,7 @@ import com.baulsupp.kolja.log.viewer.importing.LogFormat;
 public class DefaultReportEngineTest {
   Mockery context = new JUnit4Mockery();
   private DefaultReportEngine engine;
-  private EventDetector eventList;
+  private EventMatcher eventList;
   private LineIndexFactory lineIndexFactory;
   private LineIndex lineIndex;
   private LogFormat format;
@@ -64,7 +64,7 @@ public class DefaultReportEngineTest {
   public void setup() {
     engine = new DefaultReportEngine();
 
-    eventList = context.mock(EventDetector.class);
+    eventList = context.mock(EventMatcher.class);
     lineIndex = context.mock(LineIndex.class);
     lineIndexFactory = context.mock(LineIndexFactory.class);
     format = context.mock(LogFormat.class);
@@ -89,7 +89,7 @@ public class DefaultReportEngineTest {
         one(lineIndex).get(new IntRange(0, 20));
         will(returnValue(Collections.singletonList(line1)));
 
-        one(eventList).readEvent(line1);
+        one(eventList).match(line1);
         will(returnValue(null));
       }
     });
@@ -121,7 +121,7 @@ public class DefaultReportEngineTest {
         one(lineIndex).get(new IntRange(188192, 190000));
         will(returnValue(Collections.emptyList()));
 
-        one(eventList).readEvent(line1);
+        one(eventList).match(line1);
         will(returnValue(null));
       }
     });

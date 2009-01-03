@@ -64,9 +64,8 @@ public class RequestParser {
 
     String pattern = XmlReaderUtil.getElementString(e, "pattern");
     String[] fields = parseFields(XmlReaderUtil.getChildElements(e, "fields"));
-    PrintfLineFormatter statusFormatter = new PrintfLineFormatter(pattern, fields);
 
-    return statusFormatter;
+    return new PrintfLineFormatter(pattern, fields);
   }
 
   private List<FieldCopier> parseMatchers() {
@@ -106,6 +105,6 @@ public class RequestParser {
       result.add(e.getTextContent());
     }
 
-    return result.toArray(new String[0]);
+    return result.toArray(new String[result.size()]);
   }
 }

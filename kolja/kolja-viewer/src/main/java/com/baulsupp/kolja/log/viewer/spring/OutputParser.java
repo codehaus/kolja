@@ -23,19 +23,14 @@ import java.util.List;
 import org.springframework.util.ClassUtils;
 import org.w3c.dom.Element;
 
-import com.baulsupp.kolja.log.line.Line;
 import com.baulsupp.kolja.log.viewer.columns.ColumnWidths;
 import com.baulsupp.kolja.log.viewer.format.CompressedPackageFormat;
 import com.baulsupp.kolja.log.viewer.format.FormatFormat;
 import com.baulsupp.kolja.log.viewer.format.JodaFormat;
 import com.baulsupp.kolja.log.viewer.format.OutputFormat;
 import com.baulsupp.kolja.log.viewer.format.ToStringFormat;
-import com.baulsupp.kolja.log.viewer.highlight.FailedHighlight;
-import com.baulsupp.kolja.log.viewer.highlight.Highlight;
-import com.baulsupp.kolja.log.viewer.highlight.HighlightList;
-import com.baulsupp.kolja.log.viewer.highlight.PriorityHighlight;
-import com.baulsupp.kolja.log.viewer.highlight.RegexHighlight;
 import com.baulsupp.kolja.log.viewer.importing.ConfigurableOutputFormat;
+import com.baulsupp.kolja.log.viewer.event.EventMatcher;
 
 /**
  * Output Parser
@@ -44,9 +39,11 @@ import com.baulsupp.kolja.log.viewer.importing.ConfigurableOutputFormat;
  */
 public class OutputParser {
   private Element element;
+  private EventMatcher eventMatcher;
 
-  public OutputParser(Element element) {
+  public OutputParser(Element element, EventMatcher eventMatcher) {
     this.element = element;
+    this.eventMatcher = eventMatcher;
   }
 
   public ConfigurableOutputFormat parse() {
@@ -58,66 +55,9 @@ public class OutputParser {
     outputFormat.setNames(parseNames());
     outputFormat.setFormats(parseFormats());
 
-    outputFormat.setHighlights(parseHighlights());
+    outputFormat.setHighlights(new HighlightParser(element, eventMatcher).parseHighlights());
 
     return outputFormat;
-  }
-
-  private HighlightList<Line> parseHighlights() {
-    HighlightList<Line> results = new HighlightList<Line>();
-
-    for (Element e : XmlReaderUtil.getChildElements(element, "highlights")) {
-      results.addHighlight(parseHighlight(e));
-    }
-
-    return results;
-  }
-
-  private Highlight<Line> parseHighlight(Element e) {
-    if (e.getNodeName().equals("priority-highlight")) {
-      return parsePriorityHighlight(e);
-    } else if (e.getNodeName().equals("failed-highlight")) {
-      return new FailedHighlight();
-    } else if (e.getNodeName().equals("regex-highlight")) {
-      return parseRegexHighlight(e);
-    } else if (e.getNodeName().equals("custom-highlight")) {
-      return parseCustomHighlight(e);
-    }
-
-    throw new IllegalArgumentException("unknown type '" + e.getNodeName() + "'");
-  }
-
-  private RegexHighlight parseRegexHighlight(Element e) {
-    RegexHighlight regexHighlight = new RegexHighlight();
-
-    regexHighlight.setContentField(e.getAttribute("field"));
-    regexHighlight.setPattern(XmlReaderUtil.parsePattern(XmlReaderUtil.getSingleElement(element, "pattern"), 0));
-    regexHighlight.setColours(XmlReaderUtil.parseColours(XmlReaderUtil.getSingleElement(element, "colours")));
-
-    return regexHighlight;
-  }
-
-  private PriorityHighlight parsePriorityHighlight(Element e) {
-    PriorityHighlight priorityHighlight = new PriorityHighlight();
-
-    priorityHighlight.setPriorityField(e.getAttribute("field"));
-
-    return priorityHighlight;
-  }
-
-  @SuppressWarnings("unchecked")
-  private Highlight<Line> parseCustomHighlight(Element e) {
-    String className = e.getAttribute("class");
-
-    try {
-      Class c = ClassUtils.forName(className);
-
-      return (Highlight<Line>) c.newInstance();
-    } catch (RuntimeException ex) {
-      throw ex;
-    } catch (Exception ex) {
-      throw new RuntimeException(ex);
-    }
   }
 
   private List<OutputFormat> parseFormats() {
@@ -142,11 +82,11 @@ public class OutputParser {
 
   private OutputFormat parseFormat(Element e) {
     if (e.getNodeName().equals("time-format")) {
-      return parseTimeFormat(e);
+      return parseTimeFormat();
     } else if (e.getNodeName().equals("string-format")) {
-      return parseStringFormat(e);
+      return parseStringFormat();
     } else if (e.getNodeName().equals("package-format")) {
-      return parsePackageFormat(e);
+      return parsePackageFormat();
     } else if (e.getNodeName().equals("custom-format")) {
       return parseCustomFormat(e);
     }
@@ -154,15 +94,15 @@ public class OutputParser {
     throw new IllegalArgumentException("unknown type '" + e.getNodeName() + "'");
   }
 
-  private JodaFormat parseTimeFormat(Element e) {
+  private JodaFormat parseTimeFormat() {
     return new JodaFormat(FormatFormat.SHORT_TIME);
   }
 
-  private ToStringFormat parseStringFormat(Element e) {
+  private ToStringFormat parseStringFormat() {
     return new ToStringFormat();
   }
 
-  private CompressedPackageFormat parsePackageFormat(Element e) {
+  private CompressedPackageFormat parsePackageFormat() {
     return new CompressedPackageFormat();
   }
 

@@ -6,8 +6,8 @@ import com.baulsupp.kolja.log.line.Line;
 import com.baulsupp.kolja.log.line.LineIndex;
 import com.baulsupp.kolja.log.line.LineParser;
 import com.baulsupp.kolja.log.line.matcher.EntryPattern;
-import com.baulsupp.kolja.log.viewer.event.EventDetector;
 import com.baulsupp.kolja.log.viewer.event.EventList;
+import com.baulsupp.kolja.log.viewer.event.EventMatcher;
 import com.baulsupp.kolja.log.viewer.renderer.Renderer;
 import com.baulsupp.kolja.log.viewer.request.StandardRequestIndex;
 
@@ -84,7 +84,7 @@ public class ConfigurableLogFormat implements LogFormat, Serializable {
     return supportsEvents() ? eventFormat.getEventList(li) : null;
   }
 
-  public EventDetector getEventDetector() {
+  public EventMatcher getEventDetector() {
     return supportsEvents() ? eventFormat.getEventDetector() : null;
   }
 

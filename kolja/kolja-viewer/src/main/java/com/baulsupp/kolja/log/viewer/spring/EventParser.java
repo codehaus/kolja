@@ -17,18 +17,17 @@
  */
 package com.baulsupp.kolja.log.viewer.spring;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.regex.Pattern;
-
-import org.springframework.util.Assert;
-import org.springframework.util.ClassUtils;
-import org.w3c.dom.Element;
-
 import com.baulsupp.kolja.log.viewer.event.EventMatcher;
 import com.baulsupp.kolja.log.viewer.event.PatternEventMatcher;
 import com.baulsupp.kolja.log.viewer.event.WarnEventMatcher;
 import com.baulsupp.kolja.log.viewer.importing.ConfigurableEventFormat;
+import org.springframework.util.Assert;
+import org.springframework.util.ClassUtils;
+import org.w3c.dom.Element;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Pattern;
 
 /**
  * Event Parser
@@ -60,7 +59,7 @@ public class EventParser {
 
   private EventMatcher parseMatcher(Element e) {
     if (e.getNodeName().equals("priority-events")) {
-      return parsePriorityEvents(e);
+      return parsePriorityEvents();
     } else if (e.getNodeName().equals("custom-events")) {
       return parseCustomEvents(e);
     } else if (e.getNodeName().equals("regex-event-matcher")) {
@@ -70,7 +69,7 @@ public class EventParser {
     throw new IllegalArgumentException("unknown type '" + e.getNodeName() + "'");
   }
 
-  private WarnEventMatcher parsePriorityEvents(Element e) {
+  private WarnEventMatcher parsePriorityEvents() {
     return new WarnEventMatcher();
   }
 

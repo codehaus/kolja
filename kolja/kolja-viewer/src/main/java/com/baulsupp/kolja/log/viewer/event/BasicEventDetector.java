@@ -26,7 +26,7 @@ import com.baulsupp.kolja.log.line.Line;
  * @author Yuri Schimke
  * 
  */
-public class BasicEventDetector implements EventDetector {
+public class BasicEventDetector implements EventMatcher {
   private List<EventMatcher> matchers = new ArrayList<EventMatcher>();
 
   public BasicEventDetector(List<EventMatcher> eventMatchers) {
@@ -40,7 +40,7 @@ public class BasicEventDetector implements EventDetector {
     matchers.add(eventMatcher);
   }
 
-  public Event readEvent(Line l) {
+  public Event match(Line l) {
     for (EventMatcher m : matchers) {
       Event event = m.match(l);
 

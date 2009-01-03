@@ -17,14 +17,6 @@
  */
 package com.baulsupp.kolja.ansi.reports.engine;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.Collection;
-import java.util.List;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.baulsupp.kolja.ansi.reports.ReportContext;
 import com.baulsupp.kolja.ansi.reports.ReportPrinter;
 import com.baulsupp.kolja.ansi.reports.ReportUtils;
@@ -37,7 +29,7 @@ import com.baulsupp.kolja.log.line.LineIterator;
 import com.baulsupp.kolja.log.util.IntRange;
 import com.baulsupp.kolja.log.util.LongRange;
 import com.baulsupp.kolja.log.viewer.event.Event;
-import com.baulsupp.kolja.log.viewer.event.EventDetector;
+import com.baulsupp.kolja.log.viewer.event.EventMatcher;
 import com.baulsupp.kolja.log.viewer.importing.DefaultLineIndexFactory;
 import com.baulsupp.kolja.log.viewer.importing.LineIndexFactory;
 import com.baulsupp.kolja.log.viewer.importing.LogFormat;
@@ -45,6 +37,13 @@ import com.baulsupp.kolja.log.viewer.request.RequestDetector;
 import com.baulsupp.kolja.log.viewer.request.RequestIndex;
 import com.baulsupp.kolja.log.viewer.request.RequestLine;
 import com.baulsupp.kolja.util.services.BeanFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * @author Yuri Schimke
@@ -60,7 +59,7 @@ public class DefaultReportEngine implements ReportEngine, ReportContext {
 
   private boolean showEvents;
 
-  private EventDetector eventList;
+  private EventMatcher eventList;
 
   private boolean showRequests;
 
@@ -99,7 +98,7 @@ public class DefaultReportEngine implements ReportEngine, ReportContext {
     this.requestIndex = requestIndex;
   }
 
-  public void setEventList(EventDetector eventList) {
+  public void setEventList(EventMatcher eventList) {
     this.eventList = eventList;
   }
 
@@ -149,7 +148,7 @@ public class DefaultReportEngine implements ReportEngine, ReportContext {
     }
 
     if (showEvents) {
-      Event event = eventList.readEvent(line);
+      Event event = eventList.match(line);
 
       if (event != null) {
         for (TextReport<?> r : reports) {
@@ -234,7 +233,7 @@ public class DefaultReportEngine implements ReportEngine, ReportContext {
       }
 
       if (showEvents) {
-        EventDetector eventList = format.getEventDetector();
+        EventMatcher eventList = format.getEventDetector();
         setEventList(eventList);
       }
 

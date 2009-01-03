@@ -9,7 +9,7 @@ import com.baulsupp.kolja.log.line.LineParser;
 import com.baulsupp.kolja.log.line.LogEntryLineIndex;
 import com.baulsupp.kolja.log.line.matcher.EntryPattern;
 import com.baulsupp.kolja.log.line.matcher.NewLineEntryPattern;
-import com.baulsupp.kolja.log.viewer.event.EventDetector;
+import com.baulsupp.kolja.log.viewer.event.EventMatcher;
 import com.baulsupp.kolja.log.viewer.event.EventList;
 import com.baulsupp.kolja.log.viewer.highlight.HighlightList;
 import com.baulsupp.kolja.log.viewer.renderer.PlainTextRenderer;
@@ -31,14 +31,11 @@ public class PlainTextLogFormat implements LogFormat {
 
     entryIndex = new BufferedLogEntryIndex(entryIndex);
 
-    LogEntryLineIndex parsingLineIndex = new LogEntryLineIndex(entryIndex, buffer);
-
-    return parsingLineIndex;
+    return new LogEntryLineIndex(entryIndex, buffer);
   }
 
   public HighlightList<Line> getHighlights() {
-    HighlightList<Line> highlight = new HighlightList<Line>();
-    return highlight;
+    return new HighlightList<Line>();
   }
 
   public Renderer<Line> getLineRenderer() {
@@ -69,7 +66,7 @@ public class PlainTextLogFormat implements LogFormat {
     return new PlainTextLineParser();
   }
 
-  public EventDetector getEventDetector() {
+  public EventMatcher getEventDetector() {
     return null;
   }
 }
