@@ -30,8 +30,6 @@ public class PatternEventMatcher implements EventMatcher {
   private Pattern pattern;
   private String message;
 
-  private transient Matcher matcher;
-
   public PatternEventMatcher() {
   }
 
@@ -69,10 +67,10 @@ public class PatternEventMatcher implements EventMatcher {
     String m = (String) l.getValue(contentField);
 
     if (m != null) {
-      reset(m);
+      Matcher matcher = pattern.matcher(m);
 
       if (matcher.matches()) {
-        String text = format();
+        String text = format(matcher);
         return new Event(l, text);
       }
     }
@@ -80,7 +78,7 @@ public class PatternEventMatcher implements EventMatcher {
     return null;
   }
 
-  private String format() {
+  private String format(Matcher matcher) {
     String[] values = extractGroups(matcher);
 
     return String.format(message, (Object[]) values);
@@ -94,13 +92,5 @@ public class PatternEventMatcher implements EventMatcher {
     }
 
     return values;
-  }
-
-  private void reset(String l) {
-    if (matcher == null) {
-      matcher = pattern.matcher(l);
-    } else {
-      matcher.reset(l);
-    }
   }
 }
