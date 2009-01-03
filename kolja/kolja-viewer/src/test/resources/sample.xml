@@ -48,6 +48,10 @@ http://baulsupp.com/schema/kolja http://baulsupp.com/schema/kolja.xsd">
 
     <events>
       <priority-events />
+      <custom-events class="sample.SampleEvents" />
+      <regex-event-matcher field="content" message="Event {0}">
+        <pattern>.*(BEGIN|END).*</pattern>
+      </regex-event-matcher>
     </events>
 
     <requests offset-is-end="true">

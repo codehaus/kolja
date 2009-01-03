@@ -411,6 +411,21 @@
     </xsd:complexType>
   </xsd:element>
 
+  <xsd:element name="regex-event-matcher" substitutionGroup="event-matcher">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="pattern">
+          <xsd:simpleType>
+            <xsd:restriction base="xsd:string" />
+          </xsd:simpleType>
+        </xsd:element>
+      </xsd:sequence>
+      <xsd:attribute name="field" use="required"></xsd:attribute>
+      <xsd:attribute name="message" use="required"></xsd:attribute>
+    </xsd:complexType>
+  </xsd:element>
+  
+
 
   <xsd:complexType name="Requests">
     <xsd:sequence>

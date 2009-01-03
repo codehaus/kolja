@@ -19,12 +19,14 @@ package com.baulsupp.kolja.log.viewer.spring;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;
 import org.w3c.dom.Element;
 
 import com.baulsupp.kolja.log.viewer.event.EventMatcher;
+import com.baulsupp.kolja.log.viewer.event.PatternEventMatcher;
 import com.baulsupp.kolja.log.viewer.event.WarnEventMatcher;
 import com.baulsupp.kolja.log.viewer.importing.ConfigurableEventFormat;
 
@@ -61,6 +63,8 @@ public class EventParser {
       return parsePriorityEvents(e);
     } else if (e.getNodeName().equals("custom-events")) {
       return parseCustomEvents(e);
+    } else if (e.getNodeName().equals("regex-event-matcher")) {
+      return parseRegexEventMatcher(e);
     }
 
     throw new IllegalArgumentException("unknown type '" + e.getNodeName() + "'");
@@ -83,5 +87,19 @@ public class EventParser {
     } catch (Exception ex) {
       throw new RuntimeException(ex);
     }
+  }
+
+  @SuppressWarnings("unchecked")
+  private EventMatcher parseRegexEventMatcher(Element e) {
+    String message = e.getAttribute("message");
+    String field = e.getAttribute("field");
+
+    Pattern pattern = parseEventPattern(e);
+
+    return new PatternEventMatcher(field, pattern, message);
+  }
+
+  public Pattern parseEventPattern(Element r) {
+    return XmlReaderUtil.parsePattern(XmlReaderUtil.getSingleElement(r, "pattern"), Pattern.MULTILINE | Pattern.DOTALL);
   }
 }

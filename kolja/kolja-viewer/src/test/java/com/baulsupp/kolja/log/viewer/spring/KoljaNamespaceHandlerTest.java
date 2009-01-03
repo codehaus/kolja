@@ -11,6 +11,8 @@ import org.joda.time.DateTime;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import sample.SampleEvents;
+
 import com.baulsupp.kolja.log.line.Line;
 import com.baulsupp.kolja.log.line.RegexLineParser;
 import com.baulsupp.kolja.log.line.matcher.EntryPattern;
@@ -23,6 +25,7 @@ import com.baulsupp.kolja.log.line.type.PriorityType;
 import com.baulsupp.kolja.log.line.type.TypeList;
 import com.baulsupp.kolja.log.viewer.PrintfLineFormatter;
 import com.baulsupp.kolja.log.viewer.event.EventMatcher;
+import com.baulsupp.kolja.log.viewer.event.PatternEventMatcher;
 import com.baulsupp.kolja.log.viewer.event.WarnEventMatcher;
 import com.baulsupp.kolja.log.viewer.format.CompressedPackageFormat;
 import com.baulsupp.kolja.log.viewer.format.JodaFormat;
@@ -165,10 +168,16 @@ public class KoljaNamespaceHandlerTest extends TestCase {
     assertNotNull(cef);
 
     List<EventMatcher> matchers = cef.getEventMatchers();
-    assertEquals(1, matchers.size());
+    assertEquals(3, matchers.size());
 
     WarnEventMatcher warn = (WarnEventMatcher) matchers.get(0);
     assertNotNull(warn);
+
+    SampleEvents priority = (SampleEvents) matchers.get(1);
+    assertNotNull(priority);
+
+    PatternEventMatcher regex = (PatternEventMatcher) matchers.get(2);
+    assertNotNull(regex);
   }
 
   private void checkRequestFormat(ConfigurableRequestFormat crf) {
