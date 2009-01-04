@@ -15,6 +15,14 @@ public class Event {
     this.message = s;
   }
 
+  public Line getLine() {
+    return line;
+  }
+
+  public String getMessage() {
+    return message;
+  }
+
   public String toString() {
     return message != null ? message : line.toString();
   }

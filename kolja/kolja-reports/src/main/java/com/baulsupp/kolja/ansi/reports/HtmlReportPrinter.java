@@ -40,9 +40,6 @@ public class HtmlReportPrinter implements ReportPrinter {
 
   private Renderer<Line> requestRenderer;
 
-  @SuppressWarnings("unused")
-  private ReportEngine reportEngine;
-
   public String getName() {
     return "html";
   }
@@ -75,7 +72,7 @@ public class HtmlReportPrinter implements ReportPrinter {
   }
 
   public void printLine() {
-    write("<br/>");
+    write("<br/>\n");
   }
 
   public void printRequest(RequestLine request) {
@@ -88,7 +85,7 @@ public class HtmlReportPrinter implements ReportPrinter {
 
   public void println(MultiColourString string) {
     for (ColouredString s : string.getColouredStrings()) {
-      write("<span style=\"text-color: " + getHtmlColor(s.getForegroundColor()) + "\">");
+      write("<span style=\"color: " + getHtmlColor(s.getForegroundColor()) + "\">");
       write(s.toString());
       write("</span>");
     }
@@ -97,7 +94,13 @@ public class HtmlReportPrinter implements ReportPrinter {
   }
 
   private String getHtmlColor(Colour color) {
-    return color == null ? "black" : color.toString();
+    if (color == null) {
+      color = Colour.BLACK ;
+    }
+
+    // TODO use real colours
+
+    return color.toString();
   }
 
   private void write(String string) {
@@ -117,6 +120,5 @@ public class HtmlReportPrinter implements ReportPrinter {
   }
 
   public void setReportEngine(ReportEngine reportEngine) {
-    this.reportEngine = reportEngine;
   }
 }

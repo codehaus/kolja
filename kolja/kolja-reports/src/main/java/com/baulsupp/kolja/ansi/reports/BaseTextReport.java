@@ -29,6 +29,7 @@ import com.baulsupp.kolja.log.line.Line;
 import com.baulsupp.kolja.log.viewer.event.Event;
 import com.baulsupp.kolja.log.viewer.request.RequestLine;
 import com.baulsupp.kolja.util.colours.MultiColourString;
+import com.baulsupp.kolja.util.colours.ColourPair;
 
 /**
  * Base class for reports.
@@ -43,7 +44,7 @@ public class BaseTextReport<T extends BaseTextReport<T>> implements TextReport<T
   private ReportContext reportContext;
 
   public BaseTextReport() {
-    this(Detail.LINES);
+    this(Detail.LINES, Detail.EVENTS);
   }
 
   public BaseTextReport(Detail... selected) {
@@ -119,6 +120,10 @@ public class BaseTextReport<T extends BaseTextReport<T>> implements TextReport<T
 
   protected Line readLine(int i) {
     return reportContext.readLine(i);
+  }
+
+  public void println(ColourPair pair, String string) {
+    reportPrinter.println(new MultiColourString(pair, string));
   }
 
   public void println(String string) {
