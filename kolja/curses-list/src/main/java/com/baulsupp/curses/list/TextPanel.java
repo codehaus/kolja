@@ -4,8 +4,12 @@ import jcurses.system.CharColor;
 import jcurses.system.Toolkit;
 
 import com.baulsupp.kolja.util.colours.ColouredString;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class TextPanel {
+  public static final Logger logger = LoggerFactory.getLogger(TextPanel.class);
+
   private int xOffset = 0;
   private int yOffset = 0;
   private int width = 0;
@@ -58,11 +62,14 @@ public class TextPanel {
     String content = string.toString();    
 
     int left = width - xOffset;
-    if (content.length() > left) {
-      content = content.substring(0, left);
+
+    if (left > 0) {
+      if (content.length() > left) {
+        content = content.substring(0, left);
+      }
+
+      CharColor colours = ColorList.lookup(string.getColorPair());
+      Toolkit.printString(content, this.xOffset + xOffset, this.yOffset + yOffset, colours);
     }
-    
-    CharColor colours = ColorList.lookup(string.getColorPair());
-    Toolkit.printString(content, this.xOffset + xOffset, this.yOffset + yOffset, colours);
   }
 }
