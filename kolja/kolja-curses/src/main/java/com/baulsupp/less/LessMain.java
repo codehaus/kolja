@@ -17,31 +17,20 @@
  */
 package com.baulsupp.less;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.CommandLineParser;
-import org.apache.commons.cli.HelpFormatter;
-import org.apache.commons.cli.OptionBuilder;
-import org.apache.commons.cli.Options;
-import org.apache.commons.cli.ParseException;
-import org.apache.commons.cli.PosixParser;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.baulsupp.kolja.log.util.WrappedCharBuffer;
-import com.baulsupp.kolja.log.viewer.commands.BackgroundProcess;
-import com.baulsupp.kolja.log.viewer.commands.ModelsCommand;
-import com.baulsupp.kolja.log.viewer.commands.RendererCommand;
-import com.baulsupp.kolja.log.viewer.commands.ScrollbarCommand;
-import com.baulsupp.kolja.log.viewer.commands.SelectEventCommand;
-import com.baulsupp.kolja.log.viewer.commands.SelectRequestCommand;
+import com.baulsupp.kolja.log.viewer.commands.*;
+import com.baulsupp.kolja.log.viewer.event.EventList;
 import com.baulsupp.kolja.log.viewer.importing.LogFormat;
 import com.baulsupp.kolja.log.viewer.importing.PlainTextLogFormat;
 import com.baulsupp.kolja.log.viewer.importing.SavedLogFormatLoader;
 import com.baulsupp.kolja.log.viewer.linenumbers.BasicLineNumberIndex;
+import com.baulsupp.kolja.log.viewer.request.StandardRequestIndex;
+import org.apache.commons.cli.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.File;
+import java.io.FileNotFoundException;
 
 /**
  * Launcher for Less Tool
@@ -76,8 +65,7 @@ public class LessMain {
     }
   }
 
-  private static void runTool(CommandLine cmd, File f) throws InstantiationException, IllegalAccessException,
-      ClassNotFoundException, Exception, IOException {
+  private static void runTool(CommandLine cmd, File f) throws Exception {
     LogFormat format;
     if (cmd.hasOption("c")) {
       format = (LogFormat) Class.forName(cmd.getOptionValue("c")).newInstance();
@@ -94,20 +82,34 @@ public class LessMain {
     tool.createDefaultCommands();
     tool.addCommand(new RendererCommand(tool, format));
     tool.addCommand(new ModelsCommand(format, buffer, tool));
+
     if (format.supportsEvents()) {
-      tool.addCommand(new SelectEventCommand(format, tool));
+      EventList eventList = format.getEventList(tool.getLineIndex());
+      tool.getLineIndex().addLineListener(eventList);
+
+      tool.addCommand(new SelectEventCommand(eventList));
+
+      if (cmd.hasOption("b")) {
+        BackgroundProcess process = new BackgroundProcess(tool, eventList);
+        process.startBackgroundThread();
+      }
     }
+
     if (format.supportsRequests()) {
-      tool.addCommand(new SelectRequestCommand(format, tool));
+      StandardRequestIndex requestIndex = format.getRequestIndex(tool.getLineIndex());
+      tool.getLineIndex().addLineListener(requestIndex);
+
+      tool.addCommand(new SelectRequestCommand(requestIndex));
+
+      if (cmd.hasOption("b")) {
+        BackgroundProcess process = new BackgroundProcess(tool, requestIndex);
+        process.startBackgroundThread();
+      }
     }
+
     tool.addCommand(new ScrollbarCommand(tool, buffer));
 
     tool.setLineNumbers(BasicLineNumberIndex.create(buffer));
-
-    if (cmd.hasOption("b")) {
-      BackgroundProcess process = new BackgroundProcess(tool);
-      process.startBackgroundThread();
-    }
 
     tool.show();
   }

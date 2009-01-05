@@ -1,22 +1,23 @@
 package com.baulsupp.kolja.log.viewer.commands;
 
-import java.util.concurrent.Callable;
-
+import com.baulsupp.kolja.log.line.ValueIndexer;
+import com.baulsupp.kolja.log.util.IntRange;
+import com.baulsupp.less.Less;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.baulsupp.kolja.log.util.IntRange;
-import com.baulsupp.kolja.log.viewer.event.EventList;
-import com.baulsupp.less.Less;
+import java.util.concurrent.Callable;
 
 public class BackgroundProcess {
   private static final Logger log = LoggerFactory.getLogger(BackgroundProcess.class);
 
-  private static final int BACKGROUND_READAHEAD = 25000;
+  private static final int BACKGROUND_READAHEAD = 250000;
 
-  private EventList eventList;
+  private ValueIndexer eventList;
 
-  public BackgroundProcess(final Less less) {
+  public BackgroundProcess(final Less less, ValueIndexer eventList) {
+    this.eventList = eventList;
+      
     Thread t = new Thread("Less-BackgroundThread") {
       @Override
       public void run() {
@@ -32,9 +33,7 @@ public class BackgroundProcess {
 
   protected void processMore(Less less) throws Exception {
     while (true) {
-      boolean more = false;
-
-      more = less.performWithLock(new Callable<Boolean>() {
+      boolean more = less.performWithLock(new Callable<Boolean>() {
         public Boolean call() throws Exception {
           return processSlightlyMore();
         }

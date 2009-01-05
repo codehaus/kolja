@@ -1,58 +1,26 @@
 package com.baulsupp.kolja.log.viewer.commands;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.util.Collection;
-import java.util.Collections;
-
-import jcurses.system.InputChar;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.baulsupp.curses.application.Command;
 import com.baulsupp.curses.application.KeyBinding;
 import com.baulsupp.curses.list.Util;
 import com.baulsupp.kolja.log.viewer.event.Event;
 import com.baulsupp.kolja.log.viewer.event.EventList;
-import com.baulsupp.kolja.log.viewer.importing.LogFormat;
 import com.baulsupp.less.EventDialog;
 import com.baulsupp.less.Less;
+import jcurses.system.InputChar;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-public class SelectEventCommand implements Command<Less>, PropertyChangeListener {
+import java.util.Collection;
+import java.util.Collections;
+
+public class SelectEventCommand implements Command<Less> {
   private static final Logger log = LoggerFactory.getLogger(SelectEventCommand.class);
 
   private EventList eventList;
 
-  private LogFormat format;
-
-  private Less less;
-
-  public SelectEventCommand(LogFormat format, final Less less) {
-    this.format = format;
-    this.less = less;
-    
-    registerNewListener();
-  }
-
-  public void propertyChange(PropertyChangeEvent evt) {
-    if (evt.getPropertyName().equals("lineIndex")) {
-      registerNewListener();
-    }
-  }
-
-  private void registerNewListener() {
-    deregisterListener();
-    
-    eventList = format.getEventList(less.getLineIndex());
-    less.getLineIndex().addLineListener(eventList);
-  }
-
-  private void deregisterListener() {
-    if (eventList != null) {
-      eventList.deregister();
-      eventList = null;
-    }
+  public SelectEventCommand(EventList eventList) {
+    this.eventList = eventList;
   }
 
   public boolean handle(Less less, InputChar input) {
