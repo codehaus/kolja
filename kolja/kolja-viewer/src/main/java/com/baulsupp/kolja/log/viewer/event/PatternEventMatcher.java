@@ -69,7 +69,7 @@ public class PatternEventMatcher implements EventMatcher {
     if (m != null) {
       Matcher matcher = pattern.matcher(m);
 
-      if (matcher.matches()) {
+      if (matcher.find()) {
         String text = format(matcher);
         return new Event(l, text);
       }

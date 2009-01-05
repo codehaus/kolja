@@ -12,7 +12,7 @@ public class PatternEventMatcherTest extends TestCase {
   protected void setUp() throws Exception {
     super.setUp();
 
-    Pattern pattern = Pattern.compile(".*(AB).*");
+    Pattern pattern = Pattern.compile(" (AB) ");
     matcher = new PatternEventMatcher("content", pattern, "value %s value");
   }
 
