@@ -77,7 +77,7 @@
     <dependency>
       <groupId>org.gridgain</groupId>
       <artifactId>gridgain</artifactId>
-      <version>2.0.2</version>
+      <version>2.1.0</version>
     </dependency>
     <dependency>
       <groupId>org.hyperic</groupId>
@@ -95,4 +95,11 @@
       <version>1.1</version>
     </dependency>
   </dependencies>
+
+  <repositories>
+    <repository>
+        <id>gridgain</id>
+        <url>http://www.gridgainsystems.com/maven2/</url>
+    </repository>
+  </repositories>
 </project>
