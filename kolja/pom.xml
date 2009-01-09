@@ -58,7 +58,7 @@
     <module>kolja-bank</module>
     <module>kolja-jez</module>
     <module>kolja-assembly</module>
-    <!--  <module>kolja-gridgain</module> -->
+    <module>kolja-gridgain</module>
   </modules>
 
   <build>
