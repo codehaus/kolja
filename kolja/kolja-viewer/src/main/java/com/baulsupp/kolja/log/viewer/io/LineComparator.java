@@ -13,7 +13,6 @@ public class LineComparator implements Comparator<Line> {
     this.fieldNames = fieldNames;
   }
 
-  @SuppressWarnings("unchecked")
   public int compare(Line l1, Line l2) {
     if (l1 == l2) {
       return 0;

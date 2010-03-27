@@ -27,7 +27,11 @@ import com.baulsupp.kolja.log.line.Line;
  * 
  */
 public class BasicEventDetector implements EventMatcher {
-  private List<EventMatcher> matchers = new ArrayList<EventMatcher>();
+  /**
+	 * 
+	 */
+	private static final long serialVersionUID = 6598562905764830067L;
+private List<EventMatcher> matchers = new ArrayList<EventMatcher>();
 
   public BasicEventDetector(List<EventMatcher> eventMatchers) {
     this.matchers = eventMatchers;

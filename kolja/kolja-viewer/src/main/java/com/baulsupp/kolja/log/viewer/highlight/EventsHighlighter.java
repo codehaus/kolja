@@ -8,7 +8,11 @@ import com.baulsupp.kolja.util.colours.ColourPair;
  * Highlighter based on events
  */
 public class EventsHighlighter implements Highlight<Line> {
-  private EventMatcher events;
+  /**
+	 * 
+	 */
+	private static final long serialVersionUID = 6334341560451856894L;
+private EventMatcher events;
   private ColourPair colours;
 
   public EventsHighlighter(EventMatcher events, ColourPair colours) {

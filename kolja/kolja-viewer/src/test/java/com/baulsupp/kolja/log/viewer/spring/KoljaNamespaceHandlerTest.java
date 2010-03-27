@@ -44,7 +44,6 @@ import com.baulsupp.kolja.log.viewer.request.FieldCopier;
 import com.baulsupp.kolja.log.viewer.request.RegexFieldCopier;
 import com.baulsupp.kolja.util.colours.Colour;
 
-@SuppressWarnings("deprecation")
 public class KoljaNamespaceHandlerTest extends TestCase {
   private static final DateTime DATE = new DateTime(2007, 10, 12, 0, 0, 0, 0);
 

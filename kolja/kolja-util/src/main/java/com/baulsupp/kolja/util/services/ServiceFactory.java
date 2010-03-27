@@ -23,8 +23,8 @@ import sun.misc.Service;
 
 /**
  * @author Yuri Schimke
- * 
  */
+@SuppressWarnings("restriction")
 public class ServiceFactory<T extends NamedService> implements BeanFactory<T> {
   private Class<T> type;
 
@@ -32,7 +32,7 @@ public class ServiceFactory<T extends NamedService> implements BeanFactory<T> {
     this.type = type;
   }
 
-  @SuppressWarnings("unchecked")
+  @SuppressWarnings({ "unchecked" })
   public T create(String name) throws Exception {
     Iterator<T> providers = Service.providers(type);
 

@@ -71,7 +71,6 @@ public class GridReportSplitter extends GridTaskSplitAdapter<ReportBatch, List<T
     return result;
   }
 
-  @SuppressWarnings("unchecked")
   public List<TextReport<?>> reduce(List<GridJobResult> parts) throws GridException {
     try {
       for (GridJobResult gridJobResult : parts) {

@@ -128,7 +128,6 @@ public final class Frequencies<T> implements Iterable<Frequencies.Count<T>>, Mer
     }
   }
 
-  @SuppressWarnings("unchecked")
   public SortedSet<Count<T>> getMostFrequent(int top) {
     SortedSet<Count<T>> results = new TreeSet<Count<T>>(comparator());
 
@@ -152,7 +151,7 @@ public final class Frequencies<T> implements Iterable<Frequencies.Count<T>>, Mer
   public Iterator<Count<T>> iterator() {
     return counts.values().iterator();
   }
-
+ 
   public int size() {
     return counts.size();
   }

@@ -86,9 +86,8 @@ public class EventParser {
     } catch (Exception ex) {
       throw new RuntimeException(ex);
     }
-  }
+  } 
 
-  @SuppressWarnings("unchecked")
   private EventMatcher parseRegexEventMatcher(Element e) {
     String message = e.getAttribute("message");
     String field = e.getAttribute("field");

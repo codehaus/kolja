@@ -24,7 +24,11 @@ import com.baulsupp.kolja.ansi.reports.basic.Frequencies.Count;
 import com.baulsupp.kolja.log.line.Line;
 
 public abstract class AbstractFrequencyReport<S, T extends AbstractFrequencyReport<S, T>> extends BaseTextReport<T> {
-  private Frequencies<S> counts;
+  /**
+	 * 
+	 */
+	private static final long serialVersionUID = -2052859228882749189L;
+private Frequencies<S> counts;
   protected Integer count = null;
 
   public AbstractFrequencyReport() {
@@ -83,14 +87,13 @@ public abstract class AbstractFrequencyReport<S, T extends AbstractFrequencyRepo
     return counts.getMostFrequent(urlCount);
   }
 
-  @SuppressWarnings("unchecked")
   @Override
   public T newInstance() {
     T newInstance = (T) super.newInstance();
 
     newInstance.counts = new Frequencies<S>();
 
-    return newInstance;
+    return newInstance; 
   }
 
   @Override

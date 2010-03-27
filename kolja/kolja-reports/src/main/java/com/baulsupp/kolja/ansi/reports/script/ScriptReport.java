@@ -59,7 +59,6 @@ public class ScriptReport extends BaseTextReport<ScriptReport> implements Clonea
     }
   }
 
-  @SuppressWarnings("unchecked")
   private Object merge(Object thisValue, Object partValue) throws Exception {
     if (thisValue instanceof Integer) {
       return ((Integer) thisValue).intValue() + ((Integer) partValue).intValue();

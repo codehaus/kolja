@@ -26,4 +26,9 @@ import java.util.Comparator;
  */
 public abstract class BaseComparator<T> implements Comparator<T>, Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -8878880331404153374L;
+
 }

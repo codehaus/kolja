@@ -6,7 +6,11 @@ import java.io.Serializable;
  * @author yuri
  */
 public abstract class Type implements Serializable {
-  private String name;
+  /**
+	 * 
+	 */
+	private static final long serialVersionUID = 382095655045973570L;
+private String name;
   protected String nullValue;
 
   public Type() {

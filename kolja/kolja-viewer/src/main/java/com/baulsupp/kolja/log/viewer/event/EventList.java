@@ -18,7 +18,11 @@ import com.baulsupp.kolja.log.util.IntRange;
  */
 public class EventList extends ValueIndexer implements EventMatcher {
 
-  private SortedSet<Event> events = new TreeSet<Event>(new Comparator<Event>() {
+  /**
+	 * 
+	 */
+	private static final long serialVersionUID = -8318858272237862313L;
+private SortedSet<Event> events = new TreeSet<Event>(new Comparator<Event>() {
     public int compare(Event event, Event event1) {
       return event.getOffset() - event1.getOffset();
     }
