@@ -83,12 +83,12 @@
 
   <distributionManagement>
     <repository>
-      <id>codehaus-kolja-repository</id>
+      <id>codehaus.org</id>
       <name>Codehaus Kolja Repository</name>
       <url>dav:https://dav.codehaus.org/repository/kolja/</url>
     </repository>
     <snapshotRepository>
-      <id>codehaus-kolja-snapshot-repository</id>
+      <id>codehaus.org</id>
       <name>Codehaus Kolja Snapshot Repository</name>
       <url>dav:https://dav.codehaus.org/snapshots.repository/kolja/</url>
     </snapshotRepository>
