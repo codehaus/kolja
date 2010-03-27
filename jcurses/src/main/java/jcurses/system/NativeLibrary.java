@@ -58,8 +58,10 @@ public class NativeLibrary {
     String library = null;
     if (PlatformUtil.isWindowsX86()) {
       library = "/META-INF/windows-x86/libjcurses.dll";
-    } else if (PlatformUtil.isMacOsx()) {
-      library = "/META-INF/osx/libjcurses.jnilib";
+    } else if (PlatformUtil.isMacOsx64()) {
+        library = "/META-INF/osx-64/libjcurses.so";
+    } else if (PlatformUtil.isMacOsxPpc()) {
+      library = "/META-INF/osx-ppc/libjcurses.jnilib";
     } else if (PlatformUtil.isLinuxX86()) {
       library = "/META-INF/linux-x86/libjcurses.so";
     }
